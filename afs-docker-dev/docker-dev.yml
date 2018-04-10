@@ -10,6 +10,19 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: "http://kafka:9092"
       SCHEMA_REGISTRY_SVR: "http://schema-registry:8081"
       FIXED_RATE_MILLISECONDS: 60000
+
+  afs-neo4j-service :
+    image: cdelmonte/afs-neo4j-service:test
+    ports:
+      - "8477:8477"
+    environment:
+      PROFILE: "default"
+      SERVER_PORT: "8477"
+      KAFKA_BOOTSTRAP_SERVERS: "http://kafka:9092"
+      SCHEMA_REGISTRY_SVR: "http://schema-registry:8081"
+      NEO4J_SVR: "bolt://neo4j:7687"
+    depends_on:
+      - neo4j
   
   kafkastreams:
     image: cdelmonte/afs-kafkastreams:test

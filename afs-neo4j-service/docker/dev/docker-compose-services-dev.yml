@@ -1,0 +1,30 @@
+version: '2'
+services: 
+  merchants-search-service:
+    image: cdelmonte/mw-merchants-search-service:testing
+    mem_limit: 1073741824
+    ports:
+      - "8477:8477"
+    environment:
+      PROFILE: "default"
+      SERVER_PORT: "8477"
+      CONFIGSERVER_URI: "http://configserver:8886"
+      EUREKASERVER_URI: "http://eurekaserver:8761/eureka/"
+      AUTHSERVER_URI: "http://authenticationservice:8901/auth/user"
+      KAFKA_BOOTSTRAP_SERVERS: "http://kafka:9092"
+      ZIPKIN_URI: "http://zipkin:9411"
+      EUREKASERVER_PORT: "8761"
+      CONFIGSERVER_PORT: "8886"
+      ELASTICSEARCH_PORT: "9200"
+      DATABASESERVER_PORT: "5432"
+      AUTHSERVER_PORT: 8091
+      KAFKASERVER_PORT: "2181"
+      REDIS_PORT: "6379"
+      ZIPKIN_PORT: "9411"
+      ENCRYPT_KEY: "IMSYMMETRIC"
+      SIGNING_KEY: "345345fsdfsf5345"
+      
+networks:
+  default:
+    external:
+      name: msdockerinfrastructuredev_infrastructure-network

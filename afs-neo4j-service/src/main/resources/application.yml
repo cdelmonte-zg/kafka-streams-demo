@@ -1,0 +1,18 @@
+server:
+  port: 8477
+  
+logging:
+  level:
+    com.netflix: WARN
+    de.cdelmonte: DEBUG
+
+spring.data.neo4j.username: neo4j
+spring.data.neo4j.password: secret
+spring.data.neo4j.uri: bolt://localhost:7687
+
+spring.kafka.bootstrap-servers: localhost:9092
+spring.kafka.consumer:
+      auto-offset-reset: earliest
+      group-id: importer
+
+kafka.topic.import-transactions: transactions-to-import

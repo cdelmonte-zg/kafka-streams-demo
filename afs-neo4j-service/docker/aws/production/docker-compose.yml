@@ -1,0 +1,18 @@
+version: '2'
+services:
+  merchants-search-service:
+    image: cdelmonte/mw-merchants-search-service:${BUILD_NAME_PROD}
+    mem_limit: 1744M
+    ports:
+      - "8477:8477"   
+    environment:
+      PROFILE: "aws-prod"
+      SERVER_PORT: "8477"
+      CONFIGSERVER_URI: "http://172.31.39.201:8886"
+      EUREKASERVER_URI: "http://172.31.39.201:8761/eureka/"
+      ZIPKIN_URI: "http://172.31.39.201:9411"
+      AUTHSERVER_URI: "http://172.31.34.140:8901/auth/user"
+      KAFKA_BOOTSTRAP_SERVERS: "http://172.31.35.100:9092"
+      ENCRYPT_KEY: "IMSYMMETRIC"
+      SIGNING_KEY: ${JWT_SECRET_KEY}
+  

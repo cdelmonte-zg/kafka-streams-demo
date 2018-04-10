@@ -9,6 +9,7 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Printed;
+import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.processor.WallclockTimestampExtractor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -67,8 +68,8 @@ public class KafkaStreamsConfiguration {
     KStream<String, Purchase> masked =
         purchaseKStream.mapValues(p -> Purchase.builder(p).maskCreditCard().build());
 
-
     masked.print(Printed.<String, Purchase>toSysOut().withLabel("Transactions are coming!!"));
+    masked.to("transactions-to-import", Produced.with(stringSerde, purchaseSerde));
 
     return purchaseKStream;
   }

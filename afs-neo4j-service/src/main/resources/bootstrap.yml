@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: afs-neo4j-service 
+  profiles:
+    active:
+      default
+
