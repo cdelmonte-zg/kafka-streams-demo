@@ -13,7 +13,7 @@ public class Sender {
   @Autowired
   private KafkaTemplate<String, String> kafkaTemplate;
 
-  public void send(String payload, String topic) {
+  public void send(String topic, String payload) {
     LOGGER.info("sending payload='{}' to topic='{}'", payload, topic);
     kafkaTemplate.send(topic, payload);
   }
