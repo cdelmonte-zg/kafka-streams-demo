@@ -30,9 +30,9 @@ public class Application {
 
       personRepository.deleteAll();
 
-      Person greg = new Person("Greg");
-      Person roy = new Person("Roy");
-      Person craig = new Person("Craig");
+      Person greg = new Person("Greg", "Torsoln");
+      Person roy = new Person("Roy", "Anderson");
+      Person craig = new Person("Craig", "McDonald");
 
       List<Person> team = Arrays.asList(greg, roy, craig);
 
@@ -44,12 +44,12 @@ public class Application {
       personRepository.save(roy);
       personRepository.save(craig);
 
-      greg = personRepository.findByName(greg.getName());
+      greg = personRepository.findByFirstName(greg.getFirstName());
       greg.worksWith(roy);
       greg.worksWith(craig);
       personRepository.save(greg);
 
-      roy = personRepository.findByName(roy.getName());
+      roy = personRepository.findByFirstName(roy.getFirstName());
       roy.worksWith(craig);
       // We already know that roy works with greg
       personRepository.save(roy);
@@ -57,8 +57,8 @@ public class Application {
       // We already know craig works with roy and greg
 
       log.info("Lookup each person by name...");
-      team.stream().forEach(
-          person -> log.info("\t" + personRepository.findByName(person.getName()).toString()));
+      team.stream().forEach(person -> log
+          .info("\t" + personRepository.findByFirstName(person.getFirstName()).toString()));
     };
   }
 }

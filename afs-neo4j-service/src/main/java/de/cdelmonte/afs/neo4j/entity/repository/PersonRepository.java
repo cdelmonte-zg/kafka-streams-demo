@@ -5,5 +5,7 @@ import de.cdelmonte.afs.neo4j.entity.Person;
 
 public interface PersonRepository extends CrudRepository<Person, Long> {
 
-  Person findByName(String name);
+  Person findByFirstName(String firstName);
+
+  Person findByLastName(String lastName);
 }

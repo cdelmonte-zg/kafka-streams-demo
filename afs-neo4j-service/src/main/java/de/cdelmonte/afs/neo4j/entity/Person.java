@@ -18,18 +18,27 @@ public class Person {
   @GeneratedValue
   private Long id;
 
-  private String name;
+  private String firstName;
+  private String lastName;
 
+  @Relationship(type = "TEAMMATE", direction = Relationship.UNDIRECTED)
+  public Set<Person> teammates;
+
+  @Relationship(type = "CREDITCARD", direction = Relationship.UNDIRECTED)
+  public Set<CreditCard> creditCards;
+
+  @Relationship(type = "TRANSACTION", direction = Relationship.UNDIRECTED)
+  public Set<Transaction> transactions;
+
+  @SuppressWarnings("unused")
   private Person() {
     // Empty constructor required as of Neo4j API 2.0.5
   };
 
-  public Person(String name) {
-    this.name = name;
+  public Person(String firstName, String lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
   }
-
-  @Relationship(type = "TEAMMATE", direction = Relationship.UNDIRECTED)
-  public Set<Person> teammates;
 
   public void worksWith(Person person) {
     if (teammates == null) {
@@ -38,17 +47,44 @@ public class Person {
     teammates.add(person);
   }
 
-  public String getName() {
-    return name;
+  public void hasCreditCard(CreditCard creditCard) {
+    if (creditCards == null) {
+      creditCards = new HashSet<>();
+    }
+    creditCards.add(creditCard);
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void withTransaction(Transaction transaction) {
+    if (transactions == null) {
+      transactions = new HashSet<>();
+    }
+    transactions.add(transaction);
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public String getFullName() {
+    return firstName + " " + lastName;
+  }
+
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
   public String toString() {
-
-    return this.name + "'s teammates => " + Optional.ofNullable(this.teammates)
-        .orElse(Collections.emptySet()).stream().map(Person::getName).collect(Collectors.toList());
+    return this.getFullName() + "'s teammates => "
+        + Optional.ofNullable(this.teammates).orElse(Collections.emptySet()).stream()
+            .map(Person::getFullName).collect(Collectors.toList());
   }
 }

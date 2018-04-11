@@ -12,13 +12,7 @@ public class Transaction {
   @GeneratedValue
   private Long id;
 
-  private String firstName;
-  private String lastName;
-  private String customerId;
-  private String creditCardNumber;
   private String itemPurchased;
-  private String department;
-  private String employeeId;
   private int quantity;
   private double price;
   private Date purchaseDate;
@@ -27,38 +21,16 @@ public class Transaction {
 
   public Transaction() {
     // Empty constructor required as of Neo4j API 2.0.5
-  };
-
-  public String getFirstName() {
-    return firstName;
   }
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public String getCustomerId() {
-    return customerId;
-  }
-
-  public void setCustomerId(String customerId) {
-    this.customerId = customerId;
-  }
-
-  public String getCreditCardNumber() {
-    return creditCardNumber;
-  }
-
-  public void setCreditCardNumber(String creditCardNumber) {
-    this.creditCardNumber = creditCardNumber;
+  public Transaction(String itemPurchased, int quantity, double price, Date purchaseDate,
+      String zipCode, String storeId) {
+    this.itemPurchased = itemPurchased;
+    this.quantity = quantity;
+    this.price = price;
+    this.purchaseDate = purchaseDate;
+    this.zipCode = zipCode;
+    this.storeId = storeId;
   }
 
   public String getItemPurchased() {
@@ -67,22 +39,6 @@ public class Transaction {
 
   public void setItemPurchased(String itemPurchased) {
     this.itemPurchased = itemPurchased;
-  }
-
-  public String getDepartment() {
-    return department;
-  }
-
-  public void setDepartment(String department) {
-    this.department = department;
-  }
-
-  public String getEmployeeId() {
-    return employeeId;
-  }
-
-  public void setEmployeeId(String employeeId) {
-    this.employeeId = employeeId;
   }
 
   public int getQuantity() {
@@ -123,13 +79,5 @@ public class Transaction {
 
   public void setStoreId(String storeId) {
     this.storeId = storeId;
-  }
-
-  @Override
-  public String toString() {
-    return "Transaction [firstName=" + firstName + ", lastName=" + lastName + ", customerId="
-        + customerId + ", creditCardNumber=" + creditCardNumber + ", itemPurchased=" + itemPurchased
-        + ", department=" + department + ", employeeId=" + employeeId + ", quantity=" + quantity
-        + ", price=" + price + ", zipCode=" + zipCode + ", storeId=" + storeId + "]";
   }
 }
