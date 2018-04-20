@@ -5,16 +5,16 @@ import java.util.Date;
 public class Transaction {
   private String firstName;
   private String lastName;
-  private String customerId;
+  private long customerId;
   private String creditCardNumber;
   private String itemPurchased;
   private String department;
-  private String employeeId;
+  private long employeeId;
   private int quantity;
   private double price;
   private Date purchaseDate;
-  private String zipCode;
-  private String storeId;
+  private int zipCode;
+  private long storeId;
 
   public String getFirstName() {
     return firstName;
@@ -32,11 +32,11 @@ public class Transaction {
     this.lastName = lastName;
   }
 
-  public String getCustomerId() {
+  public long getCustomerId() {
     return customerId;
   }
 
-  public void setCustomerId(String customerId) {
+  public void setCustomerId(long customerId) {
     this.customerId = customerId;
   }
 
@@ -64,11 +64,11 @@ public class Transaction {
     this.department = department;
   }
 
-  public String getEmployeeId() {
+  public long getEmployeeId() {
     return employeeId;
   }
 
-  public void setEmployeeId(String employeeId) {
+  public void setEmployeeId(long employeeId) {
     this.employeeId = employeeId;
   }
 
@@ -96,19 +96,19 @@ public class Transaction {
     this.purchaseDate = purchaseDate;
   }
 
-  public String getZipCode() {
+  public int getZipCode() {
     return zipCode;
   }
 
-  public void setZipCode(String zipCode) {
+  public void setZipCode(int zipCode) {
     this.zipCode = zipCode;
   }
 
-  public String getStoreId() {
+  public long getStoreId() {
     return storeId;
   }
 
-  public void setStoreId(String storeId) {
+  public void setStoreId(long storeId) {
     this.storeId = storeId;
   }
 

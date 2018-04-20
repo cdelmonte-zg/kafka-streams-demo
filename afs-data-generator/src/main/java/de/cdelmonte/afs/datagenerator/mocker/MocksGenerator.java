@@ -56,19 +56,17 @@ public class MocksGenerator {
     List<Group> groups = this.generateGroups(howManyGroups);
     List<User> users = this.generateUsers(howManyUsers, groups);
 
-    List<Transaction> transactions = mock.reflect(Transaction.class)
-        .field("customerId", mock.from(users).map(User::getId).val().toString())
-        .field("firstName", mock.from(users).map(User::getFirstName))
-        .field("lastName", mock.from(users).map(User::getLastName))
-        .field("creditCardNumber", mock.creditCards().visa().val())
-        .field("itemPurchased", mock.words().nouns().val())
-        .field("department", mock.departments().val())
-        .field("employeeId", mock.creditCards().visa().val())
-        .field("quantity", mock.ints().range(1, 100))
-        .field("price", mock.floats().range(0.1f, 200.2f).val()).field("purchaseDate", new Date())
-        .field("storeId", mock.longSeq().start(100).increment(100).val().toString())
-        .field("zipCode", mock.ints().range(00001, 99999).val().toString())
-        .list(howManyTransactions).val();
+    List<Transaction> transactions =
+        mock.reflect(Transaction.class).field("customerId", mock.from(users).map(User::getId))
+            .field("firstName", mock.from(users).map(User::getFirstName))
+            .field("lastName", mock.from(users).map(User::getLastName))
+            .field("creditCardNumber", mock.creditCards().visa())
+            .field("itemPurchased", mock.words().nouns()).field("department", mock.departments())
+            .field("employeeId", mock.longSeq().start(100).increment(100))
+            .field("quantity", mock.ints().range(1, 100))
+            .field("price", mock.floats().range(0.1f, 200.2f)).field("purchaseDate", new Date())
+            .field("storeId", mock.longSeq().start(100).increment(100))
+            .field("zipCode", mock.ints().range(00001, 99999)).list(howManyTransactions).val();
 
     return transactions;
   }
