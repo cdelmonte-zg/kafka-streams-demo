@@ -16,3 +16,6 @@ go to http:localhost:7474 and set the new access data for neo4j to:
 
 username: neo4j
 password: secret
+
+
+go to http://localhost:2673/swagger-ui.html to access the swagger ui
