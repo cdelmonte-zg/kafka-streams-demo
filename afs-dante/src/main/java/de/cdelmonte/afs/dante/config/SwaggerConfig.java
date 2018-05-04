@@ -23,7 +23,7 @@ public class SwaggerConfig {
 
   private ApiInfo metaData() {
     ApiInfo apiInfo = new ApiInfo("Spring Boot REST API",
-        "Spring Boot REST API for the Dante afs service", "1.0", "Terms of service",
+        "Spring Boot REST API for the Dante afs service", "0.0.1-SNAPSHOT", "Terms of service",
         new Contact("Christian Del Monte", "", "info@cdelmonte.de"), "Apache License Version 2.0",
         "https://www.apache.org/licenses/LICENSE-2.0", Collections.emptyList());
     return apiInfo;
