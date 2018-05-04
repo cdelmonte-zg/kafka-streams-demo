@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: afs-dante-service 
+  profiles:
+    active:
+      default
