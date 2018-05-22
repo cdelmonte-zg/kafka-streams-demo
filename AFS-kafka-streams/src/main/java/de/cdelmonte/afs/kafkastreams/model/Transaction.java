@@ -1,4 +1,4 @@
-package de.cdelmonte.afs.datagenerator.model;
+package de.cdelmonte.afs.kafkastreams.model;
 
 import java.util.Date;
 
@@ -21,150 +21,145 @@ public class Transaction {
   private Date lastImportedAt;
   private String lastCid;
 
-  public Long getId() {
-    return id;
+
+  private Transaction(Builder builder) {
+    id = builder.id;
+    networkName = builder.networkName;
+    networkTransactionId = builder.networkTransactionId;
+    networkStatus = builder.networkStatus;
+    date = builder.date;
+    amount = builder.amount;
+    commission = builder.commission;
+    userCommission = builder.userCommission;
+    status = builder.status;
+    userId = builder.userId;
+    click = builder.click;
+    merchant = builder.merchant;
+    createdAt = builder.createdAt;
+    updatedAt = builder.updatedAt;
+    imported = builder.imported;
+    lastImportedAt = builder.lastImportedAt;
+    lastCid = builder.lastCid;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public static Builder builder() {
+    return new Builder();
   }
 
-  public String getNetworkName() {
-    return networkName;
+  public static Builder builder(Transaction copy) {
+    Builder builder = new Builder();
+
+    builder.id = copy.id;
+    builder.networkName = copy.networkName;
+    builder.networkTransactionId = copy.networkTransactionId;
+    builder.networkStatus = copy.networkStatus;
+    builder.date = copy.date;
+    builder.amount = copy.amount;
+    builder.commission = copy.commission;
+    builder.userCommission = copy.userCommission;
+    builder.status = copy.status;
+    builder.userId = copy.userId;
+    builder.click = copy.click;
+    builder.merchant = copy.merchant;
+    builder.createdAt = copy.createdAt;
+    builder.updatedAt = copy.updatedAt;
+    builder.imported = copy.imported;
+    builder.lastImportedAt = copy.lastImportedAt;
+    builder.lastCid = copy.lastCid;
+
+    return builder;
   }
 
-  public void setNetworkName(String networkName) {
-    this.networkName = networkName;
-  }
+  public static class Builder {
+    public String lastCid;
+    public Date lastImportedAt;
+    public boolean imported;
+    public Date updatedAt;
+    public Date createdAt;
+    public Merchant merchant;
+    public Click click;
+    public Long userId;
+    public String status;
+    public Long userCommission;
+    public Long commission;
+    public Long amount;
+    public Date date;
+    public String networkStatus;
+    public String networkTransactionId;
+    public String networkName;
+    public Long id;
 
-  public String getNetworkTransactionId() {
-    return networkTransactionId;
-  }
+    public void setLastCid(String lastCid) {
+      this.lastCid = lastCid;
+    }
 
-  public void setNetworkTransactionId(String networkTransactionId) {
-    this.networkTransactionId = networkTransactionId;
-  }
+    public void setLastImportedAt(Date lastImportedAt) {
+      this.lastImportedAt = lastImportedAt;
+    }
 
-  public String getNetworkStatus() {
-    return networkStatus;
-  }
+    public void setImported(boolean imported) {
+      this.imported = imported;
+    }
 
-  public void setNetworkStatus(String networkStatus) {
-    this.networkStatus = networkStatus;
-  }
+    public void setUpdatedAt(Date updatedAt) {
+      this.updatedAt = updatedAt;
+    }
 
-  public Date getDate() {
-    return date;
-  }
+    public void setCreatedAt(Date createdAt) {
+      this.createdAt = createdAt;
+    }
 
-  public void setDate(Date date) {
-    this.date = date;
-  }
+    public void setMerchant(Merchant merchant) {
+      this.merchant = merchant;
+    }
 
-  public Long getAmount() {
-    return amount;
-  }
+    public void setClick(Click click) {
+      this.click = click;
+    }
 
-  public void setAmount(Long amount) {
-    this.amount = amount;
-  }
+    public void setUserId(Long userId) {
+      this.userId = userId;
+    }
 
-  public Long getCommission() {
-    return commission;
-  }
+    public void setStatus(String status) {
+      this.status = status;
+    }
 
-  public void setCommission(Long commission) {
-    this.commission = commission;
-  }
+    public void setUserCommission(Long userCommission) {
+      this.userCommission = userCommission;
+    }
 
-  public Long getUserCommission() {
-    return userCommission;
-  }
+    public void setCommission(Long commission) {
+      this.commission = commission;
+    }
 
-  public void setUserCommission(Long userCommission) {
-    this.userCommission = userCommission;
-  }
+    public void setAmount(Long amount) {
+      this.amount = amount;
+    }
 
-  public String getStatus() {
-    return status;
-  }
+    public void setDate(Date date) {
+      this.date = date;
+    }
 
-  public void setStatus(String status) {
-    this.status = status;
-  }
+    public void setNetworkStatus(String networkStatus) {
+      this.networkStatus = networkStatus;
+    }
 
-  public Long getUserId() {
-    return userId;
-  }
+    public void setNetworkTransactionId(String networkTransactionId) {
+      this.networkTransactionId = networkTransactionId;
+    }
 
-  public void setUserId(Long userId) {
-    this.userId = userId;
-  }
+    public void setNetworkName(String networkName) {
+      this.networkName = networkName;
+    }
 
-  public Click getClick() {
-    return click;
-  }
+    public void setId(Long id) {
+      this.id = id;
+    }
 
-  public void setClick(Click click) {
-    this.click = click;
-  }
-
-  public Merchant getMerchant() {
-    return merchant;
-  }
-
-  public void setMerchant(Merchant merchant) {
-    this.merchant = merchant;
-  }
-
-  public Date getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public Date getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
-  public boolean isImported() {
-    return imported;
-  }
-
-  public void setImported(boolean imported) {
-    this.imported = imported;
-  }
-
-  public Date getLastImportedAt() {
-    return lastImportedAt;
-  }
-
-  public void setLastImportedAt(Date lastImportedAt) {
-    this.lastImportedAt = lastImportedAt;
-  }
-
-  public String getLastCid() {
-    return lastCid;
-  }
-
-  public void setLastCid(String lastCid) {
-    this.lastCid = lastCid;
-  }
-
-  @Override
-  public String toString() {
-    return "Transaction [id=" + id + ", networkName=" + networkName + ", networkTransactionId="
-        + networkTransactionId + ", networkStatus=" + networkStatus + ", date=" + date + ", amount="
-        + amount + ", commission=" + commission + ", userCommission=" + userCommission + ", status="
-        + status + ", userId=" + userId + ", click=" + click + ", merchant=" + merchant
-        + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", imported=" + imported
-        + ", lastImportedAt=" + lastImportedAt + ", lastCid=" + lastCid + "]";
+    public Transaction build() {
+      return new Transaction(this);
+    }
   }
 
   @Override
@@ -284,5 +279,15 @@ public class Transaction {
     } else if (!userId.equals(other.userId))
       return false;
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return "Transaction [id=" + id + ", networkName=" + networkName + ", networkTransactionId="
+        + networkTransactionId + ", networkStatus=" + networkStatus + ", date=" + date + ", amount="
+        + amount + ", commission=" + commission + ", userCommission=" + userCommission + ", status="
+        + status + ", userId=" + userId + ", click=" + click + ", merchant=" + merchant
+        + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", imported=" + imported
+        + ", lastImportedAt=" + lastImportedAt + ", lastCid=" + lastCid + "]";
   }
 }

@@ -1,8 +1,8 @@
-package de.cdelmonte.afs.datagenerator.model;
+package de.cdelmonte.afs.kafkastreams.model;
 
 import java.util.Date;
 import java.util.List;
-import de.cdelmonte.afs.datagenerator.model.payment.PaymentAccount;
+import de.cdelmonte.afs.kafkastreams.model.payment.PaymentAccount;
 
 public class User {
   private Long id;
@@ -33,204 +33,72 @@ public class User {
   private Balance balance;
   private Address address;
 
-  public Long getId() {
-    return id;
+
+  private User(Builder builder) {
+    id = builder.id;
+    email = builder.email;
+    username = builder.username;
+    name = builder.name;
+    birthdate = builder.birthdate;
+    registrationDate = builder.registrationDate;
+    lastLoginDate = builder.lastLoginDate;
+    lastCountry = builder.lastCountry;
+    lastIp = builder.lastIp;
+    lastCid = builder.lastCid;
+    languages = builder.languages;
+    paymentsBlockedTill = builder.paymentsBlockedTill;
+
+    emailVerified = builder.emailVerified;
+    paymentsBlocked = builder.paymentsBlocked;
+    blocked = builder.blocked;
+    doNotPay = builder.doNotPay;
+    ignoreCountry = builder.ignoreCountry;
+    automaticPayment = builder.automaticPayment;
+    adsEnabled = builder.adsEnabled;
+    toolbarUser = builder.toolbarUser;
+    mobileAppUser = builder.mobileAppUser;
+    numberOfTransactions = builder.numberOfTransactions;
+
+    paymentAccounts = builder.paymentAccounts;
+    balance = builder.balance;
+    address = builder.address;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public static Builder builder() {
+    return new Builder();
   }
 
-  public String getEmail() {
-    return email;
-  }
+  public static Builder builder(User copy) {
+    Builder builder = new Builder();
+    builder.setId(copy.id);
+    builder.setEmail(copy.email);
+    builder.setUsername(copy.username);
+    builder.setName(copy.name);
+    builder.setBirthdate(copy.birthdate);
+    builder.setRegistrationDate(copy.registrationDate);
+    builder.setLastLoginDate(copy.lastLoginDate);
+    builder.setLastCountry(copy.lastCountry);
+    builder.setLastIp(copy.lastIp);
+    builder.setLastCid(copy.lastCid);
+    builder.setLanguages(copy.languages);
+    builder.setPaymentsBlockedTill(copy.paymentsBlockedTill);
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    builder.setEmailVerified(copy.emailVerified);
+    builder.setPaymentsBlocked(copy.paymentsBlocked);
+    builder.setBlocked(copy.blocked);
+    builder.setDoNotPay(copy.doNotPay);
+    builder.setIgnoreCountry(copy.ignoreCountry);
+    builder.setAutomaticPayment(copy.automaticPayment);
+    builder.setAdsEnabled(copy.adsEnabled);
+    builder.setToolbarUser(copy.toolbarUser);
+    builder.setMobileAppUser(copy.mobileAppUser);
+    builder.setNumberOfTransactions(copy.numberOfTransactions);
 
-  public String getUsername() {
-    return username;
-  }
+    builder.setPaymentAccounts(copy.paymentAccounts);
+    builder.setBalance(copy.balance);
+    builder.setAddress(copy.address);
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Date getBirthdate() {
-    return birthdate;
-  }
-
-  public void setBirthdate(Date birthdate) {
-    this.birthdate = birthdate;
-  }
-
-  public Date getRegistrationDate() {
-    return registrationDate;
-  }
-
-  public void setRegistrationDate(Date registrationDate) {
-    this.registrationDate = registrationDate;
-  }
-
-  public Date getLastLoginDate() {
-    return lastLoginDate;
-  }
-
-  public void setLastLoginDate(Date lastLoginDate) {
-    this.lastLoginDate = lastLoginDate;
-  }
-
-  public String getLastCountry() {
-    return lastCountry;
-  }
-
-  public void setLastCountry(String lastCountry) {
-    this.lastCountry = lastCountry;
-  }
-
-  public String getLastIp() {
-    return lastIp;
-  }
-
-  public void setLastIp(String lastIp) {
-    this.lastIp = lastIp;
-  }
-
-  public Long getLastCid() {
-    return lastCid;
-  }
-
-  public void setLastCid(Long lastCid) {
-    this.lastCid = lastCid;
-  }
-
-  public String getLanguages() {
-    return languages;
-  }
-
-  public void setLanguages(String languages) {
-    this.languages = languages;
-  }
-
-  public Date getPaymentsBlockedTill() {
-    return paymentsBlockedTill;
-  }
-
-  public void setPaymentsBlockedTill(Date paymentsBlockedTill) {
-    this.paymentsBlockedTill = paymentsBlockedTill;
-  }
-
-  public boolean isEmailVerified() {
-    return emailVerified;
-  }
-
-  public void setEmailVerified(boolean emailVerified) {
-    this.emailVerified = emailVerified;
-  }
-
-  public boolean isPaymentsBlocked() {
-    return paymentsBlocked;
-  }
-
-  public void setPaymentsBlocked(boolean paymentsBlocked) {
-    this.paymentsBlocked = paymentsBlocked;
-  }
-
-  public boolean isBlocked() {
-    return blocked;
-  }
-
-  public void setBlocked(boolean blocked) {
-    this.blocked = blocked;
-  }
-
-  public boolean isDoNotPay() {
-    return doNotPay;
-  }
-
-  public void setDoNotPay(boolean doNotPay) {
-    this.doNotPay = doNotPay;
-  }
-
-  public boolean isIgnoreCountry() {
-    return ignoreCountry;
-  }
-
-  public void setIgnoreCountry(boolean ignoreCountry) {
-    this.ignoreCountry = ignoreCountry;
-  }
-
-  public boolean isAutomaticPayment() {
-    return automaticPayment;
-  }
-
-  public void setAutomaticPayment(boolean automaticPayment) {
-    this.automaticPayment = automaticPayment;
-  }
-
-  public boolean isAdsEnabled() {
-    return adsEnabled;
-  }
-
-  public void setAdsEnabled(boolean adsEnabled) {
-    this.adsEnabled = adsEnabled;
-  }
-
-  public boolean isToolbarUser() {
-    return toolbarUser;
-  }
-
-  public void setToolbarUser(boolean toolbarUser) {
-    this.toolbarUser = toolbarUser;
-  }
-
-  public boolean isMobileAppUser() {
-    return mobileAppUser;
-  }
-
-  public void setMobileAppUser(boolean mobileAppUser) {
-    this.mobileAppUser = mobileAppUser;
-  }
-
-  public int getNumberOfTransactions() {
-    return numberOfTransactions;
-  }
-
-  public void setNumberOfTransactions(int numberOfTransactions) {
-    this.numberOfTransactions = numberOfTransactions;
-  }
-
-  public List<PaymentAccount> getPaymentAccounts() {
-    return paymentAccounts;
-  }
-
-  public void setPaymentAccounts(List<PaymentAccount> paymentAccounts) {
-    this.paymentAccounts = paymentAccounts;
-  }
-
-  public Balance getBalance() {
-    return balance;
-  }
-
-  public void setBalance(Balance balance) {
-    this.balance = balance;
-  }
-
-  public Address getAddress() {
-    return address;
-  }
-
-  public void setAddress(Address address) {
-    this.address = address;
+    return builder;
   }
 
   @Override
@@ -384,5 +252,139 @@ public class User {
         + toolbarUser + ", mobileAppUser=" + mobileAppUser + ", numberOfTransactions="
         + numberOfTransactions + ", paymentAccounts=" + paymentAccounts + ", balance=" + balance
         + ", address=" + address + "]";
+  }
+
+  public static final class Builder {
+    private Long id;
+    private String email;
+    private String username;
+    private String name;
+    private Date birthdate;
+    private Date registrationDate;
+    private Date lastLoginDate;
+    private String lastCountry;
+    private String lastIp;
+    private Long lastCid;
+    private String languages;
+    private Date paymentsBlockedTill;
+
+    private boolean emailVerified;
+    private boolean paymentsBlocked;
+    private boolean blocked;
+    private boolean doNotPay;
+    private boolean ignoreCountry;
+    private boolean automaticPayment;
+    private boolean adsEnabled;
+    private boolean toolbarUser;
+    private boolean mobileAppUser;
+    private int numberOfTransactions;
+
+    private List<PaymentAccount> paymentAccounts;
+    private Balance balance;
+    private Address address;
+
+    private void setId(Long id) {
+      this.id = id;
+    }
+
+    void setEmail(String email) {
+      this.email = email;
+    }
+
+    void setUsername(String username) {
+      this.username = username;
+    }
+
+    void setName(String name) {
+      this.name = name;
+    }
+
+    void setBirthdate(Date birthdate) {
+      this.birthdate = birthdate;
+    }
+
+    void setRegistrationDate(Date registrationDate) {
+      this.registrationDate = registrationDate;
+    }
+
+    void setLastLoginDate(Date lastLoginDate) {
+      this.lastLoginDate = lastLoginDate;
+    }
+
+    void setLastCountry(String lastCountry) {
+      this.lastCountry = lastCountry;
+    }
+
+    void setLastIp(String lastIp) {
+      this.lastIp = lastIp;
+    }
+
+    void setLastCid(Long lastCid) {
+      this.lastCid = lastCid;
+    }
+
+    void setLanguages(String languages) {
+      this.languages = languages;
+    }
+
+    void setPaymentsBlockedTill(Date paymentsBlockedTill) {
+      this.paymentsBlockedTill = paymentsBlockedTill;
+    }
+
+    void setEmailVerified(boolean emailVerified) {
+      this.emailVerified = emailVerified;
+    }
+
+    void setPaymentsBlocked(boolean paymentsBlocked) {
+      this.paymentsBlocked = paymentsBlocked;
+    }
+
+    void setBlocked(boolean blocked) {
+      this.blocked = blocked;
+    }
+
+    void setDoNotPay(boolean doNotPay) {
+      this.doNotPay = doNotPay;
+    }
+
+    void setIgnoreCountry(boolean ignoreCountry) {
+      this.ignoreCountry = ignoreCountry;
+    }
+
+    void setAutomaticPayment(boolean automaticPayment) {
+      this.automaticPayment = automaticPayment;
+    }
+
+    void setAdsEnabled(boolean adsEnabled) {
+      this.adsEnabled = adsEnabled;
+    }
+
+    void setToolbarUser(boolean toolbarUser) {
+      this.toolbarUser = toolbarUser;
+    }
+
+    void setMobileAppUser(boolean mobileAppUser) {
+      this.mobileAppUser = mobileAppUser;
+    }
+
+    void setNumberOfTransactions(int numberOfTransactions) {
+      this.numberOfTransactions = numberOfTransactions;
+    }
+
+    void setPaymentAccounts(List<PaymentAccount> paymentAccounts) {
+      this.paymentAccounts = paymentAccounts;
+    }
+
+    void setBalance(Balance balance) {
+      this.balance = balance;
+    }
+
+    void setAddress(Address address) {
+      this.address = address;
+    }
+
+    public User build() {
+      return new User(this);
+    }
   }
 }

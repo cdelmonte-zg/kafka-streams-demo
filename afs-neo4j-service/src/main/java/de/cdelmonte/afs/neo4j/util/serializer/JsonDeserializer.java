@@ -1,31 +1,24 @@
-package de.cdelmonte.afs.kafkastreams.util.serializer;
+package de.cdelmonte.afs.neo4j.util.serializer;
 
-
-import java.lang.reflect.Type;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
-import de.cdelmonte.afs.kafkastreams.collectors.FixedSizePriorityQueue;
-import de.cdelmonte.afs.kafkastreams.model.payment.BankAccount;
-import de.cdelmonte.afs.kafkastreams.model.payment.BitcoinAccount;
-import de.cdelmonte.afs.kafkastreams.model.payment.PaymentAccount;
-import de.cdelmonte.afs.kafkastreams.model.payment.PaypalAccount;
+import de.cdelmonte.afs.neo4j.model.payment.BankAccount;
+import de.cdelmonte.afs.neo4j.model.payment.BitcoinAccount;
+import de.cdelmonte.afs.neo4j.model.payment.PaymentAccount;
+import de.cdelmonte.afs.neo4j.model.payment.PaypalAccount;
 
 
 public class JsonDeserializer<T> implements Deserializer<T> {
   private Gson gson;
   private Class<T> deserializedClass;
-  private Type reflectionTypeToken;
+
+  public JsonDeserializer() {}
 
   public JsonDeserializer(Class<T> deserializedClass) {
     this.deserializedClass = deserializedClass;
-    init();
-  }
-
-  public JsonDeserializer(Type reflectionTypeToken) {
-    this.reflectionTypeToken = reflectionTypeToken;
     init();
   }
 
@@ -35,14 +28,12 @@ public class JsonDeserializer<T> implements Deserializer<T> {
         .registerSubtype(PaypalAccount.class).registerSubtype(BitcoinAccount.class);
 
     GsonBuilder builder = new GsonBuilder();
-    builder
-        .registerTypeAdapter(FixedSizePriorityQueue.class,
-            new FixedSizePriorityQueueAdapter().nullSafe())
-        .registerTypeAdapterFactory(paymentAdapter);
+    builder.registerTypeAdapterFactory(paymentAdapter);
     gson = builder.create();
   }
 
-  public JsonDeserializer() {}
+  @Override
+  public void close() {}
 
   @Override
   @SuppressWarnings("unchecked")
@@ -61,17 +52,11 @@ public class JsonDeserializer<T> implements Deserializer<T> {
     }
 
     try {
-      Type deserializeFrom = deserializedClass != null ? deserializedClass : reflectionTypeToken;
-      des = gson.fromJson(new String(bytes), deserializeFrom);
-
+      des = gson.fromJson(new String(bytes), deserializedClass);
     } catch (Exception e) {
-      e.getMessage();
       e.printStackTrace();
     }
 
     return des;
   }
-
-  @Override
-  public void close() {}
 }

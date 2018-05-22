@@ -5,16 +5,28 @@ import java.util.Map;
 import org.apache.kafka.common.serialization.Serializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import de.cdelmonte.afs.kafkastreams.collectors.FixedSizePriorityQueue;
+import de.cdelmonte.afs.kafkastreams.model.payment.BankAccount;
+import de.cdelmonte.afs.kafkastreams.model.payment.BitcoinAccount;
+import de.cdelmonte.afs.kafkastreams.model.payment.PaymentAccount;
+import de.cdelmonte.afs.kafkastreams.model.payment.PaypalAccount;
 
 public class JsonSerializer<T> implements Serializer<T> {
 
   private Gson gson;
 
   public JsonSerializer() {
+    final RuntimeTypeAdapterFactory<PaymentAccount> paymentAdapter = RuntimeTypeAdapterFactory
+        .of(PaymentAccount.class, "type").registerSubtype(BankAccount.class)
+        .registerSubtype(PaypalAccount.class).registerSubtype(BitcoinAccount.class);
+
     GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(FixedSizePriorityQueue.class,
-        new FixedSizePriorityQueueAdapter().nullSafe());
+    builder
+        .registerTypeAdapter(FixedSizePriorityQueue.class,
+            new FixedSizePriorityQueueAdapter().nullSafe())
+        .registerTypeAdapterFactory(paymentAdapter);
+
     gson = builder.create();
   }
 

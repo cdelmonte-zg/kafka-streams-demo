@@ -19,4 +19,10 @@ public class KafkaConsumer {
     logger.debug("received payload='{}'", payload);
     service.importTransactions(payload);
   }
+
+  @KafkaListener(topics = "${kafka.topic.import-users}")
+  public void receiveUsers(String payload) {
+    logger.debug("received users payload='{}'", payload);
+    service.importUsers(payload);
+  }
 }

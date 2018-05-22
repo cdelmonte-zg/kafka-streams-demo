@@ -195,7 +195,6 @@ public class Purchase {
       return this;
     }
 
-
     public Builder maskCreditCard() {
       Objects.requireNonNull(this.creditCardNumber, "Credit Card can't be null");
       String[] parts = this.creditCardNumber.split("-");
