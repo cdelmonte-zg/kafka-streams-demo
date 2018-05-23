@@ -2,7 +2,7 @@ package de.cdelmonte.afs.datagenerator.model;
 
 import java.util.Date;
 
-public class Click {
+public class Click extends Mock {
   private Long id;
   private Date date;
   private String ip;

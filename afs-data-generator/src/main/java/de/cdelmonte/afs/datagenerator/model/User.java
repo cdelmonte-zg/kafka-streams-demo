@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import de.cdelmonte.afs.datagenerator.model.payment.PaymentAccount;
 
-public class User {
+public class User extends Mock {
   private Long id;
   private String email;
   private String username;

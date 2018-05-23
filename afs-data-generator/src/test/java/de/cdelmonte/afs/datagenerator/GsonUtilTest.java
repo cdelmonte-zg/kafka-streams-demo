@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import com.google.gson.Gson;
 import de.cdelmonte.afs.datagenerator.mocker.MocksGenerator;
 
 public class GsonUtilTest {
@@ -23,11 +24,19 @@ public class GsonUtilTest {
   }
 
   @Test
-  public void simpleJson() throws Exception {
-    String result = mock.generateMocks(100, 30);
+  public void testMockedUsers() throws Exception {
+    Gson gson = new Gson();
+    String results = gson.toJson(mock.generateMocks("user", 30));
+    assertTrue("Is Json Valid?", isJSONValid(results));
+  }
 
-    assertTrue("Is Json Valid?", isJSONValid(result));
+  @Test
+  public void testMockedTransactions() throws Exception {
+    mock.generateMocks("user", 30);
 
+    Gson gson = new Gson();
+    String results = gson.toJson(mock.generateMocks("transaction", 30));
+    assertTrue("Is Json Valid?", isJSONValid(results));
   }
 
   public boolean isJSONValid(String test) {

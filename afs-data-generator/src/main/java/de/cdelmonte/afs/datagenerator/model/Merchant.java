@@ -1,6 +1,6 @@
 package de.cdelmonte.afs.datagenerator.model;
 
-public class Merchant {
+public class Merchant extends Mock {
 
   private Long id;
   private String name;

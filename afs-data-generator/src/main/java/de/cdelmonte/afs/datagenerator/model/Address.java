@@ -1,6 +1,6 @@
 package de.cdelmonte.afs.datagenerator.model;
 
-public class Address {
+public class Address extends Mock {
   private String country;
   private String state = "";
   private String city;

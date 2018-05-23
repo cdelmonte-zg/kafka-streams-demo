@@ -1,6 +1,6 @@
 package de.cdelmonte.afs.datagenerator.model;
 
-public class Balance {
+public class Balance extends Mock {
   private Long pending;
   private Long paid;
   private Long denied;

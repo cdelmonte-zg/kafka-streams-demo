@@ -2,7 +2,7 @@ package de.cdelmonte.afs.datagenerator.model;
 
 import java.util.Date;
 
-public class Transaction {
+public class Transaction extends Mock {
   private Long id;
   private String networkName;
   private String networkTransactionId;
