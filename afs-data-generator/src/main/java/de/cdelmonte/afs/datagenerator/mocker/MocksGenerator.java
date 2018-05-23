@@ -8,20 +8,19 @@ import de.cdelmonte.afs.datagenerator.model.User;
 
 @Service
 public class MocksGenerator {
-  public GeneratorSupplier<User> g = new UserGenerator<User>();
-  public GeneratorSupplier<Transaction> t = new TransactionGenerator<Transaction>();
-
-  public <T> List<? extends Mock> generate(GeneratorSupplier<T> g, int howMany) {
+  private <T> List<? extends Mock> generate(GeneratorSupplier<T> g, int howMany) {
     return g.supplyMocks(howMany);
   }
 
   public List<? extends Mock> generateMocks(String type, int howMany) {
-    switch (type) {
-      case "user":
-        return generate(g, howMany);
-      case "transaction":
-        return generate(t, howMany);
-    }
+    GeneratorSupplier<User> g = new UserGenerator<User>();
+    GeneratorSupplier<Transaction> t = new TransactionGenerator<Transaction>();
+
+    if (type.equals("user"))
+      return generate(g, howMany);
+    else if (type.equals("transaction"))
+      return generate(t, howMany);
+
     return null;
   }
 }
