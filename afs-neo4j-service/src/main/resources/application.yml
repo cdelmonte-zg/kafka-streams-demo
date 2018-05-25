@@ -16,3 +16,4 @@ spring.kafka.consumer:
       group-id: importer
 
 kafka.topic.import-transactions: transactions-to-import
+kafka.topic.import-users: users-to-import

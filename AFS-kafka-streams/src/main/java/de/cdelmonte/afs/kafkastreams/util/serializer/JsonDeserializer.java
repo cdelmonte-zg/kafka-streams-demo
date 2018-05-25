@@ -6,7 +6,12 @@ import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import de.cdelmonte.afs.kafkastreams.collectors.FixedSizePriorityQueue;
+import de.cdelmonte.afs.kafkastreams.model.payment.BankAccount;
+import de.cdelmonte.afs.kafkastreams.model.payment.BitcoinAccount;
+import de.cdelmonte.afs.kafkastreams.model.payment.PaymentAccount;
+import de.cdelmonte.afs.kafkastreams.model.payment.PaypalAccount;
 
 
 public class JsonDeserializer<T> implements Deserializer<T> {
@@ -17,7 +22,6 @@ public class JsonDeserializer<T> implements Deserializer<T> {
   public JsonDeserializer(Class<T> deserializedClass) {
     this.deserializedClass = deserializedClass;
     init();
-
   }
 
   public JsonDeserializer(Type reflectionTypeToken) {
@@ -26,9 +30,15 @@ public class JsonDeserializer<T> implements Deserializer<T> {
   }
 
   private void init() {
+    final RuntimeTypeAdapterFactory<PaymentAccount> paymentAdapter = RuntimeTypeAdapterFactory
+        .of(PaymentAccount.class, "type").registerSubtype(BankAccount.class)
+        .registerSubtype(PaypalAccount.class).registerSubtype(BitcoinAccount.class);
+
     GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(FixedSizePriorityQueue.class,
-        new FixedSizePriorityQueueAdapter().nullSafe());
+    builder
+        .registerTypeAdapter(FixedSizePriorityQueue.class,
+            new FixedSizePriorityQueueAdapter().nullSafe())
+        .registerTypeAdapterFactory(paymentAdapter);
     gson = builder.create();
   }
 
@@ -53,16 +63,15 @@ public class JsonDeserializer<T> implements Deserializer<T> {
     try {
       Type deserializeFrom = deserializedClass != null ? deserializedClass : reflectionTypeToken;
       des = gson.fromJson(new String(bytes), deserializeFrom);
+
     } catch (Exception e) {
       e.getMessage();
-      System.out.println("XXX " + s);
+      e.printStackTrace();
     }
 
     return des;
   }
 
   @Override
-  public void close() {
-
-  }
+  public void close() {}
 }

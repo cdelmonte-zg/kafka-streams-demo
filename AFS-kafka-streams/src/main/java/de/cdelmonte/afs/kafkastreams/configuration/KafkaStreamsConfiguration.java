@@ -17,7 +17,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.EnableKafkaStreams;
 import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
-import de.cdelmonte.afs.kafkastreams.model.Purchase;
+import de.cdelmonte.afs.kafkastreams.model.Transaction;
+import de.cdelmonte.afs.kafkastreams.model.User;
 import de.cdelmonte.afs.kafkastreams.util.serde.StreamsSerdes;
 
 @Configuration
@@ -57,22 +58,56 @@ public class KafkaStreamsConfiguration {
     return uppercasedStream;
   }
 
+  // @Bean
+  // public KStream<String, Purchase> transactionsStream(StreamsBuilder kStreamBuilder) {
+  // Serde<Purchase> purchaseSerde = StreamsSerdes.PurchaseSerde();
+  // Serde<String> stringSerde = Serdes.String();
+  //
+  // KStream<String, Purchase> purchaseKStream =
+  // kStreamBuilder.stream("transactions", Consumed.with(stringSerde, purchaseSerde));
+  //
+  // KStream<String, Purchase> masked =
+  // purchaseKStream.mapValues(p -> Purchase.builder(p).maskCreditCard().build());
+  //
+  // masked.print(Printed.<String, Purchase>toSysOut().withLabel("Transactions are coming!!"));
+  // masked.to("transactions-to-import", Produced.with(stringSerde, purchaseSerde));
+  //
+  // return purchaseKStream;
+  // }
+
   @Bean
-  public KStream<String, Purchase> transactionsStream(StreamsBuilder kStreamBuilder) {
-    Serde<Purchase> purchaseSerde = StreamsSerdes.PurchaseSerde();
+  public KStream<String, Transaction> transactionsStream(StreamsBuilder kStreamBuilder) {
+    Serde<Transaction> transactionSerde = StreamsSerdes.transactionSerde();
     Serde<String> stringSerde = Serdes.String();
 
-    KStream<String, Purchase> purchaseKStream =
-        kStreamBuilder.stream("transactions", Consumed.with(stringSerde, purchaseSerde));
+    KStream<String, Transaction> transactionKStream =
+        kStreamBuilder.stream("transactions", Consumed.with(stringSerde, transactionSerde));
 
-    KStream<String, Purchase> masked =
-        purchaseKStream.mapValues(p -> Purchase.builder(p).maskCreditCard().build());
+    KStream<String, Transaction> masked =
+        transactionKStream.mapValues(p -> Transaction.builder(p).build());
 
-    masked.print(Printed.<String, Purchase>toSysOut().withLabel("Transactions are coming!!"));
-    masked.to("transactions-to-import", Produced.with(stringSerde, purchaseSerde));
+    masked.print(Printed.<String, Transaction>toSysOut().withLabel("Transactions are coming!!"));
+    masked.to("transactions-to-import", Produced.with(stringSerde, transactionSerde));
 
-    return purchaseKStream;
+    return transactionKStream;
   }
+
+  @Bean
+  public KStream<String, User> usersStream(StreamsBuilder kStreamBuilder) {
+    Serde<User> userSerde = StreamsSerdes.UserSerde();
+    Serde<String> stringSerde = Serdes.String();
+
+    KStream<String, User> userKStream =
+        kStreamBuilder.stream("users", Consumed.with(stringSerde, userSerde));
+
+    KStream<String, User> masked = userKStream.mapValues(p -> User.builder(p).build());
+
+    masked.print(Printed.<String, User>toSysOut().withLabel("Users are coming!!"));
+    masked.to("users-to-import", Produced.with(stringSerde, userSerde));
+
+    return userKStream;
+  }
+
 
   @Bean
   public KStream<Integer, String> kStream2(StreamsBuilder kStreamBuilder) {

@@ -1,6 +1,5 @@
 package de.cdelmonte.afs.kafkastreams.util.serde;
 
-
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
@@ -12,16 +11,22 @@ import de.cdelmonte.afs.kafkastreams.collectors.FixedSizePriorityQueue;
 import de.cdelmonte.afs.kafkastreams.model.Purchase;
 import de.cdelmonte.afs.kafkastreams.model.ShareVolume;
 import de.cdelmonte.afs.kafkastreams.model.StockTransaction;
+import de.cdelmonte.afs.kafkastreams.model.Transaction;
+import de.cdelmonte.afs.kafkastreams.model.User;
 import de.cdelmonte.afs.kafkastreams.util.serializer.JsonDeserializer;
 import de.cdelmonte.afs.kafkastreams.util.serializer.JsonSerializer;
 
-
 public class StreamsSerdes {
-
-
-
   public static Serde<Purchase> PurchaseSerde() {
     return new PurchaseSerde();
+  }
+
+  public static Serde<User> UserSerde() {
+    return new UserSerde();
+  }
+
+  public static Serde<Transaction> transactionSerde() {
+    return new TransactionSerde();
   }
 
   public static Serde<StockTransaction> StockTransactionSerde() {
@@ -36,12 +41,9 @@ public class StreamsSerdes {
     return new ShareVolumeSerde();
   }
 
-
   public static Serde<List<StockTransaction>> TransactionsListSerde() {
     return new TransactionsListSerde();
   }
-
-
 
   public static final class PurchaseSerde extends WrapperSerde<Purchase> {
     public PurchaseSerde() {
@@ -49,12 +51,24 @@ public class StreamsSerdes {
     }
   }
 
+  public static final class UserSerde extends WrapperSerde<User> {
+    public UserSerde() {
+      super(new JsonSerializer<>(), new JsonDeserializer<>(User.class));
+    }
+  }
+
+  public static final class TransactionSerde extends WrapperSerde<Transaction> {
+    public TransactionSerde() {
+      super(new JsonSerializer<>(), new JsonDeserializer<>(Transaction.class));
+    }
+  }
 
   public static final class StockTransactionSerde extends WrapperSerde<StockTransaction> {
     public StockTransactionSerde() {
       super(new JsonSerializer<>(), new JsonDeserializer<>(StockTransaction.class));
     }
   }
+
   public static final class FixedSizePriorityQueueSerde
       extends WrapperSerde<FixedSizePriorityQueue> {
     public FixedSizePriorityQueueSerde() {
@@ -68,7 +82,6 @@ public class StreamsSerdes {
     }
   }
 
-
   public static final class TransactionsListSerde extends WrapperSerde<List<StockTransaction>> {
     private static final Type listType = new TypeToken<List<StockTransaction>>() {}.getType();
 
@@ -77,9 +90,7 @@ public class StreamsSerdes {
     }
   }
 
-
   private static class WrapperSerde<T> implements Serde<T> {
-
     private JsonSerializer<T> serializer;
     private JsonDeserializer<T> deserializer;
 
