@@ -1,8 +1,6 @@
 package de.cdelmonte.afs.kafkastreams.model;
 
 import java.util.Date;
-import java.util.List;
-import de.cdelmonte.afs.kafkastreams.model.payment.PaymentAccount;
 
 public class User {
   private Long id;
@@ -29,7 +27,6 @@ public class User {
   private boolean mobileAppUser;
   private int numberOfTransactions;
 
-  private List<PaymentAccount> paymentAccounts;
   private Balance balance;
   private Address address;
 
@@ -59,7 +56,6 @@ public class User {
     mobileAppUser = builder.mobileAppUser;
     numberOfTransactions = builder.numberOfTransactions;
 
-    paymentAccounts = builder.paymentAccounts;
     balance = builder.balance;
     address = builder.address;
   }
@@ -94,7 +90,6 @@ public class User {
     builder.setMobileAppUser(copy.mobileAppUser);
     builder.setNumberOfTransactions(copy.numberOfTransactions);
 
-    builder.setPaymentAccounts(copy.paymentAccounts);
     builder.setBalance(copy.balance);
     builder.setAddress(copy.address);
 
@@ -124,7 +119,6 @@ public class User {
     result = prime * result + (mobileAppUser ? 1231 : 1237);
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + numberOfTransactions;
-    result = prime * result + ((paymentAccounts == null) ? 0 : paymentAccounts.hashCode());
     result = prime * result + (paymentsBlocked ? 1231 : 1237);
     result = prime * result + ((paymentsBlockedTill == null) ? 0 : paymentsBlockedTill.hashCode());
     result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
@@ -213,11 +207,6 @@ public class User {
       return false;
     if (numberOfTransactions != other.numberOfTransactions)
       return false;
-    if (paymentAccounts == null) {
-      if (other.paymentAccounts != null)
-        return false;
-    } else if (!paymentAccounts.equals(other.paymentAccounts))
-      return false;
     if (paymentsBlocked != other.paymentsBlocked)
       return false;
     if (paymentsBlockedTill == null) {
@@ -250,8 +239,7 @@ public class User {
         + blocked + ", doNotPay=" + doNotPay + ", ignoreCountry=" + ignoreCountry
         + ", automaticPayment=" + automaticPayment + ", adsEnabled=" + adsEnabled + ", toolbarUser="
         + toolbarUser + ", mobileAppUser=" + mobileAppUser + ", numberOfTransactions="
-        + numberOfTransactions + ", paymentAccounts=" + paymentAccounts + ", balance=" + balance
-        + ", address=" + address + "]";
+        + numberOfTransactions + ", balance=" + balance + ", address=" + address + "]";
   }
 
   public static final class Builder {
@@ -279,7 +267,6 @@ public class User {
     private boolean mobileAppUser;
     private int numberOfTransactions;
 
-    private List<PaymentAccount> paymentAccounts;
     private Balance balance;
     private Address address;
 
@@ -369,10 +356,6 @@ public class User {
 
     void setNumberOfTransactions(int numberOfTransactions) {
       this.numberOfTransactions = numberOfTransactions;
-    }
-
-    void setPaymentAccounts(List<PaymentAccount> paymentAccounts) {
-      this.paymentAccounts = paymentAccounts;
     }
 
     void setBalance(Balance balance) {

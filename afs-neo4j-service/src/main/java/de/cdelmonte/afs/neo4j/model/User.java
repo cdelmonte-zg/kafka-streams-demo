@@ -1,8 +1,6 @@
 package de.cdelmonte.afs.neo4j.model;
 
 import java.util.Date;
-import java.util.List;
-import de.cdelmonte.afs.neo4j.model.payment.PaymentAccount;
 
 public class User {
   private Long id;
@@ -29,7 +27,6 @@ public class User {
   private boolean mobileAppUser;
   private int numberOfTransactions;
 
-  private List<PaymentAccount> paymentAccounts;
   private Balance balance;
   private Address address;
 
@@ -209,14 +206,6 @@ public class User {
     this.numberOfTransactions = numberOfTransactions;
   }
 
-  public List<PaymentAccount> getPaymentAccounts() {
-    return paymentAccounts;
-  }
-
-  public void setPaymentAccounts(List<PaymentAccount> paymentAccounts) {
-    this.paymentAccounts = paymentAccounts;
-  }
-
   public Balance getBalance() {
     return balance;
   }
@@ -243,7 +232,6 @@ public class User {
         + blocked + ", doNotPay=" + doNotPay + ", ignoreCountry=" + ignoreCountry
         + ", automaticPayment=" + automaticPayment + ", adsEnabled=" + adsEnabled + ", toolbarUser="
         + toolbarUser + ", mobileAppUser=" + mobileAppUser + ", numberOfTransactions="
-        + numberOfTransactions + ", paymentAccounts=" + paymentAccounts + ", balance=" + balance
-        + ", address=" + address + "]";
+        + numberOfTransactions + ", balance=" + balance + ", address=" + address + "]";
   }
 }

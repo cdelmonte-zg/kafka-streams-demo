@@ -14,20 +14,17 @@ import de.cdelmonte.afs.kafkastreams.model.payment.PaypalAccount;
 
 public class JsonSerializer<T> implements Serializer<T> {
 
-  private Gson gson;
+  private final Gson gson;
 
   public JsonSerializer() {
     final RuntimeTypeAdapterFactory<PaymentAccount> paymentAdapter = RuntimeTypeAdapterFactory
         .of(PaymentAccount.class, "type").registerSubtype(BankAccount.class)
         .registerSubtype(PaypalAccount.class).registerSubtype(BitcoinAccount.class);
+    final Gson gson =
+        new GsonBuilder().registerTypeAdapterFactory(paymentAdapter).registerTypeAdapter(
+            FixedSizePriorityQueue.class, new FixedSizePriorityQueueAdapter().nullSafe()).create();
 
-    GsonBuilder builder = new GsonBuilder();
-    builder
-        .registerTypeAdapter(FixedSizePriorityQueue.class,
-            new FixedSizePriorityQueueAdapter().nullSafe())
-        .registerTypeAdapterFactory(paymentAdapter);
-
-    gson = builder.create();
+    this.gson = gson;
   }
 
   @Override
