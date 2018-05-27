@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: fds-datagenerator 
+  profiles:
+    active:
+      default

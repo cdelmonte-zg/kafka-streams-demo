@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: afs-datagenerator 
-  profiles:
-    active:
-      default

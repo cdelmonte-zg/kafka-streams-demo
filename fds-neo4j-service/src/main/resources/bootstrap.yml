@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: fds-neo4j-service 
+  profiles:
+    active:
+      default
+
