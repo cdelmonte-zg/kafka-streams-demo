@@ -58,23 +58,6 @@ public class KafkaStreamsConfiguration {
     return uppercasedStream;
   }
 
-  // @Bean
-  // public KStream<String, Purchase> transactionsStream(StreamsBuilder kStreamBuilder) {
-  // Serde<Purchase> purchaseSerde = StreamsSerdes.PurchaseSerde();
-  // Serde<String> stringSerde = Serdes.String();
-  //
-  // KStream<String, Purchase> purchaseKStream =
-  // kStreamBuilder.stream("transactions", Consumed.with(stringSerde, purchaseSerde));
-  //
-  // KStream<String, Purchase> masked =
-  // purchaseKStream.mapValues(p -> Purchase.builder(p).maskCreditCard().build());
-  //
-  // masked.print(Printed.<String, Purchase>toSysOut().withLabel("Transactions are coming!!"));
-  // masked.to("transactions-to-import", Produced.with(stringSerde, purchaseSerde));
-  //
-  // return purchaseKStream;
-  // }
-
   @Bean
   public KStream<String, Transaction> transactionsStream(StreamsBuilder kStreamBuilder) {
     Serde<Transaction> transactionSerde = StreamsSerdes.transactionSerde();
