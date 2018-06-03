@@ -12,9 +12,9 @@ public class User extends Mock {
   private Date birthdate;
   private Date registrationDate;
   private Date lastLoginDate;
-  private String lastCountry;
-  private String lastIp;
-  private Long lastCid;
+  private String lastCountry; //
+  private String lastIp; //
+  private Long lastCid; //
   private String languages;
   private Date paymentsBlockedTill;
 
