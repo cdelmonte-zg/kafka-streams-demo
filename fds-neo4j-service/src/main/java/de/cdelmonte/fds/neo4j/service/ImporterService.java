@@ -52,8 +52,6 @@ public class ImporterService {
     TransactionEntity transaction = new TransactionEntity();
 
     transaction.setIdExt(tr.getId());
-    transaction.setNetworkTransactionId(tr.getNetworkTransactionId());
-    transaction.setNetworkStatus(tr.getNetworkStatus());
     transaction.setDate(tr.getDate());
     transaction.setAmount(tr.getAmount());
     transaction.setCommission(tr.getCommission());
@@ -127,9 +125,7 @@ public class ImporterService {
     Person person = new Person(user.getId(), user.getEmail(), user.getUsername(), user.getName(),
         user.getBirthdate(), user.getRegistrationDate(), user.getLastLoginDate(),
         user.getLastCountry(), user.getLastIp(), user.getLastCid(), user.getLanguages(),
-        user.getPaymentsBlockedTill(), user.isEmailVerified(), user.isPaymentsBlocked(),
-        user.isBlocked(), user.isDoNotPay(), user.isIgnoreCountry(), user.isAutomaticPayment(),
-        user.isAdsEnabled(), user.isToolbarUser(), user.isMobileAppUser(),
+        user.isEmailVerified(), user.isPaymentsBlocked(), user.isBlocked(), user.isDoNotPay(),
         user.getNumberOfTransactions());
     try {
       personRepository.save(person);

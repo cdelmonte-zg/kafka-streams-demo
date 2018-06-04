@@ -15,12 +15,15 @@ public class MocksGenerator {
   public List<? extends Mock> generateMocks(String type, int howMany) {
     GeneratorSupplier<User> g = new UserGenerator<User>();
     GeneratorSupplier<Transaction> t = new TransactionGenerator<Transaction>();
+    SuspiciousTransactionGenerator<Transaction> s =
+        new SuspiciousTransactionGenerator<Transaction>();
 
     if (type.equals("user"))
       return generate(g, howMany);
     else if (type.equals("transaction"))
       return generate(t, howMany);
-
+    else if (type.equals("suspiciousTransaction"))
+      return generate(s, howMany);
     return null;
   }
 }

@@ -12,21 +12,14 @@ public class User extends Mock {
   private Date birthdate;
   private Date registrationDate;
   private Date lastLoginDate;
-  private String lastCountry; //
-  private String lastIp; //
-  private Long lastCid; //
+  private String lastCountry;
+  private String lastIp;
+  private String lastCid;
   private String languages;
-  private Date paymentsBlockedTill;
-
   private boolean emailVerified;
   private boolean paymentsBlocked;
   private boolean blocked;
   private boolean doNotPay;
-  private boolean ignoreCountry;
-  private boolean automaticPayment;
-  private boolean adsEnabled;
-  private boolean toolbarUser;
-  private boolean mobileAppUser;
   private int numberOfTransactions;
 
   private List<PaymentAccount> paymentAccounts;
@@ -105,11 +98,11 @@ public class User extends Mock {
     this.lastIp = lastIp;
   }
 
-  public Long getLastCid() {
+  public String getLastCid() {
     return lastCid;
   }
 
-  public void setLastCid(Long lastCid) {
+  public void setLastCid(String lastCid) {
     this.lastCid = lastCid;
   }
 
@@ -119,14 +112,6 @@ public class User extends Mock {
 
   public void setLanguages(String languages) {
     this.languages = languages;
-  }
-
-  public Date getPaymentsBlockedTill() {
-    return paymentsBlockedTill;
-  }
-
-  public void setPaymentsBlockedTill(Date paymentsBlockedTill) {
-    this.paymentsBlockedTill = paymentsBlockedTill;
   }
 
   public boolean isEmailVerified() {
@@ -159,46 +144,6 @@ public class User extends Mock {
 
   public void setDoNotPay(boolean doNotPay) {
     this.doNotPay = doNotPay;
-  }
-
-  public boolean isIgnoreCountry() {
-    return ignoreCountry;
-  }
-
-  public void setIgnoreCountry(boolean ignoreCountry) {
-    this.ignoreCountry = ignoreCountry;
-  }
-
-  public boolean isAutomaticPayment() {
-    return automaticPayment;
-  }
-
-  public void setAutomaticPayment(boolean automaticPayment) {
-    this.automaticPayment = automaticPayment;
-  }
-
-  public boolean isAdsEnabled() {
-    return adsEnabled;
-  }
-
-  public void setAdsEnabled(boolean adsEnabled) {
-    this.adsEnabled = adsEnabled;
-  }
-
-  public boolean isToolbarUser() {
-    return toolbarUser;
-  }
-
-  public void setToolbarUser(boolean toolbarUser) {
-    this.toolbarUser = toolbarUser;
-  }
-
-  public boolean isMobileAppUser() {
-    return mobileAppUser;
-  }
-
-  public void setMobileAppUser(boolean mobileAppUser) {
-    this.mobileAppUser = mobileAppUser;
   }
 
   public int getNumberOfTransactions() {
@@ -234,12 +179,21 @@ public class User extends Mock {
   }
 
   @Override
+  public String toString() {
+    return "User [id=" + id + ", email=" + email + ", username=" + username + ", name=" + name
+        + ", birthdate=" + birthdate + ", registrationDate=" + registrationDate + ", lastLoginDate="
+        + lastLoginDate + ", lastCountry=" + lastCountry + ", lastIp=" + lastIp + ", lastCid="
+        + lastCid + ", languages=" + languages + ", emailVerified=" + emailVerified
+        + ", paymentsBlocked=" + paymentsBlocked + ", blocked=" + blocked + ", doNotPay=" + doNotPay
+        + ", numberOfTransactions=" + numberOfTransactions + ", paymentAccounts=" + paymentAccounts
+        + ", balance=" + balance + ", address=" + address + "]";
+  }
+
+  @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((address == null) ? 0 : address.hashCode());
-    result = prime * result + (adsEnabled ? 1231 : 1237);
-    result = prime * result + (automaticPayment ? 1231 : 1237);
     result = prime * result + ((balance == null) ? 0 : balance.hashCode());
     result = prime * result + ((birthdate == null) ? 0 : birthdate.hashCode());
     result = prime * result + (blocked ? 1231 : 1237);
@@ -247,20 +201,16 @@ public class User extends Mock {
     result = prime * result + ((email == null) ? 0 : email.hashCode());
     result = prime * result + (emailVerified ? 1231 : 1237);
     result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + (ignoreCountry ? 1231 : 1237);
     result = prime * result + ((languages == null) ? 0 : languages.hashCode());
     result = prime * result + ((lastCid == null) ? 0 : lastCid.hashCode());
     result = prime * result + ((lastCountry == null) ? 0 : lastCountry.hashCode());
     result = prime * result + ((lastIp == null) ? 0 : lastIp.hashCode());
     result = prime * result + ((lastLoginDate == null) ? 0 : lastLoginDate.hashCode());
-    result = prime * result + (mobileAppUser ? 1231 : 1237);
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + numberOfTransactions;
     result = prime * result + ((paymentAccounts == null) ? 0 : paymentAccounts.hashCode());
     result = prime * result + (paymentsBlocked ? 1231 : 1237);
-    result = prime * result + ((paymentsBlockedTill == null) ? 0 : paymentsBlockedTill.hashCode());
     result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
-    result = prime * result + (toolbarUser ? 1231 : 1237);
     result = prime * result + ((username == null) ? 0 : username.hashCode());
     return result;
   }
@@ -278,10 +228,6 @@ public class User extends Mock {
       if (other.address != null)
         return false;
     } else if (!address.equals(other.address))
-      return false;
-    if (adsEnabled != other.adsEnabled)
-      return false;
-    if (automaticPayment != other.automaticPayment)
       return false;
     if (balance == null) {
       if (other.balance != null)
@@ -309,8 +255,6 @@ public class User extends Mock {
         return false;
     } else if (!id.equals(other.id))
       return false;
-    if (ignoreCountry != other.ignoreCountry)
-      return false;
     if (languages == null) {
       if (other.languages != null)
         return false;
@@ -336,8 +280,6 @@ public class User extends Mock {
         return false;
     } else if (!lastLoginDate.equals(other.lastLoginDate))
       return false;
-    if (mobileAppUser != other.mobileAppUser)
-      return false;
     if (name == null) {
       if (other.name != null)
         return false;
@@ -352,17 +294,10 @@ public class User extends Mock {
       return false;
     if (paymentsBlocked != other.paymentsBlocked)
       return false;
-    if (paymentsBlockedTill == null) {
-      if (other.paymentsBlockedTill != null)
-        return false;
-    } else if (!paymentsBlockedTill.equals(other.paymentsBlockedTill))
-      return false;
     if (registrationDate == null) {
       if (other.registrationDate != null)
         return false;
     } else if (!registrationDate.equals(other.registrationDate))
-      return false;
-    if (toolbarUser != other.toolbarUser)
       return false;
     if (username == null) {
       if (other.username != null)
@@ -370,19 +305,5 @@ public class User extends Mock {
     } else if (!username.equals(other.username))
       return false;
     return true;
-  }
-
-  @Override
-  public String toString() {
-    return "User [id=" + id + ", email=" + email + ", username=" + username + ", name=" + name
-        + ", birthdate=" + birthdate + ", registrationDate=" + registrationDate + ", lastLoginDate="
-        + lastLoginDate + ", lastCountry=" + lastCountry + ", lastIp=" + lastIp + ", lastCid="
-        + lastCid + ", languages=" + languages + ", paymentsBlockedTill=" + paymentsBlockedTill
-        + ", emailVerified=" + emailVerified + ", paymentsBlocked=" + paymentsBlocked + ", blocked="
-        + blocked + ", doNotPay=" + doNotPay + ", ignoreCountry=" + ignoreCountry
-        + ", automaticPayment=" + automaticPayment + ", adsEnabled=" + adsEnabled + ", toolbarUser="
-        + toolbarUser + ", mobileAppUser=" + mobileAppUser + ", numberOfTransactions="
-        + numberOfTransactions + ", paymentAccounts=" + paymentAccounts + ", balance=" + balance
-        + ", address=" + address + "]";
   }
 }

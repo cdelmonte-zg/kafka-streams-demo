@@ -1,23 +1,23 @@
 # kafka-streams-demo
 
 
-1) Datagenerator 
+Datagenerator 
 --------------------------------------
 - creates at the starting point fake users and commits them to the relative Kafka topic
 - creates testing data of two kind: normal and suspect transactions
 - commits them to the Kafka topic
 
-2) Kafka Streams
+Kafka Streams
 --------------------------------------
 - process the incoming streams filtering and mapping them appropriately
 - forward the processed streams to their proper outgoing topics
 
-3) Neo4J Service
+Neo4J Service
 --------------------------------------
 - Receives the topics related to users and transactions
 - Generate and update a Neo4j graph database accordingly to the underlying graphs topology
 
-4) DAnte
+DAnte
 --------------------------------------
 - executes Cypher queries to retrieve pertinent informations from the graph database,
 in order to recognise given patterns defined as suspicious.
@@ -26,23 +26,19 @@ in order to recognise given patterns defined as suspicious.
 
 
 
-
-To run go in each directory and execute 
+1. To run go in each directory and execute 
 
 ```
-mvn clean package docker:build
+mvn -Dmaven.test.skip=true clean package docker:build
 ```
 
-After that, go to the project root and run:
+2. After that, go to the project root and run:
 
 ```
 docker-compose -f afs-docker-dev/docker-dev.yml up -d
 ```
 
-go to http:localhost:7474 and set the new access data for neo4j to:
+3. After a while, go to http:localhost:7474 to access to neo4j
 
-username: neo4j
-password: secret
+go to http://localhost:2673/swagger-ui.html to access the swagger ui (to be continued...)
 
-
-go to http://localhost:2673/swagger-ui.html to access the swagger ui

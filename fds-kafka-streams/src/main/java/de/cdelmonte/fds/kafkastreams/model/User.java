@@ -12,19 +12,13 @@ public class User {
   private Date lastLoginDate;
   private String lastCountry;
   private String lastIp;
-  private Long lastCid;
+  private String lastCid;
   private String languages;
-  private Date paymentsBlockedTill;
 
   private boolean emailVerified;
   private boolean paymentsBlocked;
   private boolean blocked;
   private boolean doNotPay;
-  private boolean ignoreCountry;
-  private boolean automaticPayment;
-  private boolean adsEnabled;
-  private boolean toolbarUser;
-  private boolean mobileAppUser;
   private int numberOfTransactions;
 
   private Balance balance;
@@ -43,17 +37,11 @@ public class User {
     lastIp = builder.lastIp;
     lastCid = builder.lastCid;
     languages = builder.languages;
-    paymentsBlockedTill = builder.paymentsBlockedTill;
 
     emailVerified = builder.emailVerified;
     paymentsBlocked = builder.paymentsBlocked;
     blocked = builder.blocked;
     doNotPay = builder.doNotPay;
-    ignoreCountry = builder.ignoreCountry;
-    automaticPayment = builder.automaticPayment;
-    adsEnabled = builder.adsEnabled;
-    toolbarUser = builder.toolbarUser;
-    mobileAppUser = builder.mobileAppUser;
     numberOfTransactions = builder.numberOfTransactions;
 
     balance = builder.balance;
@@ -77,17 +65,11 @@ public class User {
     builder.setLastIp(copy.lastIp);
     builder.setLastCid(copy.lastCid);
     builder.setLanguages(copy.languages);
-    builder.setPaymentsBlockedTill(copy.paymentsBlockedTill);
 
     builder.setEmailVerified(copy.emailVerified);
     builder.setPaymentsBlocked(copy.paymentsBlocked);
     builder.setBlocked(copy.blocked);
     builder.setDoNotPay(copy.doNotPay);
-    builder.setIgnoreCountry(copy.ignoreCountry);
-    builder.setAutomaticPayment(copy.automaticPayment);
-    builder.setAdsEnabled(copy.adsEnabled);
-    builder.setToolbarUser(copy.toolbarUser);
-    builder.setMobileAppUser(copy.mobileAppUser);
     builder.setNumberOfTransactions(copy.numberOfTransactions);
 
     builder.setBalance(copy.balance);
@@ -97,12 +79,21 @@ public class User {
   }
 
   @Override
+  public String toString() {
+    return "User [id=" + id + ", email=" + email + ", username=" + username + ", name=" + name
+        + ", birthdate=" + birthdate + ", registrationDate=" + registrationDate + ", lastLoginDate="
+        + lastLoginDate + ", lastCountry=" + lastCountry + ", lastIp=" + lastIp + ", lastCid="
+        + lastCid + ", languages=" + languages + ", emailVerified=" + emailVerified
+        + ", paymentsBlocked=" + paymentsBlocked + ", blocked=" + blocked + ", doNotPay=" + doNotPay
+        + ", numberOfTransactions=" + numberOfTransactions + ", balance=" + balance + ", address="
+        + address + "]";
+  }
+
+  @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((address == null) ? 0 : address.hashCode());
-    result = prime * result + (adsEnabled ? 1231 : 1237);
-    result = prime * result + (automaticPayment ? 1231 : 1237);
     result = prime * result + ((balance == null) ? 0 : balance.hashCode());
     result = prime * result + ((birthdate == null) ? 0 : birthdate.hashCode());
     result = prime * result + (blocked ? 1231 : 1237);
@@ -110,19 +101,15 @@ public class User {
     result = prime * result + ((email == null) ? 0 : email.hashCode());
     result = prime * result + (emailVerified ? 1231 : 1237);
     result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + (ignoreCountry ? 1231 : 1237);
     result = prime * result + ((languages == null) ? 0 : languages.hashCode());
     result = prime * result + ((lastCid == null) ? 0 : lastCid.hashCode());
     result = prime * result + ((lastCountry == null) ? 0 : lastCountry.hashCode());
     result = prime * result + ((lastIp == null) ? 0 : lastIp.hashCode());
     result = prime * result + ((lastLoginDate == null) ? 0 : lastLoginDate.hashCode());
-    result = prime * result + (mobileAppUser ? 1231 : 1237);
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + numberOfTransactions;
     result = prime * result + (paymentsBlocked ? 1231 : 1237);
-    result = prime * result + ((paymentsBlockedTill == null) ? 0 : paymentsBlockedTill.hashCode());
     result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
-    result = prime * result + (toolbarUser ? 1231 : 1237);
     result = prime * result + ((username == null) ? 0 : username.hashCode());
     return result;
   }
@@ -140,10 +127,6 @@ public class User {
       if (other.address != null)
         return false;
     } else if (!address.equals(other.address))
-      return false;
-    if (adsEnabled != other.adsEnabled)
-      return false;
-    if (automaticPayment != other.automaticPayment)
       return false;
     if (balance == null) {
       if (other.balance != null)
@@ -171,8 +154,6 @@ public class User {
         return false;
     } else if (!id.equals(other.id))
       return false;
-    if (ignoreCountry != other.ignoreCountry)
-      return false;
     if (languages == null) {
       if (other.languages != null)
         return false;
@@ -198,8 +179,6 @@ public class User {
         return false;
     } else if (!lastLoginDate.equals(other.lastLoginDate))
       return false;
-    if (mobileAppUser != other.mobileAppUser)
-      return false;
     if (name == null) {
       if (other.name != null)
         return false;
@@ -209,17 +188,10 @@ public class User {
       return false;
     if (paymentsBlocked != other.paymentsBlocked)
       return false;
-    if (paymentsBlockedTill == null) {
-      if (other.paymentsBlockedTill != null)
-        return false;
-    } else if (!paymentsBlockedTill.equals(other.paymentsBlockedTill))
-      return false;
     if (registrationDate == null) {
       if (other.registrationDate != null)
         return false;
     } else if (!registrationDate.equals(other.registrationDate))
-      return false;
-    if (toolbarUser != other.toolbarUser)
       return false;
     if (username == null) {
       if (other.username != null)
@@ -229,18 +201,7 @@ public class User {
     return true;
   }
 
-  @Override
-  public String toString() {
-    return "User [id=" + id + ", email=" + email + ", username=" + username + ", name=" + name
-        + ", birthdate=" + birthdate + ", registrationDate=" + registrationDate + ", lastLoginDate="
-        + lastLoginDate + ", lastCountry=" + lastCountry + ", lastIp=" + lastIp + ", lastCid="
-        + lastCid + ", languages=" + languages + ", paymentsBlockedTill=" + paymentsBlockedTill
-        + ", emailVerified=" + emailVerified + ", paymentsBlocked=" + paymentsBlocked + ", blocked="
-        + blocked + ", doNotPay=" + doNotPay + ", ignoreCountry=" + ignoreCountry
-        + ", automaticPayment=" + automaticPayment + ", adsEnabled=" + adsEnabled + ", toolbarUser="
-        + toolbarUser + ", mobileAppUser=" + mobileAppUser + ", numberOfTransactions="
-        + numberOfTransactions + ", balance=" + balance + ", address=" + address + "]";
-  }
+
 
   public static final class Builder {
     private Long id;
@@ -252,19 +213,13 @@ public class User {
     private Date lastLoginDate;
     private String lastCountry;
     private String lastIp;
-    private Long lastCid;
+    private String lastCid;
     private String languages;
-    private Date paymentsBlockedTill;
 
     private boolean emailVerified;
     private boolean paymentsBlocked;
     private boolean blocked;
     private boolean doNotPay;
-    private boolean ignoreCountry;
-    private boolean automaticPayment;
-    private boolean adsEnabled;
-    private boolean toolbarUser;
-    private boolean mobileAppUser;
     private int numberOfTransactions;
 
     private Balance balance;
@@ -306,16 +261,12 @@ public class User {
       this.lastIp = lastIp;
     }
 
-    void setLastCid(Long lastCid) {
+    void setLastCid(String lastCid) {
       this.lastCid = lastCid;
     }
 
     void setLanguages(String languages) {
       this.languages = languages;
-    }
-
-    void setPaymentsBlockedTill(Date paymentsBlockedTill) {
-      this.paymentsBlockedTill = paymentsBlockedTill;
     }
 
     void setEmailVerified(boolean emailVerified) {
@@ -332,26 +283,6 @@ public class User {
 
     void setDoNotPay(boolean doNotPay) {
       this.doNotPay = doNotPay;
-    }
-
-    void setIgnoreCountry(boolean ignoreCountry) {
-      this.ignoreCountry = ignoreCountry;
-    }
-
-    void setAutomaticPayment(boolean automaticPayment) {
-      this.automaticPayment = automaticPayment;
-    }
-
-    void setAdsEnabled(boolean adsEnabled) {
-      this.adsEnabled = adsEnabled;
-    }
-
-    void setToolbarUser(boolean toolbarUser) {
-      this.toolbarUser = toolbarUser;
-    }
-
-    void setMobileAppUser(boolean mobileAppUser) {
-      this.mobileAppUser = mobileAppUser;
     }
 
     void setNumberOfTransactions(int numberOfTransactions) {

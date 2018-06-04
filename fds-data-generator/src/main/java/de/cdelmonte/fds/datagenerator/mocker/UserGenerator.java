@@ -70,7 +70,6 @@ public class UserGenerator<T> implements GeneratorSupplier<T> {
     List<User> users =
         mock.reflect(User.class).field("id", mock.longSeq()).field("name", mock.names().full())
             .field("username", mock.users()).field("email", mock.emails())
-
             .field("birthdate",
                 mock.localDates().between(LocalDate.of(1945, 01, 01), LocalDate.of(2001, 12, 12))
                     .toUtilDate())
@@ -78,18 +77,13 @@ public class UserGenerator<T> implements GeneratorSupplier<T> {
                 mock.localDates().between(LocalDate.of(2016, 01, 01), LocalDate.now()).toUtilDate())
             .field("lastLoginDate",
                 mock.localDates().between(LocalDate.of(2016, 01, 01), LocalDate.now()).toUtilDate())
-
             .field("lastCountry", mock.countries().iso2()).field("lastIp", mock.ipv4s())
-            .field("lastCid", mock.longs()).field("languages", browserLanguagesMock)
+            .field("lastCid", mock.strings().size(12)).field("languages", browserLanguagesMock)
             .field("emailVerified", mock.bools()).field("paymentsBlocked", mock.bools())
             .field("blocked", mock.bools()).field("doNotPay", mock.bools())
-            .field("ignoreCountry", mock.bools()).field("automaticPayment", mock.bools())
-
-            .field("adsEnabled", mock.bools()).field("toolbarUser", mock.bools())
-            .field("mobileAppUser", mock.bools()).field("numberOfTransactions", mock.ints())
-
-            .field("balance", mock.from(balances)).field("address", mock.from(addresses))
-            .field("paymentAccounts", paymentAccounts).list(howMany).val();
+            .field("numberOfTransactions", mock.ints()).field("balance", mock.from(balances))
+            .field("address", mock.from(addresses)).field("paymentAccounts", paymentAccounts)
+            .list(howMany).val();
 
     DataContainer.setUsers(users);
 
