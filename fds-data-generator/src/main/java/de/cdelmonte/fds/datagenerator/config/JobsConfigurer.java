@@ -32,7 +32,7 @@ public class JobsConfigurer {
         .registerSubtype(PaypalAccount.class).registerSubtype(BitcoinAccount.class);
     final Gson gson = new GsonBuilder().registerTypeAdapterFactory(paymentAdapter).create();
 
-    int howMany = new Random().nextInt(1000) + 100;
+    int howMany = new Random().nextInt(10) + 1;
     List<? extends Mock> users = mocksGenerator.generateMocks("user", howMany);
 
     for (Mock u : users) {
@@ -40,11 +40,23 @@ public class JobsConfigurer {
     }
   }
 
-  @Scheduled(fixedRateString = "2400000")
+  @Scheduled(fixedRateString = "240000")
   public void generateTransactions() {
     Gson gson = new Gson();
-    int howMany = new Random().nextInt(1000) + 100;
+    int howMany = new Random().nextInt(11) + 1;
     List<? extends Mock> transactions = mocksGenerator.generateMocks("transaction", howMany);
+
+    for (Mock t : transactions) {
+      messageSender.send("transactions", gson.toJson(t));
+    }
+  }
+
+  @Scheduled(fixedRateString = "245000")
+  public void generateSuspiciousTransactions() {
+    Gson gson = new Gson();
+    int howMany = new Random().nextInt(11) + 1;
+    List<? extends Mock> transactions =
+        mocksGenerator.generateMocks("suspiciousTransaction", howMany);
 
     for (Mock t : transactions) {
       messageSender.send("transactions", gson.toJson(t));

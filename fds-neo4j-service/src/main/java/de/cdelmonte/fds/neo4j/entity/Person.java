@@ -25,19 +25,13 @@ public class Person {
   private Date lastLoginDate;
   private String lastCountry;
   private String lastIp;
-  private Long lastCid;
+  private String lastCid;
   private String languages;
-  private Date paymentsBlockedTill;
 
   private boolean emailVerified;
   private boolean paymentsBlocked;
   private boolean blocked;
   private boolean doNotPay;
-  private boolean ignoreCountry;
-  private boolean automaticPayment;
-  private boolean adsEnabled;
-  private boolean toolbarUser;
-  private boolean mobileAppUser;
   private int numberOfTransactions;
 
   // private Balance balance;
@@ -55,13 +49,10 @@ public class Person {
     // Empty constructor required as of Neo4j API 2.0.5
   };
 
-
-
   public Person(Long idExt, String email, String username, String name, Date birthdate,
-      Date registrationDate, Date lastLoginDate, String lastCountry, String lastIp, Long lastCid,
-      String languages, Date paymentsBlockedTill, boolean emailVerified, boolean paymentsBlocked,
-      boolean blocked, boolean doNotPay, boolean ignoreCountry, boolean automaticPayment,
-      boolean adsEnabled, boolean toolbarUser, boolean mobileAppUser, int numberOfTransactions) {
+      Date registrationDate, Date lastLoginDate, String lastCountry, String lastIp, String lastCid,
+      String languages, boolean emailVerified, boolean paymentsBlocked, boolean blocked,
+      boolean doNotPay, int numberOfTransactions) {
     super();
     this.idExt = idExt;
     this.email = email;
@@ -74,16 +65,10 @@ public class Person {
     this.lastIp = lastIp;
     this.lastCid = lastCid;
     this.languages = languages;
-    this.paymentsBlockedTill = paymentsBlockedTill;
     this.emailVerified = emailVerified;
     this.paymentsBlocked = paymentsBlocked;
     this.blocked = blocked;
     this.doNotPay = doNotPay;
-    this.ignoreCountry = ignoreCountry;
-    this.automaticPayment = automaticPayment;
-    this.adsEnabled = adsEnabled;
-    this.toolbarUser = toolbarUser;
-    this.mobileAppUser = mobileAppUser;
     this.numberOfTransactions = numberOfTransactions;
   }
 
@@ -159,11 +144,11 @@ public class Person {
     this.lastIp = lastIp;
   }
 
-  public Long getLastCid() {
+  public String getLastCid() {
     return lastCid;
   }
 
-  public void setLastCid(Long lastCid) {
+  public void setLastCid(String lastCid) {
     this.lastCid = lastCid;
   }
 
@@ -173,14 +158,6 @@ public class Person {
 
   public void setLanguages(String languages) {
     this.languages = languages;
-  }
-
-  public Date getPaymentsBlockedTill() {
-    return paymentsBlockedTill;
-  }
-
-  public void setPaymentsBlockedTill(Date paymentsBlockedTill) {
-    this.paymentsBlockedTill = paymentsBlockedTill;
   }
 
   public boolean isEmailVerified() {
@@ -213,46 +190,6 @@ public class Person {
 
   public void setDoNotPay(boolean doNotPay) {
     this.doNotPay = doNotPay;
-  }
-
-  public boolean isIgnoreCountry() {
-    return ignoreCountry;
-  }
-
-  public void setIgnoreCountry(boolean ignoreCountry) {
-    this.ignoreCountry = ignoreCountry;
-  }
-
-  public boolean isAutomaticPayment() {
-    return automaticPayment;
-  }
-
-  public void setAutomaticPayment(boolean automaticPayment) {
-    this.automaticPayment = automaticPayment;
-  }
-
-  public boolean isAdsEnabled() {
-    return adsEnabled;
-  }
-
-  public void setAdsEnabled(boolean adsEnabled) {
-    this.adsEnabled = adsEnabled;
-  }
-
-  public boolean isToolbarUser() {
-    return toolbarUser;
-  }
-
-  public void setToolbarUser(boolean toolbarUser) {
-    this.toolbarUser = toolbarUser;
-  }
-
-  public boolean isMobileAppUser() {
-    return mobileAppUser;
-  }
-
-  public void setMobileAppUser(boolean mobileAppUser) {
-    this.mobileAppUser = mobileAppUser;
   }
 
   public int getNumberOfTransactions() {
@@ -292,11 +229,5 @@ public class Person {
     }
     merchants.add(merchant);
   }
-
-  // public String toString() {
-  // return this.getFullName() + "'s teammates => "
-  // + Optional.ofNullable(this.teammates).orElse(Collections.emptySet()).stream()
-  // .map(Person::getFullName).collect(Collectors.toList());
-  // }
 
 }

@@ -5,8 +5,6 @@ import java.util.Date;
 public class Transaction {
   private Long id;
   private String networkName;
-  private String networkTransactionId;
-  private String networkStatus;
   private Date date;
   private Long amount;
   private Long commission;
@@ -25,8 +23,6 @@ public class Transaction {
   private Transaction(Builder builder) {
     id = builder.id;
     networkName = builder.networkName;
-    networkTransactionId = builder.networkTransactionId;
-    networkStatus = builder.networkStatus;
     date = builder.date;
     amount = builder.amount;
     commission = builder.commission;
@@ -51,8 +47,6 @@ public class Transaction {
 
     builder.id = copy.id;
     builder.networkName = copy.networkName;
-    builder.networkTransactionId = copy.networkTransactionId;
-    builder.networkStatus = copy.networkStatus;
     builder.date = copy.date;
     builder.amount = copy.amount;
     builder.commission = copy.commission;
@@ -163,6 +157,15 @@ public class Transaction {
   }
 
   @Override
+  public String toString() {
+    return "Transaction [id=" + id + ", networkName=" + networkName + ", date=" + date + ", amount="
+        + amount + ", commission=" + commission + ", userCommission=" + userCommission + ", status="
+        + status + ", userId=" + userId + ", click=" + click + ", merchant=" + merchant
+        + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", imported=" + imported
+        + ", lastImportedAt=" + lastImportedAt + ", lastCid=" + lastCid + "]";
+  }
+
+  @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
@@ -177,9 +180,6 @@ public class Transaction {
     result = prime * result + ((lastImportedAt == null) ? 0 : lastImportedAt.hashCode());
     result = prime * result + ((merchant == null) ? 0 : merchant.hashCode());
     result = prime * result + ((networkName == null) ? 0 : networkName.hashCode());
-    result = prime * result + ((networkStatus == null) ? 0 : networkStatus.hashCode());
-    result =
-        prime * result + ((networkTransactionId == null) ? 0 : networkTransactionId.hashCode());
     result = prime * result + ((status == null) ? 0 : status.hashCode());
     result = prime * result + ((updatedAt == null) ? 0 : updatedAt.hashCode());
     result = prime * result + ((userCommission == null) ? 0 : userCommission.hashCode());
@@ -248,16 +248,6 @@ public class Transaction {
         return false;
     } else if (!networkName.equals(other.networkName))
       return false;
-    if (networkStatus == null) {
-      if (other.networkStatus != null)
-        return false;
-    } else if (!networkStatus.equals(other.networkStatus))
-      return false;
-    if (networkTransactionId == null) {
-      if (other.networkTransactionId != null)
-        return false;
-    } else if (!networkTransactionId.equals(other.networkTransactionId))
-      return false;
     if (status == null) {
       if (other.status != null)
         return false;
@@ -279,15 +269,5 @@ public class Transaction {
     } else if (!userId.equals(other.userId))
       return false;
     return true;
-  }
-
-  @Override
-  public String toString() {
-    return "Transaction [id=" + id + ", networkName=" + networkName + ", networkTransactionId="
-        + networkTransactionId + ", networkStatus=" + networkStatus + ", date=" + date + ", amount="
-        + amount + ", commission=" + commission + ", userCommission=" + userCommission + ", status="
-        + status + ", userId=" + userId + ", click=" + click + ", merchant=" + merchant
-        + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", imported=" + imported
-        + ", lastImportedAt=" + lastImportedAt + ", lastCid=" + lastCid + "]";
   }
 }

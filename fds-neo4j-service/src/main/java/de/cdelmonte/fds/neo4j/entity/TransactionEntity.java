@@ -15,8 +15,6 @@ public class TransactionEntity {
   @GeneratedValue
   private Long id;
   private Long idExt;
-  private String networkTransactionId;
-  private String networkStatus;
   private Date date;
   private Long amount;
   private Long commission;
@@ -44,22 +42,6 @@ public class TransactionEntity {
 
   public void setIdExt(Long idExt) {
     this.idExt = idExt;
-  }
-
-  public String getNetworkTransactionId() {
-    return networkTransactionId;
-  }
-
-  public void setNetworkTransactionId(String networkTransactionId) {
-    this.networkTransactionId = networkTransactionId;
-  }
-
-  public String getNetworkStatus() {
-    return networkStatus;
-  }
-
-  public void setNetworkStatus(String networkStatus) {
-    this.networkStatus = networkStatus;
   }
 
   public Date getDate() {
