@@ -1,6 +1,9 @@
 package de.cdelmonte.fds.kafkastreams.model;
 
 import java.util.Date;
+import de.cdelmonte.fds.kafkastreams.model.payment.BankAccount;
+import de.cdelmonte.fds.kafkastreams.model.payment.BitcoinAccount;
+import de.cdelmonte.fds.kafkastreams.model.payment.PaypalAccount;
 
 public class User {
   private Long id;
@@ -24,6 +27,9 @@ public class User {
   private Balance balance;
   private Address address;
 
+  private BitcoinAccount bitcoinAccount;
+  private PaypalAccount paypalAccount;
+  private BankAccount bankAccount;
 
   private User(Builder builder) {
     id = builder.id;
@@ -46,6 +52,10 @@ public class User {
 
     balance = builder.balance;
     address = builder.address;
+
+    bitcoinAccount = builder.bitcoinAccount;
+    paypalAccount = builder.paypalAccount;
+    bankAccount = builder.bankAccount;
   }
 
   public static Builder builder() {
@@ -75,6 +85,10 @@ public class User {
     builder.setBalance(copy.balance);
     builder.setAddress(copy.address);
 
+    builder.setBankAccount(copy.bankAccount);
+    builder.setPaypalAccount(copy.paypalAccount);
+    builder.setBitcoinAccount(copy.bitcoinAccount);
+
     return builder;
   }
 
@@ -86,7 +100,8 @@ public class User {
         + lastCid + ", languages=" + languages + ", emailVerified=" + emailVerified
         + ", paymentsBlocked=" + paymentsBlocked + ", blocked=" + blocked + ", doNotPay=" + doNotPay
         + ", numberOfTransactions=" + numberOfTransactions + ", balance=" + balance + ", address="
-        + address + "]";
+        + address + ", bitcoinAccount=" + bitcoinAccount + ", paypalAccount=" + paypalAccount
+        + ", bankAccount=" + bankAccount + "]";
   }
 
   @Override
@@ -95,7 +110,9 @@ public class User {
     int result = 1;
     result = prime * result + ((address == null) ? 0 : address.hashCode());
     result = prime * result + ((balance == null) ? 0 : balance.hashCode());
+    result = prime * result + ((bankAccount == null) ? 0 : bankAccount.hashCode());
     result = prime * result + ((birthdate == null) ? 0 : birthdate.hashCode());
+    result = prime * result + ((bitcoinAccount == null) ? 0 : bitcoinAccount.hashCode());
     result = prime * result + (blocked ? 1231 : 1237);
     result = prime * result + (doNotPay ? 1231 : 1237);
     result = prime * result + ((email == null) ? 0 : email.hashCode());
@@ -109,6 +126,7 @@ public class User {
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + numberOfTransactions;
     result = prime * result + (paymentsBlocked ? 1231 : 1237);
+    result = prime * result + ((paypalAccount == null) ? 0 : paypalAccount.hashCode());
     result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
     result = prime * result + ((username == null) ? 0 : username.hashCode());
     return result;
@@ -133,10 +151,20 @@ public class User {
         return false;
     } else if (!balance.equals(other.balance))
       return false;
+    if (bankAccount == null) {
+      if (other.bankAccount != null)
+        return false;
+    } else if (!bankAccount.equals(other.bankAccount))
+      return false;
     if (birthdate == null) {
       if (other.birthdate != null)
         return false;
     } else if (!birthdate.equals(other.birthdate))
+      return false;
+    if (bitcoinAccount == null) {
+      if (other.bitcoinAccount != null)
+        return false;
+    } else if (!bitcoinAccount.equals(other.bitcoinAccount))
       return false;
     if (blocked != other.blocked)
       return false;
@@ -188,6 +216,11 @@ public class User {
       return false;
     if (paymentsBlocked != other.paymentsBlocked)
       return false;
+    if (paypalAccount == null) {
+      if (other.paypalAccount != null)
+        return false;
+    } else if (!paypalAccount.equals(other.paypalAccount))
+      return false;
     if (registrationDate == null) {
       if (other.registrationDate != null)
         return false;
@@ -200,8 +233,6 @@ public class User {
       return false;
     return true;
   }
-
-
 
   public static final class Builder {
     private Long id;
@@ -224,6 +255,10 @@ public class User {
 
     private Balance balance;
     private Address address;
+
+    private BitcoinAccount bitcoinAccount;
+    private PaypalAccount paypalAccount;
+    private BankAccount bankAccount;
 
     private void setId(Long id) {
       this.id = id;
@@ -295,6 +330,18 @@ public class User {
 
     void setAddress(Address address) {
       this.address = address;
+    }
+
+    public void setBitcoinAccount(BitcoinAccount bitcoinAccount) {
+      this.bitcoinAccount = bitcoinAccount;
+    }
+
+    public void setPaypalAccount(PaypalAccount paypalAccount) {
+      this.paypalAccount = paypalAccount;
+    }
+
+    public void setBankAccount(BankAccount bankAccount) {
+      this.bankAccount = bankAccount;
     }
 
     public User build() {

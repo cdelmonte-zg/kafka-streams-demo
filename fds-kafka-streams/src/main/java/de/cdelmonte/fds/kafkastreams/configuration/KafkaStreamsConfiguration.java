@@ -43,23 +43,7 @@ public class KafkaStreamsConfiguration {
   }
 
   @Bean
-  public KStream<Integer, String> kStream(StreamsBuilder kStreamBuilder) {
-    Serde<String> stringSerde = Serdes.String();
-    Serde<Integer> integerSerde = Serdes.Integer();
-
-    KStream<Integer, String> stream1 =
-        kStreamBuilder.stream("strings", Consumed.with(integerSerde, stringSerde));
-    KStream<Integer, String> uppercasedStream = stream1.mapValues(String::toUpperCase);
-
-    uppercasedStream.to("strings2");
-
-    uppercasedStream.print(Printed.<Integer, String>toSysOut().withLabel("Hello"));
-
-    return uppercasedStream;
-  }
-
-  @Bean
-  public KStream<String, Transaction> transactionsStream(StreamsBuilder kStreamBuilder) {
+  public KStream<String, Transaction> transactionStream(StreamsBuilder kStreamBuilder) {
     Serde<Transaction> transactionSerde = StreamsSerdes.transactionSerde();
     Serde<String> stringSerde = Serdes.String();
 
@@ -76,29 +60,18 @@ public class KafkaStreamsConfiguration {
   }
 
   @Bean
-  public KStream<String, User> usersStream(StreamsBuilder kStreamBuilder) {
+  public KStream<String, User> userStream(StreamsBuilder kStreamBuilder) {
     Serde<User> userSerde = StreamsSerdes.UserSerde();
     Serde<String> stringSerde = Serdes.String();
 
     KStream<String, User> userKStream =
         kStreamBuilder.stream("users", Consumed.with(stringSerde, userSerde));
 
-    KStream<String, User> masked = userKStream.mapValues(p -> User.builder(p).build());
+    KStream<String, User> masked = userKStream.mapValues(u -> User.builder(u).build());
 
     masked.print(Printed.<String, User>toSysOut().withLabel("Users are coming!!"));
     masked.to("users-to-import", Produced.with(stringSerde, userSerde));
 
     return userKStream;
-  }
-
-
-  @Bean
-  public KStream<Integer, String> kStream2(StreamsBuilder kStreamBuilder) {
-    KStream<Integer, String> stream = kStreamBuilder.stream("strings2");
-    stream.mapValues(String::toLowerCase).to("strings3");
-
-    stream.print(Printed.<Integer, String>toSysOut().withLabel("world"));
-
-    return stream;
   }
 }

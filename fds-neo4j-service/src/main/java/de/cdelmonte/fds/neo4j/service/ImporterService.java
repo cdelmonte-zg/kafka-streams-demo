@@ -3,17 +3,25 @@ package de.cdelmonte.fds.neo4j.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
+import de.cdelmonte.fds.neo4j.entity.AddressEntity;
+import de.cdelmonte.fds.neo4j.entity.BankAccountEntity;
+import de.cdelmonte.fds.neo4j.entity.BitcoinAccountEntity;
 import de.cdelmonte.fds.neo4j.entity.CID;
 import de.cdelmonte.fds.neo4j.entity.Click;
 import de.cdelmonte.fds.neo4j.entity.Merchant;
 import de.cdelmonte.fds.neo4j.entity.Network;
+import de.cdelmonte.fds.neo4j.entity.PaypalAccountEntity;
 import de.cdelmonte.fds.neo4j.entity.Person;
 import de.cdelmonte.fds.neo4j.entity.SourceIP;
 import de.cdelmonte.fds.neo4j.entity.TransactionEntity;
+import de.cdelmonte.fds.neo4j.entity.repository.AddressRepository;
+import de.cdelmonte.fds.neo4j.entity.repository.BankAccountRepository;
+import de.cdelmonte.fds.neo4j.entity.repository.BitcoinAccountRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.CIDRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.ClickRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.MerchantRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.NetworkRepository;
+import de.cdelmonte.fds.neo4j.entity.repository.PaypalAccountRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.PersonRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.SourceIPRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.TransactionRepository;
@@ -43,6 +51,18 @@ public class ImporterService {
 
   @Autowired
   CIDRepository cidRepository;
+
+  @Autowired
+  AddressRepository addressRepository;
+
+  @Autowired
+  BankAccountRepository bankAccountRepository;
+
+  @Autowired
+  PaypalAccountRepository paypalAccountRepository;
+
+  @Autowired
+  BitcoinAccountRepository bitcoinAccountRepository;
 
   public void importTransactions(String payload) {
     Gson gson = new Gson();
@@ -122,13 +142,107 @@ public class ImporterService {
     Gson gson = new Gson();
     User user = gson.fromJson(payload, User.class);
 
-    Person person = new Person(user.getId(), user.getEmail(), user.getUsername(), user.getName(),
-        user.getBirthdate(), user.getRegistrationDate(), user.getLastLoginDate(),
-        user.getLastCountry(), user.getLastIp(), user.getLastCid(), user.getLanguages(),
-        user.isEmailVerified(), user.isPaymentsBlocked(), user.isBlocked(), user.isDoNotPay(),
-        user.getNumberOfTransactions());
+    Person person = personRepository.findByIdExt(user.getId());
+    if (person == null)
+      person = new Person();
+
+    person.setIdExt(user.getId());
+    person.setEmail(user.getEmail());
+    person.setUsername(user.getUsername());
+    person.setName(user.getName());
+    person.setBirthdate(user.getBirthdate());
+    person.setRegistrationDate(user.getRegistrationDate());
+    person.setLastLoginDate(user.getLastLoginDate());
+    person.setLastCountry(user.getLastCountry());
+    person.setLastIp(user.getLastIp());
+    person.setLastCid(user.getLastCid());
+    person.setLanguages(user.getLanguages());
+    person.setEmailVerified(user.isEmailVerified());
+    person.setPaymentsBlocked(user.isPaymentsBlocked());
+    person.setBlocked(user.isBlocked());
+    person.setDoNotPay(user.isDoNotPay());
+    person.setNumberOfTransactions(user.getNumberOfTransactions());
+    person.setBalancePending(user.getBalance().getPending());
+    person.setBalancePaid(user.getBalance().getPaid());
+    person.setBalanceDenied(user.getBalance().getDenied());
+    person.setBalanceReceived(user.getBalance().getReceived());
+
     try {
       personRepository.save(person);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      saveAddress(user, person);
+      saveBankAccount(user, person);
+      savePaypalAccount(user, person);
+      saveBitcoinAccount(user, person);
+    }
+  }
+
+  private void saveBankAccount(User user, Person person) {
+    BankAccountEntity bankAccount =
+        bankAccountRepository.findByIBAN(user.getBankAccount().getIBAN());
+    if (bankAccount == null)
+      bankAccount = new BankAccountEntity();
+
+    bankAccount.setAccountHolder(user.getBankAccount().getAccountHolder());
+    bankAccount.setIBAN(user.getBankAccount().getIBAN());
+    bankAccount.setBIC(user.getBankAccount().getBIC());
+    bankAccount.withPerson(person);
+
+    try {
+      bankAccountRepository.save(bankAccount);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void savePaypalAccount(User user, Person person) {
+    PaypalAccountEntity paypalAccount =
+        paypalAccountRepository.findByAddress(user.getPaypalAccount().getAddress());
+    if (paypalAccount == null)
+      paypalAccount = new PaypalAccountEntity();
+
+    paypalAccount.setAccountHolder(user.getPaypalAccount().getAccountHolder());
+    paypalAccount.setAddress(user.getPaypalAccount().getAddress());
+    paypalAccount.withPerson(person);
+
+    try {
+      paypalAccountRepository.save(paypalAccount);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void saveBitcoinAccount(User user, Person person) {
+    BitcoinAccountEntity bitcoinAccount =
+        bitcoinAccountRepository.findByAddress(user.getBitcoinAccount().getAddress());
+    if (bitcoinAccount == null)
+      bitcoinAccount = new BitcoinAccountEntity();
+
+    bitcoinAccount.setAddress(user.getPaypalAccount().getAddress());
+    bitcoinAccount.withPerson(person);
+
+    try {
+      bitcoinAccountRepository.save(bitcoinAccount);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void saveAddress(User user, Person person) {
+    AddressEntity address = new AddressEntity();
+    address.setCountry(user.getAddress().getCountry());
+    address.setState(user.getAddress().getState());
+    address.setCity(user.getAddress().getCity());
+    address.setZipCode(user.getAddress().getZipCode());
+    address.setStreetAddress(user.getAddress().getStreetAddress());
+    address.setStreetNumber(user.getAddress().getStreetNumber());
+    address.withPerson(person);
+
+    try {
+      addressRepository.save(address);
     } catch (Exception e) {
       e.printStackTrace();
     }

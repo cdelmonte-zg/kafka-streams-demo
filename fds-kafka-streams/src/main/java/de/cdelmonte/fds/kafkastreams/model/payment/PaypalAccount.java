@@ -25,9 +25,4 @@ public class PaypalAccount extends PaymentAccount implements Serializable {
   public void setAccountHolder(String accountHolder) {
     this.accountHolder = accountHolder;
   }
-
-  @Override
-  public String toString() {
-    return "PaypalAccount [address=" + address + ", accountHolder=" + accountHolder + "]";
-  }
 }

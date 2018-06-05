@@ -13,17 +13,19 @@ public class MocksGenerator {
   }
 
   public List<? extends Mock> generateMocks(String type, int howMany) {
-    GeneratorSupplier<User> g = new UserGenerator<User>();
+    GeneratorSupplier<User> su = new UserGenerator<User>();
+    GeneratorSupplier<User> u = new SuspiciousUserGenerator<User>();
     GeneratorSupplier<Transaction> t = new TransactionGenerator<Transaction>();
-    SuspiciousTransactionGenerator<Transaction> s =
-        new SuspiciousTransactionGenerator<Transaction>();
+    GeneratorSupplier<Transaction> st = new SuspiciousTransactionGenerator<Transaction>();
 
     if (type.equals("user"))
-      return generate(g, howMany);
+      return generate(u, howMany);
+    if (type.equals("suspiciousUser"))
+      return generate(su, howMany);
     else if (type.equals("transaction"))
       return generate(t, howMany);
     else if (type.equals("suspiciousTransaction"))
-      return generate(s, howMany);
+      return generate(st, howMany);
     return null;
   }
 }

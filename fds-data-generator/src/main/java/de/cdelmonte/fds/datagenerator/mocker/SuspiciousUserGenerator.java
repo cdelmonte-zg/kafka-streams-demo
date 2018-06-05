@@ -20,11 +20,11 @@ import net.andreinc.mockneat.abstraction.MockUnit;
 import net.andreinc.mockneat.abstraction.MockUnitString;
 import net.andreinc.mockneat.types.enums.IBANType;
 
-public class UserGenerator<T> implements GeneratorSupplier<T> {
+public class SuspiciousUserGenerator<T> implements GeneratorSupplier<T> {
   private MockNeat mock;
   private List<User> users;
 
-  public UserGenerator() {
+  public SuspiciousUserGenerator() {
     mock = MockNeat.threadLocal();
   }
 
@@ -33,16 +33,22 @@ public class UserGenerator<T> implements GeneratorSupplier<T> {
   }
 
   public List<User> supplyMocks(int howMany) {
+    int howManyBankAccounts = 4;
+    int howManyBitconsAccounts = 3;
+    int howManyPaypalAccounts = 5;
+    int howManyAddresses = 4;
+
     List<Balance> balances = generateBalances(howMany);
-    LinkedList<Address> addresses = generateAddresses(howMany);
+    LinkedList<Address> addresses = generateAddresses(howManyAddresses);
     MockUnitString browserLanguagesMock = genBrowserLanguage();
 
-    LinkedList<BankAccount> bankAccounts =
-        (LinkedList<BankAccount>) generateBankAccount().list(LinkedList.class, howMany).val();
-    LinkedList<PaypalAccount> paypalAccounts =
-        (LinkedList<PaypalAccount>) generatePaypalAccount().list(LinkedList.class, howMany).val();
+    LinkedList<BankAccount> bankAccounts = (LinkedList<BankAccount>) generateBankAccount()
+        .list(LinkedList.class, howManyBankAccounts).val();
+    LinkedList<PaypalAccount> paypalAccounts = (LinkedList<PaypalAccount>) generatePaypalAccount()
+        .list(LinkedList.class, howManyPaypalAccounts).val();
     LinkedList<BitcoinAccount> bitcoinAccounts =
-        (LinkedList<BitcoinAccount>) generateBitcoinAccount().list(LinkedList.class, howMany).val();
+        (LinkedList<BitcoinAccount>) generateBitcoinAccount()
+            .list(LinkedList.class, howManyBitconsAccounts).val();
 
     List<User> users =
         mock.reflect(User.class).field("id", mock.longSeq()).field("name", mock.names().full())
@@ -55,14 +61,17 @@ public class UserGenerator<T> implements GeneratorSupplier<T> {
             .field("lastCountry", "DE").field("lastIp", mock.ipv4s())
             .field("lastCid", mock.strings().size(12)).field("languages", browserLanguagesMock)
             .field("emailVerified", true).field("paymentsBlocked", false).field("blocked", false)
-            .field("doNotPay", false).field("numberOfTransactions", mock.ints().range(1, 20))
+            .field("doNotPay", false).field("numberOfTransactions", mock.ints().range(13, 20))
             .field("balance", mock.from(balances)).list(howMany).val();
 
-    users.forEach(u -> u.setAddress(addresses.remove()));
-    users.forEach(u -> u.setBankAccount(bankAccounts.remove().setAccountHolder(u.getName())));
-    users.forEach(u -> u.setPaypalAccount(
-        paypalAccounts.remove().setAccountHolder(u.getName()).setAddress(u.getEmail())));
-    users.forEach(u -> u.setBitcoinAccount(bitcoinAccounts.remove()));
+    users.forEach(u -> u.setAddress(addresses.get(new Random().nextInt(howManyAddresses))));
+    users.forEach(u -> u.setBankAccount(
+        bankAccounts.get(new Random().nextInt(howManyBankAccounts)).setAccountHolder(u.getName())));
+    users.forEach(
+        u -> u.setPaypalAccount(paypalAccounts.get(new Random().nextInt(howManyPaypalAccounts))
+            .setAccountHolder(u.getName()).setAddress(u.getEmail())));
+    users.forEach(u -> u
+        .setBitcoinAccount(bitcoinAccounts.get(new Random().nextInt(howManyBitconsAccounts))));
 
     users.forEach((u) -> {
       Calendar cal = Calendar.getInstance();
@@ -71,16 +80,15 @@ public class UserGenerator<T> implements GeneratorSupplier<T> {
       u.setLastLoginDate(cal.getTime());
     });
 
-    DataContainer.setUsers(users);
+    DataContainer.setSuspiciousUsers(users);
 
     return users;
   }
 
-
   private MockUnitString genBrowserLanguage() {
     Supplier<String> browserLanguagesSupplier = () -> {
       StringBuffer buff = new StringBuffer();
-      buff.append("de-DE,de").append(";q=0.9,").append("en-US").append(";q=0.8,")
+      buff.append(mock.countries().iso2().val()).append(";q=0.9,").append("en-US").append(";q=0.8,")
           .append(mock.countries().iso2().val()).append(";q=0.7,")
           .append(mock.countries().iso2().val()).append(";q=0.6,")
           .append(mock.countries().iso2().val()).append(";q=");

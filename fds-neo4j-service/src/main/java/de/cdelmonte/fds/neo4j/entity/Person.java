@@ -34,7 +34,12 @@ public class Person {
   private boolean doNotPay;
   private int numberOfTransactions;
 
-  // private Balance balance;
+  private Long balancePending;
+  private Long balancePaid;
+  private Long balanceDenied;
+  private Long balanceReceived;
+
+  private int[] rating = new int[] {1, 0, 0, 1, 1, 1};
   // private Address address;
 
 
@@ -45,31 +50,38 @@ public class Person {
   public Set<Merchant> merchants;
 
   @SuppressWarnings("unused")
-  private Person() {
-    // Empty constructor required as of Neo4j API 2.0.5
-  };
+  public Person() {};
 
-  public Person(Long idExt, String email, String username, String name, Date birthdate,
-      Date registrationDate, Date lastLoginDate, String lastCountry, String lastIp, String lastCid,
-      String languages, boolean emailVerified, boolean paymentsBlocked, boolean blocked,
-      boolean doNotPay, int numberOfTransactions) {
-    super();
-    this.idExt = idExt;
-    this.email = email;
-    this.username = username;
-    this.name = name;
-    this.birthdate = birthdate;
-    this.registrationDate = registrationDate;
-    this.lastLoginDate = lastLoginDate;
-    this.lastCountry = lastCountry;
-    this.lastIp = lastIp;
-    this.lastCid = lastCid;
-    this.languages = languages;
-    this.emailVerified = emailVerified;
-    this.paymentsBlocked = paymentsBlocked;
-    this.blocked = blocked;
-    this.doNotPay = doNotPay;
-    this.numberOfTransactions = numberOfTransactions;
+  public Long getBalancePending() {
+    return balancePending;
+  }
+
+  public void setBalancePending(Long balancePending) {
+    this.balancePending = balancePending;
+  }
+
+  public Long getBalancePaid() {
+    return balancePaid;
+  }
+
+  public void setBalancePaid(Long balancePaid) {
+    this.balancePaid = balancePaid;
+  }
+
+  public Long getBalanceDenied() {
+    return balanceDenied;
+  }
+
+  public void setBalanceDenied(Long balanceDenied) {
+    this.balanceDenied = balanceDenied;
+  }
+
+  public Long getBalanceReceived() {
+    return balanceReceived;
+  }
+
+  public void setBalanceReceived(Long balanceReceived) {
+    this.balanceReceived = balanceReceived;
   }
 
   public Long getIdExt() {
@@ -228,6 +240,14 @@ public class Person {
       merchants = new HashSet<>();
     }
     merchants.add(merchant);
+  }
+
+  public int[] getRating() {
+    return rating;
+  }
+
+  public void setRating(int[] rating) {
+    this.rating = rating;
   }
 
 }

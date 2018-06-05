@@ -6,6 +6,7 @@ import de.cdelmonte.fds.datagenerator.model.User;
 
 public class DataContainer {
   private static List<User> users;
+  private static List<User> suspiciousUsers;
   private static List<Transaction> transactions;
 
   public static List<User> getUsers() {
@@ -22,5 +23,13 @@ public class DataContainer {
 
   public static void setTransactions(List<Transaction> transactions) {
     DataContainer.transactions = transactions;
+  }
+
+  public static void setSuspiciousUsers(List<User> users) {
+    DataContainer.suspiciousUsers = users;
+  }
+
+  public static List<User> getSuspiciousUsers() {
+    return suspiciousUsers;
   }
 }

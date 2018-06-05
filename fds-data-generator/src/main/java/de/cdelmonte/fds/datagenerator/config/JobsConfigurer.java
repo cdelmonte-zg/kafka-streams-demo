@@ -4,21 +4,18 @@ import java.util.List;
 import java.util.Random;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import de.cdelmonte.fds.datagenerator.mocker.MocksGenerator;
 import de.cdelmonte.fds.datagenerator.model.Mock;
-import de.cdelmonte.fds.datagenerator.model.payment.BankAccount;
-import de.cdelmonte.fds.datagenerator.model.payment.BitcoinAccount;
-import de.cdelmonte.fds.datagenerator.model.payment.PaymentAccount;
-import de.cdelmonte.fds.datagenerator.model.payment.PaypalAccount;
 import de.cdelmonte.fds.datagenerator.producer.Sender;
 
 @Component
 public class JobsConfigurer {
+  private static final String USER = "user";
+  private static final String TRANSACTION = "transaction";
+  private static final String SUSPICIOUS_USER = "suspiciousUser";
+
   @Autowired
   Sender messageSender;
 
@@ -26,39 +23,55 @@ public class JobsConfigurer {
   private MocksGenerator mocksGenerator;
 
   @PostConstruct
-  public void generateUsers() {
-    final RuntimeTypeAdapterFactory<PaymentAccount> paymentAdapter = RuntimeTypeAdapterFactory
-        .of(PaymentAccount.class, "type").registerSubtype(BankAccount.class)
-        .registerSubtype(PaypalAccount.class).registerSubtype(BitcoinAccount.class);
-    final Gson gson = new GsonBuilder().registerTypeAdapterFactory(paymentAdapter).create();
+  public void generateMocks() {
+    generateUsers();
+    generateSouspiociusUsers();
 
-    int howMany = new Random().nextInt(10) + 1;
-    List<? extends Mock> users = mocksGenerator.generateMocks("user", howMany);
+    try {
+      Thread.sleep(180000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
+    generateTransactions();
+    generateSuspiciousTransactions();
+  }
+
+  public void generateUsers() {
+    Gson gson = new Gson();;
+    List<? extends Mock> users = mocksGenerator.generateMocks(USER, 20);
 
     for (Mock u : users) {
       messageSender.send("users", gson.toJson(u));
     }
   }
 
-  @Scheduled(fixedRateString = "240000")
+  public void generateSouspiociusUsers() {
+    Gson gson = new Gson();;
+
+    List<? extends Mock> suspiciousUsers = mocksGenerator.generateMocks(SUSPICIOUS_USER, 20);
+    for (Mock u : suspiciousUsers) {
+      messageSender.send("suspiciousUsers", gson.toJson(u));
+    }
+  }
+
   public void generateTransactions() {
     Gson gson = new Gson();
     int howMany = new Random().nextInt(11) + 1;
-    List<? extends Mock> transactions = mocksGenerator.generateMocks("transaction", howMany);
+    List<? extends Mock> transactions = mocksGenerator.generateMocks(TRANSACTION, howMany);
 
     for (Mock t : transactions) {
       messageSender.send("transactions", gson.toJson(t));
     }
   }
 
-  @Scheduled(fixedRateString = "245000")
   public void generateSuspiciousTransactions() {
     Gson gson = new Gson();
     int howMany = new Random().nextInt(11) + 1;
-    List<? extends Mock> transactions =
+    List<? extends Mock> suspiciousTransaction =
         mocksGenerator.generateMocks("suspiciousTransaction", howMany);
 
-    for (Mock t : transactions) {
+    for (Mock t : suspiciousTransaction) {
       messageSender.send("transactions", gson.toJson(t));
     }
   }

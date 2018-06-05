@@ -14,16 +14,19 @@ public class PaypalAccount extends PaymentAccount implements Serializable {
     return address;
   }
 
-  public void setAddress(String address) {
+  public PaypalAccount setAddress(String address) {
     this.address = address;
+
+    return this;
   }
 
   public String getAccountHolder() {
     return accountHolder;
   }
 
-  public void setAccountHolder(String accountHolder) {
+  public PaypalAccount setAccountHolder(String accountHolder) {
     this.accountHolder = accountHolder;
+    return this;
   }
 
   @Override
