@@ -44,19 +44,19 @@ public class UserGenerator<T> implements GeneratorSupplier<T> {
     LinkedList<BitcoinAccount> bitcoinAccounts =
         (LinkedList<BitcoinAccount>) generateBitcoinAccount().list(LinkedList.class, howMany).val();
 
-    List<User> users =
-        mock.reflect(User.class).field("id", mock.longSeq()).field("name", mock.names().full())
-            .field("username", mock.users()).field("email", mock.emails())
-            .field("birthdate",
-                mock.localDates().between(LocalDate.of(1945, 01, 01), LocalDate.of(2001, 12, 12))
-                    .toUtilDate())
-            .field("registrationDate",
-                mock.localDates().between(LocalDate.of(2016, 01, 01), LocalDate.now()).toUtilDate())
-            .field("lastCountry", "DE").field("lastIp", mock.ipv4s())
-            .field("lastCid", mock.strings().size(12)).field("languages", browserLanguagesMock)
-            .field("emailVerified", true).field("paymentsBlocked", false).field("blocked", false)
-            .field("doNotPay", false).field("numberOfTransactions", mock.ints().range(1, 20))
-            .field("balance", mock.from(balances)).list(howMany).val();
+    List<User> users = mock.reflect(User.class).field("id", mock.longSeq().start(1))
+        .field("name", mock.names().full()).field("username", mock.users())
+        .field("email", mock.emails())
+        .field("birthdate",
+            mock.localDates().between(LocalDate.of(1945, 01, 01), LocalDate.of(2001, 12, 12))
+                .toUtilDate())
+        .field("registrationDate",
+            mock.localDates().between(LocalDate.of(2016, 01, 01), LocalDate.now()).toUtilDate())
+        .field("lastCountry", "DE").field("lastIp", mock.ipv4s())
+        .field("lastCid", mock.strings().size(12)).field("languages", browserLanguagesMock)
+        .field("emailVerified", true).field("paymentsBlocked", false).field("blocked", false)
+        .field("doNotPay", false).field("numberOfTransactions", mock.ints().range(1, 20))
+        .field("balance", mock.from(balances)).list(howMany).val();
 
     users.forEach(u -> u.setAddress(addresses.remove()));
     users.forEach(u -> u.setBankAccount(bankAccounts.remove().setAccountHolder(u.getName())));

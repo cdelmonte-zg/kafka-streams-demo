@@ -9,4 +9,6 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
   Person findByLastName(String lastName);
 
+  // MATCH (n1:SourceIP)-[r1]-(n2)-[r2]-(n3:SourceIP) RETURN r1, r2, n1, n2,n3
+
 }
