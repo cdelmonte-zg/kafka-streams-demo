@@ -31,8 +31,9 @@ public class BankAccount extends PaymentAccount implements Serializable {
     return accountHolder;
   }
 
-  public void setAccountHolder(String accountHolder) {
+  public BankAccount setAccountHolder(String accountHolder) {
     this.accountHolder = accountHolder;
+    return this;
   }
 
   @Override

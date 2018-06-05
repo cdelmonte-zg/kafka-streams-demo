@@ -6,12 +6,7 @@ import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import de.cdelmonte.fds.kafkastreams.collectors.FixedSizePriorityQueue;
-import de.cdelmonte.fds.kafkastreams.model.payment.BankAccount;
-import de.cdelmonte.fds.kafkastreams.model.payment.BitcoinAccount;
-import de.cdelmonte.fds.kafkastreams.model.payment.PaymentAccount;
-import de.cdelmonte.fds.kafkastreams.model.payment.PaypalAccount;
 
 
 public class JsonDeserializer<T> implements Deserializer<T> {
@@ -30,15 +25,9 @@ public class JsonDeserializer<T> implements Deserializer<T> {
   }
 
   private void init() {
-    final RuntimeTypeAdapterFactory<PaymentAccount> paymentAdapter = RuntimeTypeAdapterFactory
-        .of(PaymentAccount.class, "type").registerSubtype(BankAccount.class)
-        .registerSubtype(PaypalAccount.class).registerSubtype(BitcoinAccount.class);
-
     GsonBuilder builder = new GsonBuilder();
-    builder
-        .registerTypeAdapter(FixedSizePriorityQueue.class,
-            new FixedSizePriorityQueueAdapter().nullSafe())
-        .registerTypeAdapterFactory(paymentAdapter);
+    builder.registerTypeAdapter(FixedSizePriorityQueue.class,
+        new FixedSizePriorityQueueAdapter().nullSafe());
     gson = builder.create();
   }
 

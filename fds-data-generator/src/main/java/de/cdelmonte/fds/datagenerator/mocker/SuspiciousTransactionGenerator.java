@@ -20,7 +20,7 @@ public class SuspiciousTransactionGenerator<T> implements GeneratorSupplier<T> {
   }
 
   public List<Transaction> supplyMocks(int howMany) {
-    List<User> users = DataContainer.getUsers();
+    List<User> users = DataContainer.getSuspiciousUsers();
     List<Click> clicks = this.generateClicks(howMany);
     List<Merchant> merchants = this.generateMerchants();
     MockUnitString networkNameMock = genNetworkName();

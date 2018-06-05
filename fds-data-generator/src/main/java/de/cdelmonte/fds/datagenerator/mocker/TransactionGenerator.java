@@ -33,7 +33,7 @@ public class TransactionGenerator<T> implements GeneratorSupplier<T> {
     List<Transaction> totalTransactions = new LinkedList<Transaction>();
 
     for (User user : users) {
-      int numOfTransactions = 1 + new Random().nextInt(20);
+      int numOfTransactions = user.getNumberOfTransactions();
 
       List<Transaction> transactions = mock.reflect(Transaction.class)
           .field("id", mock.longSeq().start(idCounter))
@@ -45,13 +45,13 @@ public class TransactionGenerator<T> implements GeneratorSupplier<T> {
 
       this.idCounter += numOfTransactions;
 
-      transactions.stream().forEach((t) -> {
+      transactions.forEach((t) -> {
         Click click = new Click();
         click.setId(new Random().nextLong() + 1);
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(t.getDate());
-        cal.add(Calendar.SECOND, (new Random().nextInt(600)) * (-1));
+        cal.add(Calendar.SECOND, (new Random().nextInt(600) - 1) * (-1));
         click.setDate(cal.getTime());
 
         click.setIp(user.getLastIp());
@@ -60,29 +60,28 @@ public class TransactionGenerator<T> implements GeneratorSupplier<T> {
         t.setClick(click);
       });
 
-      transactions.stream()
-          .forEach(t -> t.setNetworkName(getNetworkNameFor(t.getMerchant().getName())));
+      transactions.forEach(t -> t.setNetworkName(getNetworkNameFor(t.getMerchant().getName())));
 
-      transactions.stream().forEach((t) -> {
+      transactions.forEach((t) -> {
         Calendar cal = Calendar.getInstance();
         cal.setTime(t.getDate());
-        cal.add(Calendar.HOUR, new Random().nextInt(30));
+        cal.add(Calendar.HOUR, new Random().nextInt(30) + 1);
         t.setCreatedAt(cal.getTime());
       });
 
-      transactions.stream().forEach((t) -> {
+      transactions.forEach((t) -> {
         Calendar cal = Calendar.getInstance();
         cal.setTime(t.getCreatedAt());
-        cal.add(Calendar.HOUR, new Random().nextInt(300));
+        cal.add(Calendar.HOUR, new Random().nextInt(300) + 1);
         t.setUpdatedAt(cal.getTime());
       });
 
-      transactions.stream().forEach((t) -> {
+      transactions.forEach((t) -> {
         if (t.isImported())
           t.setLastImportedAt(t.getUpdatedAt());
       });
 
-      transactions.stream().forEach(t -> t.setLastCid(user.getLastCid()));
+      transactions.forEach(t -> t.setLastCid(user.getLastCid()));
 
       Random rand = new Random();
       float commissionPercent = rand.nextFloat();
@@ -128,9 +127,8 @@ public class TransactionGenerator<T> implements GeneratorSupplier<T> {
 
       return statuses[indexToReturn];
     };
-    MockUnitString statusMock = () -> statusSupplier;
 
-    return statusMock;
+    return () -> statusSupplier;
   }
 
   private MockUnitString genMerchantName() {
@@ -142,9 +140,8 @@ public class TransactionGenerator<T> implements GeneratorSupplier<T> {
 
       return merchants[indexToReturn];
     };
-    MockUnitString merchantNameMock = () -> merchantNameSupplier;
 
-    return merchantNameMock;
+    return () -> merchantNameSupplier;
   }
 
   private List<Merchant> generateMerchants() {

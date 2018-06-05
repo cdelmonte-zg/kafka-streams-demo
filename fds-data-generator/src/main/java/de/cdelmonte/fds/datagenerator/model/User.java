@@ -1,8 +1,9 @@
 package de.cdelmonte.fds.datagenerator.model;
 
 import java.util.Date;
-import java.util.List;
-import de.cdelmonte.fds.datagenerator.model.payment.PaymentAccount;
+import de.cdelmonte.fds.datagenerator.model.payment.BankAccount;
+import de.cdelmonte.fds.datagenerator.model.payment.BitcoinAccount;
+import de.cdelmonte.fds.datagenerator.model.payment.PaypalAccount;
 
 public class User extends Mock {
   private Long id;
@@ -22,8 +23,11 @@ public class User extends Mock {
   private boolean doNotPay;
   private int numberOfTransactions;
 
-  private List<PaymentAccount> paymentAccounts;
   private Balance balance;
+  private BitcoinAccount bitcoinAccount;
+  private PaypalAccount paypalAccount;
+  private BankAccount bankAccount;
+
   private Address address;
 
   public Long getId() {
@@ -154,14 +158,6 @@ public class User extends Mock {
     this.numberOfTransactions = numberOfTransactions;
   }
 
-  public List<PaymentAccount> getPaymentAccounts() {
-    return paymentAccounts;
-  }
-
-  public void setPaymentAccounts(List<PaymentAccount> paymentAccounts) {
-    this.paymentAccounts = paymentAccounts;
-  }
-
   public Balance getBalance() {
     return balance;
   }
@@ -178,132 +174,27 @@ public class User extends Mock {
     this.address = address;
   }
 
-  @Override
-  public String toString() {
-    return "User [id=" + id + ", email=" + email + ", username=" + username + ", name=" + name
-        + ", birthdate=" + birthdate + ", registrationDate=" + registrationDate + ", lastLoginDate="
-        + lastLoginDate + ", lastCountry=" + lastCountry + ", lastIp=" + lastIp + ", lastCid="
-        + lastCid + ", languages=" + languages + ", emailVerified=" + emailVerified
-        + ", paymentsBlocked=" + paymentsBlocked + ", blocked=" + blocked + ", doNotPay=" + doNotPay
-        + ", numberOfTransactions=" + numberOfTransactions + ", paymentAccounts=" + paymentAccounts
-        + ", balance=" + balance + ", address=" + address + "]";
+  public BitcoinAccount getBitcoinAccount() {
+    return bitcoinAccount;
   }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((address == null) ? 0 : address.hashCode());
-    result = prime * result + ((balance == null) ? 0 : balance.hashCode());
-    result = prime * result + ((birthdate == null) ? 0 : birthdate.hashCode());
-    result = prime * result + (blocked ? 1231 : 1237);
-    result = prime * result + (doNotPay ? 1231 : 1237);
-    result = prime * result + ((email == null) ? 0 : email.hashCode());
-    result = prime * result + (emailVerified ? 1231 : 1237);
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + ((languages == null) ? 0 : languages.hashCode());
-    result = prime * result + ((lastCid == null) ? 0 : lastCid.hashCode());
-    result = prime * result + ((lastCountry == null) ? 0 : lastCountry.hashCode());
-    result = prime * result + ((lastIp == null) ? 0 : lastIp.hashCode());
-    result = prime * result + ((lastLoginDate == null) ? 0 : lastLoginDate.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + numberOfTransactions;
-    result = prime * result + ((paymentAccounts == null) ? 0 : paymentAccounts.hashCode());
-    result = prime * result + (paymentsBlocked ? 1231 : 1237);
-    result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
-    result = prime * result + ((username == null) ? 0 : username.hashCode());
-    return result;
+  public void setBitcoinAccount(BitcoinAccount bitcoinAccount) {
+    this.bitcoinAccount = bitcoinAccount;
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    User other = (User) obj;
-    if (address == null) {
-      if (other.address != null)
-        return false;
-    } else if (!address.equals(other.address))
-      return false;
-    if (balance == null) {
-      if (other.balance != null)
-        return false;
-    } else if (!balance.equals(other.balance))
-      return false;
-    if (birthdate == null) {
-      if (other.birthdate != null)
-        return false;
-    } else if (!birthdate.equals(other.birthdate))
-      return false;
-    if (blocked != other.blocked)
-      return false;
-    if (doNotPay != other.doNotPay)
-      return false;
-    if (email == null) {
-      if (other.email != null)
-        return false;
-    } else if (!email.equals(other.email))
-      return false;
-    if (emailVerified != other.emailVerified)
-      return false;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    if (languages == null) {
-      if (other.languages != null)
-        return false;
-    } else if (!languages.equals(other.languages))
-      return false;
-    if (lastCid == null) {
-      if (other.lastCid != null)
-        return false;
-    } else if (!lastCid.equals(other.lastCid))
-      return false;
-    if (lastCountry == null) {
-      if (other.lastCountry != null)
-        return false;
-    } else if (!lastCountry.equals(other.lastCountry))
-      return false;
-    if (lastIp == null) {
-      if (other.lastIp != null)
-        return false;
-    } else if (!lastIp.equals(other.lastIp))
-      return false;
-    if (lastLoginDate == null) {
-      if (other.lastLoginDate != null)
-        return false;
-    } else if (!lastLoginDate.equals(other.lastLoginDate))
-      return false;
-    if (name == null) {
-      if (other.name != null)
-        return false;
-    } else if (!name.equals(other.name))
-      return false;
-    if (numberOfTransactions != other.numberOfTransactions)
-      return false;
-    if (paymentAccounts == null) {
-      if (other.paymentAccounts != null)
-        return false;
-    } else if (!paymentAccounts.equals(other.paymentAccounts))
-      return false;
-    if (paymentsBlocked != other.paymentsBlocked)
-      return false;
-    if (registrationDate == null) {
-      if (other.registrationDate != null)
-        return false;
-    } else if (!registrationDate.equals(other.registrationDate))
-      return false;
-    if (username == null) {
-      if (other.username != null)
-        return false;
-    } else if (!username.equals(other.username))
-      return false;
-    return true;
+  public PaypalAccount getPaypalAccount() {
+    return paypalAccount;
+  }
+
+  public void setPaypalAccount(PaypalAccount paypalAccount) {
+    this.paypalAccount = paypalAccount;
+  }
+
+  public BankAccount getBankAccount() {
+    return bankAccount;
+  }
+
+  public void setBankAccount(BankAccount bankAccount) {
+    this.bankAccount = bankAccount;
   }
 }
