@@ -5,27 +5,13 @@ import java.io.Serializable;
 public class BankAccount extends PaymentAccount implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  private String IBAN;
-  private String BIC;
+  private String iban;
+  private String bic;
   private String accountHolder;
 
   public BankAccount() {}
 
-  public String getIBAN() {
-    return IBAN;
-  }
 
-  public void setIBAN(String iBAN) {
-    IBAN = iBAN;
-  }
-
-  public String getBIC() {
-    return BIC;
-  }
-
-  public void setBIC(String bIC) {
-    BIC = bIC;
-  }
 
   public String getAccountHolder() {
     return accountHolder;
@@ -36,13 +22,34 @@ public class BankAccount extends PaymentAccount implements Serializable {
     return this;
   }
 
+  public String getIban() {
+    return iban;
+  }
+
+  public void setIban(String iban) {
+    this.iban = iban;
+  }
+
+  public String getBic() {
+    return bic;
+  }
+
+  public void setBic(String bic) {
+    this.bic = bic;
+  }
+
+  @Override
+  public String toString() {
+    return "BankAccount [iban=" + iban + ", bic=" + bic + ", accountHolder=" + accountHolder + "]";
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((BIC == null) ? 0 : BIC.hashCode());
-    result = prime * result + ((IBAN == null) ? 0 : IBAN.hashCode());
     result = prime * result + ((accountHolder == null) ? 0 : accountHolder.hashCode());
+    result = prime * result + ((bic == null) ? 0 : bic.hashCode());
+    result = prime * result + ((iban == null) ? 0 : iban.hashCode());
     return result;
   }
 
@@ -55,26 +62,21 @@ public class BankAccount extends PaymentAccount implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     BankAccount other = (BankAccount) obj;
-    if (BIC == null) {
-      if (other.BIC != null)
-        return false;
-    } else if (!BIC.equals(other.BIC))
-      return false;
-    if (IBAN == null) {
-      if (other.IBAN != null)
-        return false;
-    } else if (!IBAN.equals(other.IBAN))
-      return false;
     if (accountHolder == null) {
       if (other.accountHolder != null)
         return false;
     } else if (!accountHolder.equals(other.accountHolder))
       return false;
+    if (bic == null) {
+      if (other.bic != null)
+        return false;
+    } else if (!bic.equals(other.bic))
+      return false;
+    if (iban == null) {
+      if (other.iban != null)
+        return false;
+    } else if (!iban.equals(other.iban))
+      return false;
     return true;
-  }
-
-  @Override
-  public String toString() {
-    return "BankAccount [IBAN=" + IBAN + ", BIC=" + BIC + ", accountHolder=" + accountHolder + "]";
   }
 }

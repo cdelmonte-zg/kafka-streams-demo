@@ -5,27 +5,11 @@ import java.io.Serializable;
 public class BankAccount extends PaymentAccount implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  private String IBAN;
-  private String BIC;
+  private String iban;
+  private String bic;
   private String accountHolder;
 
   public BankAccount() {}
-
-  public String getIBAN() {
-    return IBAN;
-  }
-
-  public void setIBAN(String iBAN) {
-    IBAN = iBAN;
-  }
-
-  public String getBIC() {
-    return BIC;
-  }
-
-  public void setBIC(String bIC) {
-    BIC = bIC;
-  }
 
   public String getAccountHolder() {
     return accountHolder;
@@ -35,8 +19,24 @@ public class BankAccount extends PaymentAccount implements Serializable {
     this.accountHolder = accountHolder;
   }
 
+  public String getIban() {
+    return iban;
+  }
+
+  public void setIban(String iban) {
+    this.iban = iban;
+  }
+
+  public String getBic() {
+    return bic;
+  }
+
+  public void setBic(String bic) {
+    this.bic = bic;
+  }
+
   @Override
   public String toString() {
-    return "BankAccount [IBAN=" + IBAN + ", BIC=" + BIC + ", accountHolder=" + accountHolder + "]";
+    return "BankAccount [iban=" + iban + ", bic=" + bic + ", accountHolder=" + accountHolder + "]";
   }
 }

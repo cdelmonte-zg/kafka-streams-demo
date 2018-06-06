@@ -1,5 +1,7 @@
 package de.cdelmonte.fds.neo4j.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
@@ -25,11 +27,13 @@ import de.cdelmonte.fds.neo4j.entity.repository.PaypalAccountRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.PersonRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.SourceIPRepository;
 import de.cdelmonte.fds.neo4j.entity.repository.TransactionRepository;
+import de.cdelmonte.fds.neo4j.events.listener.KafkaConsumer;
 import de.cdelmonte.fds.neo4j.model.Transaction;
 import de.cdelmonte.fds.neo4j.model.User;
 
 @Service
 public class ImporterService {
+  private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumer.class);
 
   @Autowired
   PersonRepository personRepository;
@@ -81,6 +85,7 @@ public class ImporterService {
     transaction.setUpdatedAt(tr.getUpdatedAt());
     transaction.setImported(tr.isImported());
     transaction.setLastImportedAt(tr.getLastImportedAt());
+    transaction.setTestData(tr.isTestData());
 
     Merchant merchant = merchantRepository.findByName(tr.getMerchant().getName());
     if (merchant == null) {
@@ -136,6 +141,11 @@ public class ImporterService {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
+
+    setPersonRatingFactors(tr.getUserId(), person);
+
+
   }
 
   public void importUsers(String payload) {
@@ -167,28 +177,101 @@ public class ImporterService {
     person.setBalanceDenied(user.getBalance().getDenied());
     person.setBalanceReceived(user.getBalance().getReceived());
 
+    person.setTestData(user.isTestData());
+    if (user.isTestData())
+      person.setFraudScore(user.getFraudScore());
+
     try {
       personRepository.save(person);
-
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      saveAddress(user, person);
-      saveBankAccount(user, person);
-      savePaypalAccount(user, person);
-      saveBitcoinAccount(user, person);
+      try {
+        saveAddress(user, person);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      try {
+        saveBankAccount(user, person);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      try {
+        savePaypalAccount(user, person);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      try {
+        saveBitcoinAccount(user, person);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      try {
+        setPersonRatingFactors(user.getId(), person);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  private void setPersonRatingFactors(Long userId, Person person) {
+    int paypalInCommonWithHowManyPersons =
+        personRepository.getPaypalInCommonWithHowManyPersons(userId);
+    int adressInCommonWithHowManyPersons =
+        personRepository.getAdressInCommonWithHowManyPersons(userId);
+    int cidInCommonWithHowManyPersons = personRepository.getCidInCommonWithHowManyPersons(userId);
+    int sourceIPInCommonWithHowManyPersons =
+        personRepository.getSourceIPInCommonWithHowManyPersons(userId);
+    int bankAccountInCommonWithHowManyPersons =
+        personRepository.getBankAccountInCommonWithHowManyPersons(userId);
+    int bitcoinAccountInCommonWithHowManyPersons =
+        personRepository.getBitcoinAccountInCommonWithHowManyPersons(userId);
+
+    LOGGER.debug("paypalInCommonWithHowManyPersons: " + paypalInCommonWithHowManyPersons);
+    LOGGER.debug("adressInCommonWithHowManyPersons: " + adressInCommonWithHowManyPersons);
+    LOGGER.debug("cidInCommonWithHowManyPersons: " + cidInCommonWithHowManyPersons);
+    LOGGER.debug("sourceIPInCommonWithHowManyPersons: " + sourceIPInCommonWithHowManyPersons);
+    LOGGER.debug("bankAccountInCommonWithHowManyPersons: " + bankAccountInCommonWithHowManyPersons);
+    LOGGER.debug("paypalInCommonWithHowManyPersons: " + bitcoinAccountInCommonWithHowManyPersons);
+
+    if (paypalInCommonWithHowManyPersons > 0)
+      person.setRatingFactor(0);
+
+    if (adressInCommonWithHowManyPersons > 0)
+      person.setRatingFactor(1);
+
+    if (cidInCommonWithHowManyPersons > 0)
+      person.setRatingFactor(2);
+
+    if (sourceIPInCommonWithHowManyPersons > 0)
+      person.setRatingFactor(3);
+
+    if (bankAccountInCommonWithHowManyPersons > 0)
+      person.setRatingFactor(4);
+
+    if (bitcoinAccountInCommonWithHowManyPersons > 0)
+      person.setRatingFactor(5);
+
+    LOGGER.debug("RatingFactor from person: " + person.getRatingFactors().toString());
+
+    try {
+      personRepository.save(person);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 
   private void saveBankAccount(User user, Person person) {
     BankAccountEntity bankAccount =
-        bankAccountRepository.findByIBAN(user.getBankAccount().getIBAN());
-    if (bankAccount == null)
+        bankAccountRepository.findByIban(user.getBankAccount().getIban());
+
+    if (bankAccount == null) {
       bankAccount = new BankAccountEntity();
+    }
 
     bankAccount.setAccountHolder(user.getBankAccount().getAccountHolder());
-    bankAccount.setIBAN(user.getBankAccount().getIBAN());
-    bankAccount.setBIC(user.getBankAccount().getBIC());
+    bankAccount.setIban(user.getBankAccount().getIban());
+    bankAccount.setBic(user.getBankAccount().getBic());
     bankAccount.withPerson(person);
 
     try {
@@ -221,7 +304,7 @@ public class ImporterService {
     if (bitcoinAccount == null)
       bitcoinAccount = new BitcoinAccountEntity();
 
-    bitcoinAccount.setAddress(user.getPaypalAccount().getAddress());
+    bitcoinAccount.setAddress(user.getBitcoinAccount().getAddress());
     bitcoinAccount.withPerson(person);
 
     try {

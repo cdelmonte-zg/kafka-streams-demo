@@ -4,5 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import de.cdelmonte.fds.neo4j.entity.BankAccountEntity;
 
 public interface BankAccountRepository extends CrudRepository<BankAccountEntity, Long> {
-  BankAccountEntity findByIBAN(String IBAN);
+  BankAccountEntity findByIban(String iban);
 }

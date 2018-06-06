@@ -47,14 +47,15 @@ public class KafkaStreamsConfiguration {
     Serde<Transaction> transactionSerde = StreamsSerdes.transactionSerde();
     Serde<String> stringSerde = Serdes.String();
 
-    KStream<String, Transaction> transactionKStream =
-        kStreamBuilder.stream("transactions", Consumed.with(stringSerde, transactionSerde));
+    KStream<String, Transaction> transactionKStream = kStreamBuilder.stream("training-transactions",
+        Consumed.with(stringSerde, transactionSerde));
 
-    KStream<String, Transaction> masked =
-        transactionKStream.mapValues(p -> Transaction.builder(p).build());
+    KStream<String, Transaction> tests =
+        transactionKStream.mapValues(p -> Transaction.builder(p).setTestData().build());
 
-    masked.print(Printed.<String, Transaction>toSysOut().withLabel("Transactions are coming!!"));
-    masked.to("transactions-to-import", Produced.with(stringSerde, transactionSerde));
+    tests.print(
+        Printed.<String, Transaction>toSysOut().withLabel("Training transactions are coming!!"));
+    tests.to("training-transactions-to-import", Produced.with(stringSerde, transactionSerde));
 
     return transactionKStream;
   }
@@ -65,12 +66,30 @@ public class KafkaStreamsConfiguration {
     Serde<String> stringSerde = Serdes.String();
 
     KStream<String, User> userKStream =
-        kStreamBuilder.stream("users", Consumed.with(stringSerde, userSerde));
+        kStreamBuilder.stream("training-users", Consumed.with(stringSerde, userSerde));
 
-    KStream<String, User> masked = userKStream.mapValues(u -> User.builder(u).build());
+    KStream<String, User> rated =
+        userKStream.mapValues(u -> User.builder(u).setTestData().setFraudScore(0.0f).build());
 
-    masked.print(Printed.<String, User>toSysOut().withLabel("Users are coming!!"));
-    masked.to("users-to-import", Produced.with(stringSerde, userSerde));
+    rated.print(Printed.<String, User>toSysOut().withLabel("Training users are coming!!"));
+    rated.to("training-users-to-import", Produced.with(stringSerde, userSerde));
+
+    return userKStream;
+  }
+
+  @Bean
+  public KStream<String, User> suspiciousUserStream(StreamsBuilder kStreamBuilder) {
+    Serde<User> userSerde = StreamsSerdes.UserSerde();
+    Serde<String> stringSerde = Serdes.String();
+
+    KStream<String, User> userKStream =
+        kStreamBuilder.stream("training-suspicious-users", Consumed.with(stringSerde, userSerde));
+
+    KStream<String, User> rated =
+        userKStream.mapValues(u -> User.builder(u).setTestData().setFraudScore(1.0f).build());
+
+    rated.print(Printed.<String, User>toSysOut().withLabel("Streaming training suspicious users."));
+    rated.to("training-users-to-import", Produced.with(stringSerde, userSerde));
 
     return userKStream;
   }

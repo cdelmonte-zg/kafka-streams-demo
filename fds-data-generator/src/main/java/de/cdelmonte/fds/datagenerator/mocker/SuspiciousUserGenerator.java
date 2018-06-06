@@ -1,13 +1,10 @@
 package de.cdelmonte.fds.datagenerator.mocker;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import de.cdelmonte.fds.datagenerator.container.DataContainer;
 import de.cdelmonte.fds.datagenerator.model.Address;
 import de.cdelmonte.fds.datagenerator.model.Balance;
@@ -18,7 +15,6 @@ import de.cdelmonte.fds.datagenerator.model.payment.PaypalAccount;
 import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.MockUnit;
 import net.andreinc.mockneat.abstraction.MockUnitString;
-import net.andreinc.mockneat.types.enums.IBANType;
 
 public class SuspiciousUserGenerator<T> implements GeneratorSupplier<T> {
   private MockNeat mock;
@@ -33,22 +29,19 @@ public class SuspiciousUserGenerator<T> implements GeneratorSupplier<T> {
   }
 
   public List<User> supplyMocks(int howMany) {
-    int howManyBankAccounts = 4;
+    int howManyBankAccounts = 3;
     int howManyBitconsAccounts = 3;
-    int howManyPaypalAccounts = 5;
-    int howManyAddresses = 4;
+    int howManyPaypalAccounts = 3;
+    int howManyAddresses = 3;
 
     List<Balance> balances = generateBalances(howMany);
-    LinkedList<Address> addresses = generateAddresses(howManyAddresses);
+    List<Address> addresses = generateAddresses(howManyAddresses);
     MockUnitString browserLanguagesMock = genBrowserLanguage();
 
-    LinkedList<BankAccount> bankAccounts = (LinkedList<BankAccount>) generateBankAccount()
-        .list(LinkedList.class, howManyBankAccounts).val();
-    LinkedList<PaypalAccount> paypalAccounts = (LinkedList<PaypalAccount>) generatePaypalAccount()
-        .list(LinkedList.class, howManyPaypalAccounts).val();
-    LinkedList<BitcoinAccount> bitcoinAccounts =
-        (LinkedList<BitcoinAccount>) generateBitcoinAccount()
-            .list(LinkedList.class, howManyBitconsAccounts).val();
+    List<BankAccount> bankAccounts = generateBankAccount().list(howManyBankAccounts).val();
+    List<PaypalAccount> paypalAccounts = generatePaypalAccount().list(howManyPaypalAccounts).val();
+    List<BitcoinAccount> bitcoinAccounts =
+        generateBitcoinAccount().list(howManyBitconsAccounts).val();
 
     List<User> users = mock.reflect(User.class).field("id", mock.longSeq().start(howMany + 1))
         .field("name", mock.names().full()).field("username", mock.users())
@@ -65,11 +58,14 @@ public class SuspiciousUserGenerator<T> implements GeneratorSupplier<T> {
         .field("balance", mock.from(balances)).list(howMany).val();
 
     users.forEach(u -> u.setAddress(addresses.get(new Random().nextInt(howManyAddresses))));
+
     users.forEach(u -> u.setBankAccount(
         bankAccounts.get(new Random().nextInt(howManyBankAccounts)).setAccountHolder(u.getName())));
+
     users.forEach(
         u -> u.setPaypalAccount(paypalAccounts.get(new Random().nextInt(howManyPaypalAccounts))
             .setAccountHolder(u.getName()).setAddress(u.getEmail())));
+
     users.forEach(u -> u
         .setBitcoinAccount(bitcoinAccounts.get(new Random().nextInt(howManyBitconsAccounts))));
 
@@ -99,7 +95,30 @@ public class SuspiciousUserGenerator<T> implements GeneratorSupplier<T> {
     return () -> browserLanguagesSupplier;
   }
 
-  private LinkedList<Address> generateAddresses(int howMany) {
+  private List<Address> generateAddresses(int howMany) {
+    MockUnitString zipMock = generateZip();
+    MockUnitString streetNumberMock = generateStreetNumber();
+
+    List<Address> addresses = mock.reflect(Address.class).field("country", mock.countries().names())
+        .field("city", mock.cities().capitals()).field("zipCode", zipMock)
+        .field("streetAddress", mock.names()).field("streetNumber", streetNumberMock).list(howMany)
+        .val();
+
+    return addresses;
+  }
+
+  private MockUnitString generateStreetNumber() {
+    Supplier<String> streetNumberSupplier = () -> {
+      StringBuffer buff = new StringBuffer();
+      buff.append(mock.chars().digits().val()).append(mock.chars().digits().val());
+
+      return buff.toString();
+    };
+    MockUnitString streetNumberMock = () -> streetNumberSupplier;
+    return streetNumberMock;
+  }
+
+  private MockUnitString generateZip() {
     Supplier<String> zipSupplier = () -> {
       StringBuilder buff = new StringBuilder();
       buff.append(mock.chars().letters().val()).append(mock.chars().digits().val())
@@ -109,40 +128,7 @@ public class SuspiciousUserGenerator<T> implements GeneratorSupplier<T> {
       return buff.toString();
     };
     MockUnitString zipMock = () -> zipSupplier;
-
-    Supplier<String> streetNumberSupplier = () -> {
-      StringBuffer buff = new StringBuffer();
-      buff.append(mock.chars().digits().val()).append(mock.chars().digits().val());
-
-      return buff.toString();
-    };
-    MockUnitString streetNumberMock = () -> streetNumberSupplier;
-
-    Supplier<String> germanCitiesSupplier = () -> {
-      List<String> cities = Arrays.asList(new String[] {"Arzberg", "Aschaffenburg", "Aschersleben",
-          "Asperg", "Aßlar", "Attendorn", "Aub", "Aue", "Auerbach in der Oberpfalz",
-          "Auerbach/Vogtl.", "Augsburg", "Augustusburg", "Aulendorf", "Auma-Weidatal", "Aurich",
-          "Babenhausen", "Bacharach", "Backnang", "Bad Aibling", "Bad Arolsen", "Bad Belzig",
-          "Bad Bentheim", "Bad Bergzabern", "Bad Berka", "Bad Berleburg",
-          "Bad Berneck im Fichtelgebirge", "Bad Bevensen", "Bad Bibra", "Bad Blankenburg",
-          "Bad Bramstedt", "Bad Breisig", "Bad Brückenau", "Bad Buchau", "Bad Camberg",
-          "Bad Colberg-Heldburg", "Bad Doberan", "Bad Driburg", "Bad Düben", "Bad Dürkheim",
-          "Bad Dürrenberg", "Bad Dürrheim", "Bad Elster", "Bad Ems", "Baden-Baden",
-          "Bad Fallingbostel", "Bad Frankenhausen/Kyffhäuser", "Bad Freienwalde (Oder)"});
-
-      return cities.get(new Random().nextInt(cities.size()));
-    };
-    MockUnitString germanCitiesMock = () -> germanCitiesSupplier;
-
-    LinkedList<Address> addresses = mock.reflect(Address.class).field("country", "Germany")
-        .field("city", germanCitiesMock).field("zipCode", zipMock)
-        .field("streetAddress", mock.names()).field("streetNumber", streetNumberMock)
-        .list(LinkedList.class, howMany).val().stream().map(a -> {
-          a.setStreetAddress(a.getStreetAddress() + " Strasse");
-          return a;
-        }).collect(Collectors.toCollection(LinkedList::new));
-
-    return addresses;
+    return zipMock;
   }
 
   private List<Balance> generateBalances(int howMany) {
@@ -155,14 +141,14 @@ public class SuspiciousUserGenerator<T> implements GeneratorSupplier<T> {
     return balances;
   }
 
-
   private MockUnit<BankAccount> generateBankAccount() {
     Supplier<BankAccount> bankAccountSupplier = () -> {
       String name = mock.names().full().val();
+      String[] iBANs = {"fakeIBAN1", "fakeIBAN2", "fakeIBAN3", "fakeIBAN4"};
 
       BankAccount bankAccount = new BankAccount();
-      bankAccount.setIBAN(mock.ibans().type(IBANType.GERMANY).val());
-      bankAccount.setBIC("DEUTDEFF500");
+      bankAccount.setIban(iBANs[new Random().nextInt(4)]);
+      bankAccount.setBic("ATTFUTDEFF500");
       bankAccount.setAccountHolder(name);
 
       return bankAccount;
@@ -188,8 +174,11 @@ public class SuspiciousUserGenerator<T> implements GeneratorSupplier<T> {
   private MockUnit<BitcoinAccount> generateBitcoinAccount() {
     Supplier<BitcoinAccount> bitcoinAccountSupplier = () -> {
 
+      String[] addresses = {"fakebitcoinaccount1", "fakebitcoinaccount2", "fakebitcoinaccount3",
+          "fakebitcoinaccount4"};
+
       BitcoinAccount bitcoinAccount = new BitcoinAccount();
-      bitcoinAccount.setAddress(mock.strings().size(24).val());
+      bitcoinAccount.setAddress(addresses[new Random().nextInt(4)]);
 
       return bitcoinAccount;
     };

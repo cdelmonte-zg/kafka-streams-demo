@@ -13,8 +13,8 @@ public class BankAccountEntity {
   @GeneratedValue
   private Long id;
 
-  private String IBAN;
-  private String BIC;
+  private String iban;
+  private String bic;
   private String accountHolder;
 
   @Relationship(type = "BANK_ACCOUNT_OWNED_BY", direction = Relationship.UNDIRECTED)
@@ -25,20 +25,20 @@ public class BankAccountEntity {
     // Empty constructor required as of Neo4j API 2.0.5
   };
 
-  public String getIBAN() {
-    return IBAN;
+  public String getIban() {
+    return iban;
   }
 
-  public void setIBAN(String IBAN) {
-    this.IBAN = IBAN;
+  public void setIban(String iban) {
+    this.iban = iban;
   }
 
-  public String getBIC() {
-    return BIC;
+  public String getBic() {
+    return bic;
   }
 
-  public void setBIC(String BIC) {
-    this.BIC = BIC;
+  public void setBic(String bic) {
+    this.bic = bic;
   }
 
   public String getAccountHolder() {
@@ -58,7 +58,7 @@ public class BankAccountEntity {
 
   @Override
   public String toString() {
-    return "BankAccountEntity [id=" + id + ", IBAN=" + IBAN + ", BIC=" + BIC + ", accountHolder="
+    return "BankAccountEntity [id=" + id + ", iban=" + iban + ", bic=" + bic + ", accountHolder="
         + accountHolder + ", persons=" + persons + "]";
   }
 }

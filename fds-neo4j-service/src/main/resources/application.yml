@@ -15,5 +15,5 @@ spring.kafka.consumer:
       auto-offset-reset: earliest
       group-id: importer
 
-kafka.topic.import-transactions: transactions-to-import
-kafka.topic.import-users: users-to-import
+kafka.topic.import-training-transactions: training-transactions-to-import
+kafka.topic.import-training-users: training-users-to-import

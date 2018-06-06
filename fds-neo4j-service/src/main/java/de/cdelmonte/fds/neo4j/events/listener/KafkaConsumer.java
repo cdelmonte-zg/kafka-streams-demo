@@ -14,15 +14,15 @@ public class KafkaConsumer {
 
   private static final Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
 
-  @KafkaListener(topics = "${kafka.topic.import-transactions}")
+  @KafkaListener(topics = "${kafka.topic.import-training-transactions}")
   public void receive(String payload) {
-    logger.debug("received payload='{}'", payload);
+    logger.debug("received training transactions payload='{}'", payload);
     service.importTransactions(payload);
   }
 
-  @KafkaListener(topics = "${kafka.topic.import-users}")
+  @KafkaListener(topics = "${kafka.topic.import-training-users}")
   public void receiveUsers(String payload) {
-    logger.debug("received users payload='{}'", payload);
+    logger.debug("received training users payload='{}'", payload);
     service.importUsers(payload);
   }
 }
