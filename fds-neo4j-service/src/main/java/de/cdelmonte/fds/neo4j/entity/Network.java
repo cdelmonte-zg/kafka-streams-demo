@@ -11,7 +11,6 @@ public class Network {
   private Long id;
   private String name;
 
-  @SuppressWarnings("unused")
   private Network() {
     // Empty constructor required as of Neo4j API 2.0.5
   };

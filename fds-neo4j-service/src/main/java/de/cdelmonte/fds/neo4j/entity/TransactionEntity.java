@@ -1,5 +1,6 @@
 package de.cdelmonte.fds.neo4j.entity;
 
+import java.util.BitSet;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +25,8 @@ public class TransactionEntity {
   private Date updatedAt;
   private boolean imported;
   private Date lastImportedAt;
+  private boolean testData;
+  private BitSet ratingFactors = new BitSet(3);
 
   @Relationship(type = "TRANSACTION_WITH_CID", direction = Relationship.UNDIRECTED)
   private Set<CID> cid;
@@ -31,10 +34,7 @@ public class TransactionEntity {
   @Relationship(type = "TRANSACTION_WITH_NETWORK", direction = Relationship.UNDIRECTED)
   private Set<Network> network;
 
-  @SuppressWarnings("unused")
-  public TransactionEntity() {
-    // Empty constructor required as of Neo4j API 2.0.5
-  };
+  public TransactionEntity() {};
 
   public Long getIdExt() {
     return idExt;
@@ -128,5 +128,21 @@ public class TransactionEntity {
       this.cid = new HashSet<>();
     }
     this.cid.add(cid);
+  }
+
+  public boolean isTestData() {
+    return testData;
+  }
+
+  public void setTestData(boolean testData) {
+    this.testData = testData;
+  }
+
+  public BitSet getRatingFactors() {
+    return ratingFactors;
+  }
+
+  public void setRatingFactors(BitSet ratingFactors) {
+    this.ratingFactors = ratingFactors;
   }
 }

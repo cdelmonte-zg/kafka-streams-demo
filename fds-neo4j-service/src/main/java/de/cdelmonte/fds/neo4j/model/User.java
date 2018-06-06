@@ -31,6 +31,9 @@ public class User {
   private PaypalAccount paypalAccount;
   private BankAccount bankAccount;
 
+  private boolean testData;
+  private float fraudScore;
+
   public Long getId() {
     return id;
   }
@@ -197,5 +200,21 @@ public class User {
 
   public void setBankAccount(BankAccount bankAccount) {
     this.bankAccount = bankAccount;
+  }
+
+  public boolean isTestData() {
+    return testData;
+  }
+
+  public void setTestData(boolean testData) {
+    this.testData = testData;
+  }
+
+  public float getFraudScore() {
+    return fraudScore;
+  }
+
+  public void setFraudScore(float fraudScore) {
+    this.fraudScore = fraudScore;
   }
 }

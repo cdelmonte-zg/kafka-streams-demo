@@ -13,8 +13,8 @@ public class MocksGenerator {
   }
 
   public List<? extends Mock> generateMocks(String type, int howMany) {
-    GeneratorSupplier<User> su = new UserGenerator<User>();
-    GeneratorSupplier<User> u = new SuspiciousUserGenerator<User>();
+    GeneratorSupplier<User> u = new UserGenerator<User>();
+    GeneratorSupplier<User> su = new SuspiciousUserGenerator<User>();
     GeneratorSupplier<Transaction> t = new TransactionGenerator<Transaction>();
     GeneratorSupplier<Transaction> st = new SuspiciousTransactionGenerator<Transaction>();
 

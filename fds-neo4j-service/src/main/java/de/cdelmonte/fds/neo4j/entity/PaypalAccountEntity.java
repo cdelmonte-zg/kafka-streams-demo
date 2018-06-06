@@ -19,10 +19,7 @@ public class PaypalAccountEntity {
   @Relationship(type = "PAYPAL_ACCOUNT_OWNED_BY", direction = Relationship.UNDIRECTED)
   public Set<Person> persons;
 
-  @SuppressWarnings("unused")
-  public PaypalAccountEntity() {
-    // Empty constructor required as of Neo4j API 2.0.5
-  };
+  public PaypalAccountEntity() {};
 
   public void withPerson(Person person) {
     if (persons == null) {

@@ -18,7 +18,7 @@ public class Transaction {
   private boolean imported;
   private Date lastImportedAt;
   private String lastCid;
-
+  private boolean testData = false;
 
   private Transaction(Builder builder) {
     id = builder.id;
@@ -36,6 +36,7 @@ public class Transaction {
     imported = builder.imported;
     lastImportedAt = builder.lastImportedAt;
     lastCid = builder.lastCid;
+    testData = builder.testData;
   }
 
   public static Builder builder() {
@@ -82,6 +83,7 @@ public class Transaction {
     public String networkTransactionId;
     public String networkName;
     public Long id;
+    private boolean testData = false;
 
     public void setLastCid(String lastCid) {
       this.lastCid = lastCid;
@@ -151,6 +153,11 @@ public class Transaction {
       this.id = id;
     }
 
+    public Builder setTestData() {
+      testData = true;
+      return this;
+    }
+
     public Transaction build() {
       return new Transaction(this);
     }
@@ -162,7 +169,8 @@ public class Transaction {
         + amount + ", commission=" + commission + ", userCommission=" + userCommission + ", status="
         + status + ", userId=" + userId + ", click=" + click + ", merchant=" + merchant
         + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", imported=" + imported
-        + ", lastImportedAt=" + lastImportedAt + ", lastCid=" + lastCid + "]";
+        + ", lastImportedAt=" + lastImportedAt + ", lastCid=" + lastCid + ", testData=" + testData
+        + "]";
   }
 
   @Override
@@ -181,6 +189,7 @@ public class Transaction {
     result = prime * result + ((merchant == null) ? 0 : merchant.hashCode());
     result = prime * result + ((networkName == null) ? 0 : networkName.hashCode());
     result = prime * result + ((status == null) ? 0 : status.hashCode());
+    result = prime * result + (testData ? 1231 : 1237);
     result = prime * result + ((updatedAt == null) ? 0 : updatedAt.hashCode());
     result = prime * result + ((userCommission == null) ? 0 : userCommission.hashCode());
     result = prime * result + ((userId == null) ? 0 : userId.hashCode());
@@ -252,6 +261,8 @@ public class Transaction {
       if (other.status != null)
         return false;
     } else if (!status.equals(other.status))
+      return false;
+    if (testData != other.testData)
       return false;
     if (updatedAt == null) {
       if (other.updatedAt != null)

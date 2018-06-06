@@ -12,6 +12,7 @@ import de.cdelmonte.fds.datagenerator.producer.Sender;
 
 @Component
 public class JobsConfigurer {
+  private static final String SUSPICIOUS_TRANSACTION = "suspiciousTransaction";
   private static final String USER = "user";
   private static final String TRANSACTION = "transaction";
   private static final String SUSPICIOUS_USER = "suspiciousUser";
@@ -28,7 +29,7 @@ public class JobsConfigurer {
     generateSouspiociusUsers();
 
     try {
-      Thread.sleep(180000);
+      Thread.sleep(220000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -42,7 +43,7 @@ public class JobsConfigurer {
     List<? extends Mock> users = mocksGenerator.generateMocks(USER, 20);
 
     for (Mock u : users) {
-      messageSender.send("users", gson.toJson(u));
+      messageSender.send("training-users", gson.toJson(u));
     }
   }
 
@@ -51,7 +52,7 @@ public class JobsConfigurer {
 
     List<? extends Mock> suspiciousUsers = mocksGenerator.generateMocks(SUSPICIOUS_USER, 20);
     for (Mock u : suspiciousUsers) {
-      messageSender.send("suspiciousUsers", gson.toJson(u));
+      messageSender.send("training-suspicious-users", gson.toJson(u));
     }
   }
 
@@ -61,7 +62,7 @@ public class JobsConfigurer {
     List<? extends Mock> transactions = mocksGenerator.generateMocks(TRANSACTION, howMany);
 
     for (Mock t : transactions) {
-      messageSender.send("transactions", gson.toJson(t));
+      messageSender.send("training-transactions", gson.toJson(t));
     }
   }
 
@@ -69,10 +70,10 @@ public class JobsConfigurer {
     Gson gson = new Gson();
     int howMany = new Random().nextInt(11) + 1;
     List<? extends Mock> suspiciousTransaction =
-        mocksGenerator.generateMocks("suspiciousTransaction", howMany);
+        mocksGenerator.generateMocks(SUSPICIOUS_TRANSACTION, howMany);
 
     for (Mock t : suspiciousTransaction) {
-      messageSender.send("transactions", gson.toJson(t));
+      messageSender.send("training-transactions", gson.toJson(t));
     }
   }
 }

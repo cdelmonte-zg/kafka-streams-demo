@@ -30,6 +30,8 @@ public class User {
   private BitcoinAccount bitcoinAccount;
   private PaypalAccount paypalAccount;
   private BankAccount bankAccount;
+  private boolean testData = false;
+  private float fraudScore = 0.0f;
 
   private User(Builder builder) {
     id = builder.id;
@@ -56,6 +58,8 @@ public class User {
     bitcoinAccount = builder.bitcoinAccount;
     paypalAccount = builder.paypalAccount;
     bankAccount = builder.bankAccount;
+    testData = builder.testData;
+    fraudScore = builder.fraudScore;
   }
 
   public static Builder builder() {
@@ -101,7 +105,8 @@ public class User {
         + ", paymentsBlocked=" + paymentsBlocked + ", blocked=" + blocked + ", doNotPay=" + doNotPay
         + ", numberOfTransactions=" + numberOfTransactions + ", balance=" + balance + ", address="
         + address + ", bitcoinAccount=" + bitcoinAccount + ", paypalAccount=" + paypalAccount
-        + ", bankAccount=" + bankAccount + "]";
+        + ", bankAccount=" + bankAccount + ", testData=" + testData + ", fraudScore=" + fraudScore
+        + "]";
   }
 
   @Override
@@ -117,6 +122,7 @@ public class User {
     result = prime * result + (doNotPay ? 1231 : 1237);
     result = prime * result + ((email == null) ? 0 : email.hashCode());
     result = prime * result + (emailVerified ? 1231 : 1237);
+    result = prime * result + Float.floatToIntBits(fraudScore);
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((languages == null) ? 0 : languages.hashCode());
     result = prime * result + ((lastCid == null) ? 0 : lastCid.hashCode());
@@ -128,6 +134,7 @@ public class User {
     result = prime * result + (paymentsBlocked ? 1231 : 1237);
     result = prime * result + ((paypalAccount == null) ? 0 : paypalAccount.hashCode());
     result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
+    result = prime * result + (testData ? 1231 : 1237);
     result = prime * result + ((username == null) ? 0 : username.hashCode());
     return result;
   }
@@ -176,6 +183,8 @@ public class User {
     } else if (!email.equals(other.email))
       return false;
     if (emailVerified != other.emailVerified)
+      return false;
+    if (Float.floatToIntBits(fraudScore) != Float.floatToIntBits(other.fraudScore))
       return false;
     if (id == null) {
       if (other.id != null)
@@ -226,6 +235,8 @@ public class User {
         return false;
     } else if (!registrationDate.equals(other.registrationDate))
       return false;
+    if (testData != other.testData)
+      return false;
     if (username == null) {
       if (other.username != null)
         return false;
@@ -259,6 +270,8 @@ public class User {
     private BitcoinAccount bitcoinAccount;
     private PaypalAccount paypalAccount;
     private BankAccount bankAccount;
+    private boolean testData = false;
+    private float fraudScore = 0.0f;
 
     private void setId(Long id) {
       this.id = id;
@@ -342,6 +355,16 @@ public class User {
 
     public void setBankAccount(BankAccount bankAccount) {
       this.bankAccount = bankAccount;
+    }
+
+    public Builder setTestData() {
+      testData = true;
+      return this;
+    }
+
+    public Builder setFraudScore(float score) {
+      fraudScore = score;
+      return this;
     }
 
     public User build() {

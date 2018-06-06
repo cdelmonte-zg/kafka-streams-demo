@@ -153,8 +153,8 @@ public class UserGenerator<T> implements GeneratorSupplier<T> {
       String name = mock.names().full().val();
 
       BankAccount bankAccount = new BankAccount();
-      bankAccount.setIBAN(mock.ibans().type(IBANType.GERMANY).val());
-      bankAccount.setBIC("DEUTDEFF500");
+      bankAccount.setIban(mock.ibans().type(IBANType.GERMANY).val());
+      bankAccount.setBic("DEUTDEFF500");
       bankAccount.setAccountHolder(name);
 
       return bankAccount;

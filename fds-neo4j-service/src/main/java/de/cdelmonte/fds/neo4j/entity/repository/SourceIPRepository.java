@@ -5,4 +5,5 @@ import de.cdelmonte.fds.neo4j.entity.SourceIP;
 
 public interface SourceIPRepository extends CrudRepository<SourceIP, Long> {
   SourceIP findByIp(String ip);
+
 }

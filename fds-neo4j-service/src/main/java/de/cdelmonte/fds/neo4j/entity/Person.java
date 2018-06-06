@@ -38,10 +38,9 @@ public class Person {
   private Long balancePaid;
   private Long balanceDenied;
   private Long balanceReceived;
-
-  private int[] rating = new int[] {1, 0, 0, 1, 1, 1};
-  // private Address address;
-
+  private boolean testData;
+  private float fraudScore;
+  private int[] ratingFactors = new int[] {0, 0, 0, 0, 0, 0};
 
   @Relationship(type = "PERSON_WITH_TRANSACTION", direction = Relationship.UNDIRECTED)
   public Set<TransactionEntity> transactions;
@@ -49,8 +48,11 @@ public class Person {
   @Relationship(type = "PERSON_WITH_MERCHANT", direction = Relationship.UNDIRECTED)
   public Set<Merchant> merchants;
 
-  @SuppressWarnings("unused")
   public Person() {};
+
+  public Long getId() {
+    return id;
+  }
 
   public Long getBalancePending() {
     return balancePending;
@@ -242,12 +244,31 @@ public class Person {
     merchants.add(merchant);
   }
 
-  public int[] getRating() {
-    return rating;
+  public boolean isTestData() {
+    return testData;
   }
 
-  public void setRating(int[] rating) {
-    this.rating = rating;
+  public void setTestData(boolean testData) {
+    this.testData = testData;
   }
 
+  public float getFraudScore() {
+    return fraudScore;
+  }
+
+  public void setFraudScore(float fraudScore) {
+    this.fraudScore = fraudScore;
+  }
+
+  public int[] getRatingFactors() {
+    return this.ratingFactors;
+  }
+
+  public void setRatingFactor(int pos) {
+    this.ratingFactors[pos] = 1;
+  }
+
+  public void unsetRatingFactor(int pos) {
+    this.ratingFactors[pos] = 0;
+  }
 }
