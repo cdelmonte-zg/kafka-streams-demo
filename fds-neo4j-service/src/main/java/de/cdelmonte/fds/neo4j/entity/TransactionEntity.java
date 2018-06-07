@@ -28,9 +28,6 @@ public class TransactionEntity {
   private boolean testData;
   private BitSet ratingFactors = new BitSet(3);
 
-  @Relationship(type = "TRANSACTION_WITH_CID", direction = Relationship.UNDIRECTED)
-  private Set<CID> cid;
-
   @Relationship(type = "TRANSACTION_WITH_NETWORK", direction = Relationship.UNDIRECTED)
   private Set<Network> network;
 
@@ -121,13 +118,6 @@ public class TransactionEntity {
       this.network = new HashSet<>();
     }
     this.network.add(network);
-  }
-
-  public void withCID(CID cid) {
-    if (this.cid == null) {
-      this.cid = new HashSet<>();
-    }
-    this.cid.add(cid);
   }
 
   public boolean isTestData() {
