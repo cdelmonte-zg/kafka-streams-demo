@@ -38,3 +38,8 @@ docker-compose -f fds-docker/docker-dev.yml up -d
 --------------------------------------
 to access to neo4j browser: http://localhost:7474
 
+A simple cypher query to visualize some nodes is:
+
+```
+MATCH (n1)-[r]->(n2) RETURN r, n1, n2 LIMIT 25
+```
