@@ -32,7 +32,7 @@ in order to recognise given patterns defined as suspicious.
 ```
 mvn clean package docker:build -Dmaven.test.skip=true
 
-docker-compose -f afs-docker-dev/docker-dev.yml up -d
+docker-compose -f fds-docker/docker-dev.yml up -d
 ```
 
 --------------------------------------
