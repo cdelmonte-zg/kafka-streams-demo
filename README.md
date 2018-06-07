@@ -27,6 +27,8 @@ in order to recognise given patterns defined as suspicious.
 
 How to run the FDS Playtoy
 --------------------------------------
+0. Be sure to have at least java 9 SDK installed on your machine
+
 1. Using the CLI, go in the project root and run the following commands:
 
 ```
