@@ -3,12 +3,17 @@ package de.cdelmonte.fds.neo4j.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import de.cdelmonte.fds.neo4j.entity.Person;
+import de.cdelmonte.fds.neo4j.entity.TransactionEntity;
 import de.cdelmonte.fds.neo4j.entity.repository.PersonRepository;
+import de.cdelmonte.fds.neo4j.entity.repository.TransactionRepository;
 
 @Service
 public class RatingsGeneratorService {
   @Autowired
   PersonRepository personRepository;
+
+  @Autowired
+  TransactionRepository transactionRepository;
 
   public void ratePersonRelations(Long userId, Person person) {
     int paypalInCommonWithHowManyPersons =
@@ -64,11 +69,31 @@ public class RatingsGeneratorService {
     if (person.isDoNotPay())
       person.setAttributesRatingFactor(4);
 
-    if (person.getBalanceDenied() > 0.0)
+    if (person.getBalanceDenied() > 0)
       person.setAttributesRatingFactor(5);
 
     try {
       personRepository.save(person);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void rateTransactionRelations(TransactionEntity tre) {
+    try {
+      transactionRepository.save(tre);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void rateTransactionAttributes(TransactionEntity tre) {
+    if (tre.getAmount() == 0)
+      tre.setAttributesRatingFactor(0);
+
+
+    try {
+      transactionRepository.save(tre);
     } catch (Exception e) {
       e.printStackTrace();
     }

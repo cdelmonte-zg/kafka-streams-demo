@@ -1,6 +1,5 @@
 package de.cdelmonte.fds.neo4j.entity;
 
-import java.util.BitSet;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,7 +25,8 @@ public class TransactionEntity {
   private boolean imported;
   private Date lastImportedAt;
   private boolean testData;
-  private BitSet ratingFactors = new BitSet(3);
+  private int[] attributesRatingFactors = new int[] {0, 0, 0, 0, 0, 0};
+  private int[] relationsRatingFactors = new int[] {0, 0, 0, 0, 0, 0};
 
   @Relationship(type = "TRANSACTION_WITH_NETWORK", direction = Relationship.UNDIRECTED)
   private Set<Network> network;
@@ -128,11 +128,27 @@ public class TransactionEntity {
     this.testData = testData;
   }
 
-  public BitSet getRatingFactors() {
-    return ratingFactors;
+  public int[] getRelationsRatingFactor() {
+    return this.relationsRatingFactors;
   }
 
-  public void setRatingFactors(BitSet ratingFactors) {
-    this.ratingFactors = ratingFactors;
+  public void setRelationsRatingFactor(int pos) {
+    this.relationsRatingFactors[pos] = 1;
+  }
+
+  public void unsetRelationsRatingFactor(int pos) {
+    this.relationsRatingFactors[pos] = 0;
+  }
+
+  public int[] getAttributesRatingFactor() {
+    return this.attributesRatingFactors;
+  }
+
+  public void setAttributesRatingFactor(int pos) {
+    this.attributesRatingFactors[pos] = 1;
+  }
+
+  public void unsetAttributesRatingFactor(int pos) {
+    this.attributesRatingFactors[pos] = 0;
   }
 }

@@ -86,8 +86,11 @@ public class TransactionsImporterService {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
     try {
       ratingsGeneratorService.ratePersonRelations(transaction.getUserId(), person);
+      ratingsGeneratorService.rateTransactionAttributes(transactionEntity);
+      ratingsGeneratorService.rateTransactionRelations(transactionEntity);
     } catch (Exception e) {
       e.printStackTrace();
     }
