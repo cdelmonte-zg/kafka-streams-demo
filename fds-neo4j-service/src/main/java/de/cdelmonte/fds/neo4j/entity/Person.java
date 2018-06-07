@@ -48,9 +48,6 @@ public class Person {
   @Relationship(type = "PERSON_WITH_MERCHANT", direction = Relationship.UNDIRECTED)
   public Set<Merchant> merchants;
 
-  @Relationship(type = "PERSON_WITH_CID", direction = Relationship.UNDIRECTED)
-  public Set<CID> cids;
-
   public Person() {};
 
   public Long getId() {
@@ -245,13 +242,6 @@ public class Person {
       merchants = new HashSet<>();
     }
     merchants.add(merchant);
-  }
-
-  public void withCids(CID cid) {
-    if (cids == null) {
-      cids = new HashSet<>();
-    }
-    cids.add(cid);
   }
 
   public boolean isTestData() {
