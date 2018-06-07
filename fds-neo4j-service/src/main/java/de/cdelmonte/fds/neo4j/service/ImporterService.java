@@ -142,10 +142,7 @@ public class ImporterService {
       e.printStackTrace();
     }
 
-
     setPersonRatingFactors(tr.getUserId(), person);
-
-
   }
 
   public void importUsers(String payload) {
@@ -176,6 +173,12 @@ public class ImporterService {
     person.setBalancePaid(user.getBalance().getPaid());
     person.setBalanceDenied(user.getBalance().getDenied());
     person.setBalanceReceived(user.getBalance().getReceived());
+
+    CID cid = cidRepository.findByCid(user.getLastCid());
+    if (cid == null) {
+      cid = new CID(user.getLastCid());
+    }
+    person.withCids(cid);
 
     person.setTestData(user.isTestData());
     if (user.isTestData())

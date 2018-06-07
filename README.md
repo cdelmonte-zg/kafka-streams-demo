@@ -1,7 +1,7 @@
-# kafka-streams-demo
+# FDS Playtoy
 
 
-Datagenerator 
+Data Generator 
 --------------------------------------
 - creates at the starting point fake users and commits them to the relative Kafka topic
 - creates testing data of two kind: normal and suspect transactions
@@ -25,20 +25,16 @@ in order to recognise given patterns defined as suspicious.
 - gives to disposal a rest endpoint to deliver the data to an external service
 
 
+--------------------------------------
 
-1. To run go in each directory and execute 
-
-```
-mvn -Dmaven.test.skip=true clean package docker:build
-```
-
-2. After that, go to the project root and run:
+1. To run go in the project root and run 
 
 ```
+mvn clean package docker:build -Dmaven.test.skip=true
+
 docker-compose -f afs-docker-dev/docker-dev.yml up -d
 ```
 
-3. After a while, go to http:localhost:7474 to access to neo4j
-
-go to http://localhost:2673/swagger-ui.html to access the swagger ui (to be continued...)
+--------------------------------------
+to access to neo4j browser: http://localhost:7474
 
