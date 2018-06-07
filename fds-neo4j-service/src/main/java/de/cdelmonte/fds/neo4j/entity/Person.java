@@ -40,7 +40,9 @@ public class Person {
   private Long balanceReceived;
   private boolean testData;
   private float fraudScore;
-  private int[] ratingFactors = new int[] {0, 0, 0, 0, 0, 0};
+  private int[] attributesRatingFactors = new int[] {0, 0, 0, 0, 0, 0};
+  private int[] relationsRatingFactors = new int[] {0, 0, 0, 0, 0, 0};
+
 
   @Relationship(type = "PERSON_WITH_TRANSACTION", direction = Relationship.UNDIRECTED)
   public Set<TransactionEntity> transactions;
@@ -260,15 +262,27 @@ public class Person {
     this.fraudScore = fraudScore;
   }
 
-  public int[] getRatingFactors() {
-    return this.ratingFactors;
+  public int[] getRelationsRatingFactor() {
+    return this.relationsRatingFactors;
   }
 
-  public void setRatingFactor(int pos) {
-    this.ratingFactors[pos] = 1;
+  public void setRelationsRatingFactor(int pos) {
+    this.relationsRatingFactors[pos] = 1;
   }
 
-  public void unsetRatingFactor(int pos) {
-    this.ratingFactors[pos] = 0;
+  public void unsetRelationsRatingFactor(int pos) {
+    this.relationsRatingFactors[pos] = 0;
+  }
+
+  public int[] getAttributesRatingFactor() {
+    return this.attributesRatingFactors;
+  }
+
+  public void setAttributesRatingFactor(int pos) {
+    this.attributesRatingFactors[pos] = 1;
+  }
+
+  public void unsetAttributesRatingFactor(int pos) {
+    this.attributesRatingFactors[pos] = 0;
   }
 }

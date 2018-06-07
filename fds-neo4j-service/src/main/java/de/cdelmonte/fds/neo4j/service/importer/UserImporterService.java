@@ -88,12 +88,16 @@ public class UserImporterService {
       relatedEntityManager.saveBankAccount(user, person);
       relatedEntityManager.saveBitcoinAccount(user, person);
       relatedEntityManager.savePaypalAccount(user, person);
-      ratingsGeneratorService.setPersonRatingFactors(user.getId(), person);
-    } catch (Exception e) {
+      ratingsGeneratorService.ratePersonRelations(user.getId(), person);
+      ratingsGeneratorService.ratePersonAttributes(person);
+    } catch (
+
+    Exception e) {
       e.getMessage();
       e.printStackTrace();
     }
   }
+
 
   private class RelatedEntityManager {
     private void saveBankAccount(User user, Person person) throws Exception {
