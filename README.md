@@ -25,9 +25,9 @@ in order to recognise given patterns defined as suspicious.
 - gives to disposal a rest endpoint to deliver the data to an external service
 
 
+How to run the FDS Playtoy
 --------------------------------------
-
-1. To run go in the project root and run 
+1. Using the CLI, go in the project root and run the following commands:
 
 ```
 mvn clean package docker:build -Dmaven.test.skip=true
@@ -35,6 +35,16 @@ mvn clean package docker:build -Dmaven.test.skip=true
 docker-compose -f fds-docker/docker-dev.yml up -d
 ```
 
---------------------------------------
-to access to neo4j browser: http://localhost:7474
+2. To access to the neo4j browser, go to the URI http://localhost:7474
+
+3. A simple cypher query to visualize some data is:
+
+```
+MATCH (n1)-[r]->(n2) RETURN r, n1, n2 LIMIT 25
+```
+
+4. To stop the containers run from the project root the command:
+```
+docker-compose -f fds-docker/docker-dev.yml stop
+```
 
