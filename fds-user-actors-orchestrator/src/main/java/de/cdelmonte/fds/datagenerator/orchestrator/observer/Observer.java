@@ -1,0 +1,7 @@
+package de.cdelmonte.fds.datagenerator.orchestrator.observer;
+
+import de.cdelmonte.fds.datagenerator.orchestrator.event.Event;
+
+public interface Observer {
+  public void update(Event event);
+}

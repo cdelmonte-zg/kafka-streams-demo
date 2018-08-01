@@ -12,7 +12,7 @@ import de.cdelmonte.fds.datagenerator.model.User;
 import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.MockUnitString;
 
-public class SuspiciousTransactionGenerator<T> implements GeneratorSupplier<T> {
+public class SuspiciousTransactionGenerator implements GeneratorSupplier {
   public MockNeat mock;
 
   public SuspiciousTransactionGenerator() {

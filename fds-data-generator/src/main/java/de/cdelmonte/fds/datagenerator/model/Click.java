@@ -7,6 +7,7 @@ public class Click extends Mock {
   private Date date;
   private String ip;
   private String source;
+  private String session;
 
   public Long getId() {
     return id;
@@ -87,5 +88,13 @@ public class Click extends Mock {
   @Override
   public String toString() {
     return "Click [id=" + id + ", date=" + date + ", ip=" + ip + ", source=" + source + "]";
+  }
+
+  public String getSession() {
+    return session;
+  }
+
+  public void setSession(String session) {
+    this.session = session;
   }
 }

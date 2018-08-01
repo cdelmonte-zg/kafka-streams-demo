@@ -1,9 +1,9 @@
 package de.cdelmonte.fds.datagenerator.model;
 
 public class Merchant extends Mock {
-
   private Long id;
   private String name;
+  private float endangered = 0f;
 
   public Long getId() {
     return id;
@@ -21,15 +21,19 @@ public class Merchant extends Mock {
     this.name = name;
   }
 
-  @Override
-  public String toString() {
-    return "Merchant [id=" + id + ", name=" + name + "]";
+  public float getEndangered() {
+    return endangered;
+  }
+
+  public void setEndangered(float endangered) {
+    this.endangered = endangered;
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + Float.floatToIntBits(endangered);
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
@@ -44,6 +48,8 @@ public class Merchant extends Mock {
     if (getClass() != obj.getClass())
       return false;
     Merchant other = (Merchant) obj;
+    if (Float.floatToIntBits(endangered) != Float.floatToIntBits(other.endangered))
+      return false;
     if (id == null) {
       if (other.id != null)
         return false;
@@ -55,5 +61,10 @@ public class Merchant extends Mock {
     } else if (!name.equals(other.name))
       return false;
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return "Merchant [id=" + id + ", name=" + name + ", endangered=" + endangered + "]";
   }
 }

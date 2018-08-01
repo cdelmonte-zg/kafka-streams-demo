@@ -20,7 +20,7 @@ import net.andreinc.mockneat.abstraction.MockUnit;
 import net.andreinc.mockneat.abstraction.MockUnitString;
 import net.andreinc.mockneat.types.enums.IBANType;
 
-public class UserGenerator<T> implements GeneratorSupplier<T> {
+public class UserGenerator implements GeneratorSupplier {
   private MockNeat mock;
   private List<User> users;
 

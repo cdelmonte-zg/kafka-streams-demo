@@ -9,15 +9,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Supplier;
 import de.cdelmonte.fds.datagenerator.container.DataContainer;
-import de.cdelmonte.fds.datagenerator.model.Click;
-import de.cdelmonte.fds.datagenerator.model.Merchant;
 import de.cdelmonte.fds.datagenerator.model.Transaction;
 import de.cdelmonte.fds.datagenerator.model.User;
 import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.MockUnitString;
 
-public class TransactionGenerator<T> implements GeneratorSupplier<T> {
+public class TransactionGenerator implements GeneratorSupplier {
   public MockNeat mock;
+  Random rand = new Random();
 
   private long idCounter = 1L;
 
@@ -27,7 +26,6 @@ public class TransactionGenerator<T> implements GeneratorSupplier<T> {
 
   public List<Transaction> supplyMocks(int howMany) {
     List<User> users = DataContainer.getUsers();
-    List<Merchant> merchants = this.generateMerchants();
     MockUnitString statusMock = genStatus();
 
     List<Transaction> totalTransactions = new LinkedList<Transaction>();
@@ -40,39 +38,24 @@ public class TransactionGenerator<T> implements GeneratorSupplier<T> {
           .field("date",
               mock.localDates().between(LocalDate.of(2016, 01, 01), LocalDate.now()).toUtilDate())
           .field("amount", mock.longs().bound(9999999)).field("status", statusMock)
-          .field("userId", user.getId()).field("merchant", mock.from(merchants))
-          .field("imported", mock.bools()).list(numOfTransactions).val();
+          .field("userId", user.getId()).field("imported", mock.bools()).list(numOfTransactions)
+          .val();
 
       this.idCounter += numOfTransactions;
-
-      transactions.forEach((t) -> {
-        Click click = new Click();
-        click.setId(new Random().nextLong() + 1);
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(t.getDate());
-        cal.add(Calendar.SECOND, (new Random().nextInt(600) - 1) * (-1));
-        click.setDate(cal.getTime());
-
-        click.setIp(user.getLastIp());
-        click.setSource(TransactionSource.getRandomSource());
-
-        t.setClick(click);
-      });
 
       transactions.forEach(t -> t.setNetworkName(getNetworkNameFor(t.getMerchant().getName())));
 
       transactions.forEach((t) -> {
         Calendar cal = Calendar.getInstance();
         cal.setTime(t.getDate());
-        cal.add(Calendar.HOUR, new Random().nextInt(30) + 1);
+        cal.add(Calendar.HOUR, rand.nextInt(30) + 1);
         t.setCreatedAt(cal.getTime());
       });
 
       transactions.forEach((t) -> {
         Calendar cal = Calendar.getInstance();
         cal.setTime(t.getCreatedAt());
-        cal.add(Calendar.HOUR, new Random().nextInt(300) + 1);
+        cal.add(Calendar.HOUR, rand.nextInt(300) + 1);
         t.setUpdatedAt(cal.getTime());
       });
 
@@ -83,7 +66,7 @@ public class TransactionGenerator<T> implements GeneratorSupplier<T> {
 
       transactions.forEach(t -> t.setLastCid(user.getLastCid()));
 
-      Random rand = new Random();
+
       float commissionPercent = rand.nextFloat();
       float userCommissionPercent = commissionPercent * rand.nextFloat();
 
@@ -123,34 +106,11 @@ public class TransactionGenerator<T> implements GeneratorSupplier<T> {
     Supplier<String> statusSupplier = () -> {
       String[] statuses = {"pending", "added", "validated", "received", "marked-as-received",
           "denied", "paid", "blocked", "claimed"};
-      int indexToReturn = new Random().nextInt(statuses.length);
+      int indexToReturn = rand.nextInt(statuses.length);
 
       return statuses[indexToReturn];
     };
 
     return () -> statusSupplier;
-  }
-
-  private MockUnitString genMerchantName() {
-    Supplier<String> merchantNameSupplier = () -> {
-      String[] merchants =
-          {"amazon", "boohoo", "gymshark", "prettylittlething", "showpo", "athleta", "allsaints",
-              "asos", "superdry", "airfrance", "mediamarkt", "telecom", "vodafon", "ebay"};
-      int indexToReturn = new Random().nextInt(merchants.length);
-
-      return merchants[indexToReturn];
-    };
-
-    return () -> merchantNameSupplier;
-  }
-
-  private List<Merchant> generateMerchants() {
-    int r = new Random().nextInt(1000);
-    MockUnitString merchantNames = genMerchantName();
-
-    List<Merchant> merchants = mock.reflect(Merchant.class).field("id", mock.longSeq())
-        .field("name", merchantNames).list(r).val();
-
-    return merchants;
   }
 }

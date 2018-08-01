@@ -17,11 +17,18 @@ public class User extends Mock {
   private String lastIp;
   private String lastCid;
   private String languages;
+  private String browserAgent;
+
   private boolean emailVerified;
   private boolean paymentsBlocked;
   private boolean blocked;
   private boolean doNotPay;
-  private int numberOfTransactions;
+  private boolean suspect; // TODO: verify if this property isn't already cachted from other fields,
+                           // for ex. doNotPay or so...
+
+  private int numOfTransactions;
+  private int numberOfSessions;
+  private int numOfClaims;
 
   private Balance balance;
   private BitcoinAccount bitcoinAccount;
@@ -151,11 +158,11 @@ public class User extends Mock {
   }
 
   public int getNumberOfTransactions() {
-    return numberOfTransactions;
+    return numOfTransactions;
   }
 
   public void setNumberOfTransactions(int numberOfTransactions) {
-    this.numberOfTransactions = numberOfTransactions;
+    this.numOfTransactions = numberOfTransactions;
   }
 
   public Balance getBalance() {
@@ -196,5 +203,37 @@ public class User extends Mock {
 
   public void setBankAccount(BankAccount bankAccount) {
     this.bankAccount = bankAccount;
+  }
+
+  public int getNumberOfSessions() {
+    return numberOfSessions;
+  }
+
+  public void setNumberOfSessions(int numberOfSessions) {
+    this.numberOfSessions = numberOfSessions;
+  }
+
+  public String getBrowserAgent() {
+    return browserAgent;
+  }
+
+  public void setBrowserAgent(String browserAgent) {
+    this.browserAgent = browserAgent;
+  }
+
+  public int getNumOfClaims() {
+    return numOfClaims;
+  }
+
+  public void setNumOfClaims(int numOfClaims) {
+    this.numOfClaims = numOfClaims;
+  }
+
+  public boolean isSuspect() {
+    return suspect;
+  }
+
+  public void setSuspect(boolean suspect) {
+    this.suspect = suspect;
   }
 }

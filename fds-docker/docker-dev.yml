@@ -106,7 +106,7 @@ services:
       - schema-registry
   
   neo4j:
-    image: neo4j:3.3
+    image: neo4j:3.4
     container_name: neo4j
     ports:
       - "7474:7474"

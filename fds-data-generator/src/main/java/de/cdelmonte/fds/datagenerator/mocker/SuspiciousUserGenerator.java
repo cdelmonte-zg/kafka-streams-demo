@@ -16,7 +16,7 @@ import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.MockUnit;
 import net.andreinc.mockneat.abstraction.MockUnitString;
 
-public class SuspiciousUserGenerator<T> implements GeneratorSupplier<T> {
+public class SuspiciousUserGenerator implements GeneratorSupplier {
   private MockNeat mock;
   private List<User> users;
 

@@ -26,16 +26,16 @@ public class GsonUtilTest {
   @Test
   public void testMockedUsers() throws Exception {
     Gson gson = new Gson();
-    String results = gson.toJson(mock.generateMocks("user", 30));
+    String results = gson.toJson(mock.genMocks("user", 30));
     assertTrue("Is Json Valid?", isJSONValid(results));
   }
 
   @Test
   public void testMockedTransactions() throws Exception {
-    mock.generateMocks("user", 30);
+    mock.genMocks("user", 30);
 
     Gson gson = new Gson();
-    String results = gson.toJson(mock.generateMocks("transaction", 30));
+    String results = gson.toJson(mock.genMocks("transaction", 30));
     assertTrue("Is Json Valid?", isJSONValid(results));
   }
 

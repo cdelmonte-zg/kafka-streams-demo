@@ -3,29 +3,25 @@ package de.cdelmonte.fds.datagenerator.mocker;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import de.cdelmonte.fds.datagenerator.model.Mock;
-import de.cdelmonte.fds.datagenerator.model.Transaction;
-import de.cdelmonte.fds.datagenerator.model.User;
+import de.cdelmonte.fds.datagenerator.model.MockType;
 
 @Service
 public class MocksGenerator {
-  private <T> List<? extends Mock> generate(GeneratorSupplier<T> g, int howMany) {
+  private <T> List<? extends Mock> generate(GeneratorSupplier g, int howMany) {
     return g.supplyMocks(howMany);
   }
 
-  public List<? extends Mock> generateMocks(String type, int howMany) {
-    GeneratorSupplier<User> u = new UserGenerator<User>();
-    GeneratorSupplier<User> su = new SuspiciousUserGenerator<User>();
-    GeneratorSupplier<Transaction> t = new TransactionGenerator<Transaction>();
-    GeneratorSupplier<Transaction> st = new SuspiciousTransactionGenerator<Transaction>();
-
-    if (type.equals("user"))
-      return generate(u, howMany);
-    if (type.equals("suspiciousUser"))
-      return generate(su, howMany);
-    else if (type.equals("transaction"))
-      return generate(t, howMany);
-    else if (type.equals("suspiciousTransaction"))
-      return generate(st, howMany);
+  public List<? extends Mock> genMocks(MockType type, int howMany) {
+    if (type.equals(MockType.USER))
+      return generate(new UserGenerator(), howMany);
+    if (type.equals(MockType.SUSPICIOUS_USER))
+      return generate(new SuspiciousUserGenerator(), howMany);
+    else if (type.equals(MockType.TRANSACTION))
+      return generate(new TransactionGenerator(), howMany);
+    else if (type.equals(MockType.CLICK))
+      return generate(new ClickGenerator(), howMany);
+    else if (type.equals(MockType.SUSPICIOUS_TRANSACTION))
+      return generate(new SuspiciousTransactionGenerator(), howMany);
     return null;
   }
 }
