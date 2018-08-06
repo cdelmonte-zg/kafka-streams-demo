@@ -1,4 +1,4 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.controller;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,14 +8,14 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.ActorAttributesSummaryPane;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.ActorBehaviorSummaryPane;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.ActorButtonsSummaryPane;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.ActorDialogWindow;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.StartPauseActorButton;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.WorldFrame;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.world.World;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.ActorAttributesSummaryPane;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.ActorBehaviorSummaryPane;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.ActorButtonsSummaryPane;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.ActorDialogWindow;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.StartPauseActorButton;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.WorldFrame;
 
 
 public class ListPanelController implements ListSelectionListener {
@@ -41,12 +41,10 @@ public class ListPanelController implements ListSelectionListener {
 
   public void valueChanged(ListSelectionEvent e) {
     ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-
     if (!e.getValueIsAdjusting()) {
       if (!lsm.isSelectionEmpty()) {
 
         int i = lsm.getMinSelectionIndex();
-
         Actor actor = world.getList().get(i);
 
         attributesView.setModel(actor);
@@ -84,15 +82,23 @@ public class ListPanelController implements ListSelectionListener {
         deleteActorButton.addActionListener(new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
-            world.remove(world.getList().get(i));
-            lsm.clearSelection();
-            actorPropertiesPaneTableController.update();
-            attributesView.empty();
-            behaviorView.empty();
+            int i = lsm.getMinSelectionIndex();
 
-            startStopActorButton.setVisible(false);
-            modifyButton.setVisible(false);
-            deleteActorButton.setVisible(false);
+            if (i > -1) {
+              Actor actor = world.getList().get(i);
+              if (actor != null) {
+                world.remove(actor);
+                lsm.clearSelection();
+                // actorPropertiesPaneTableController.rowDeleted(i);
+                actorPropertiesPaneTableController.update();
+                attributesView.empty();
+                behaviorView.empty();
+
+                startStopActorButton.setVisible(false);
+                modifyButton.setVisible(false);
+                deleteActorButton.setVisible(false);
+              }
+            }
 
             attributesView.validate();
             buttonsView.validate();

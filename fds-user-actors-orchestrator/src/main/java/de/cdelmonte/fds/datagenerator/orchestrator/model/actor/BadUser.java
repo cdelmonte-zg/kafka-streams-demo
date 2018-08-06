@@ -7,7 +7,7 @@ import de.cdelmonte.fds.datagenerator.orchestrator.util.MockUtils;
 import net.andreinc.mockneat.MockNeat;
 
 
-public class BadUser extends Actor implements Runnable {
+public class BadUser extends Actor {
   private BadUser(Builder builder) {
     super(builder);
   }

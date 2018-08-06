@@ -1,4 +1,4 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.view;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.view;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -10,8 +10,10 @@ import java.awt.Insets;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
@@ -19,13 +21,14 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import de.cdelmonte.fds.datagenerator.orchestrator.controller.ActorDialogController;
-import de.cdelmonte.fds.datagenerator.orchestrator.controller.ActorPropertiesPaneTableController;
-import de.cdelmonte.fds.datagenerator.orchestrator.controller.ListPanelController;
-import de.cdelmonte.fds.datagenerator.orchestrator.controller.LoggingTextAreaController;
-import de.cdelmonte.fds.datagenerator.orchestrator.model.view.ActorPropertiesModel;
-import de.cdelmonte.fds.datagenerator.orchestrator.model.view.LoggingTextAreaModel;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.controller.ActorDialogController;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.controller.ActorPropertiesPaneTableController;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.controller.ListPanelController;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.controller.LoggingTextAreaController;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.model.ActorPropertiesModel;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.model.LoggingTextAreaModel;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.world.World;
+import de.cdelmonte.fds.datagenerator.orchestrator.service.WorldInOutService;
 import de.cdelmonte.fds.datagenerator.orchestrator.util.logging.Logger;
 
 
@@ -41,7 +44,7 @@ public class WorldFrame extends BaseFrame {
 
 
     ActorPropertiesModel actorsPropertyModel = new ActorPropertiesModel();
-    ActorPropertiesPane actorPropertiesPane = new ActorPropertiesPane(actorsPropertyModel);
+    ActorTableView actorPropertiesPane = new ActorTableView(actorsPropertyModel);
 
     ActorPropertiesPaneTableController actorPropertiesPaneTableController =
         new ActorPropertiesPaneTableController(world, actorsPropertyModel, actorPropertiesPane);
@@ -144,7 +147,7 @@ public class WorldFrame extends BaseFrame {
 
 
 
-    Button newActorButton = new Button("Create new actor");
+    Button newActorButton = new Button("Create new Actor");
     newActorButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -173,11 +176,24 @@ public class WorldFrame extends BaseFrame {
     Logger.addOutput(textAreaController);
     Logger.log("hello world");
 
-    Button resetTextAreaButton = new Button("reset");
+    Button resetTextAreaButton = new Button("Reset");
     resetTextAreaButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         textAreaController.reset();
+      }
+    });
+
+
+    JButton saveButton = new JButton("Save");
+    saveButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        try {
+          WorldInOutService.saveWorld(world);
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
       }
     });
 
@@ -192,6 +208,7 @@ public class WorldFrame extends BaseFrame {
     buttonsPanel.add(resetTextAreaButton);
     buttonsPanel.add(closeButton);
     buttonsPanel.add(newActorButton);
+    buttonsPanel.add(saveButton);
 
 
 

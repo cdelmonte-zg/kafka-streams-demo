@@ -1,8 +1,8 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.controller;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.controller;
 
-import de.cdelmonte.fds.datagenerator.orchestrator.model.view.LoggingTextAreaModel;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.model.LoggingTextAreaModel;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.LoggingTextArea;
 import de.cdelmonte.fds.datagenerator.orchestrator.util.logging.Output;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.LoggingTextArea;
 
 public class LoggingTextAreaController implements Output {
   LoggingTextArea view;

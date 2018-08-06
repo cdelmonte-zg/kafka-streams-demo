@@ -1,6 +1,10 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.model.actor;
 
-public class Balance {
+import java.io.Serializable;
+
+
+public class Balance implements Serializable {
+  private static final long serialVersionUID = 1L;
   private Long pending;
   private Long paid;
   private Long denied;

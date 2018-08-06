@@ -1,6 +1,10 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.model.actor;
 
-public class Address {
+import java.io.Serializable;
+
+
+public class Address implements Serializable {
+  private static final long serialVersionUID = 1L;
   private String country;
   private String state = "";
   private String city;

@@ -1,11 +1,11 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.view;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.view;
 
 import java.awt.Color;
 
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 
-import de.cdelmonte.fds.datagenerator.orchestrator.model.view.LoggingTextAreaModel;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.model.LoggingTextAreaModel;
 
 
 public class LoggingTextArea extends JTextArea {

@@ -1,5 +1,6 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.model.actor;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.function.Supplier;
 
@@ -8,14 +9,19 @@ import javax.swing.Icon;
 import de.cdelmonte.fds.datagenerator.orchestrator.behaviors.Behavior;
 import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Command;
 import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Context;
+import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Executor;
 import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Parser;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.BankAccount;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.BitcoinAccount;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.PaypalAccount;
-import de.cdelmonte.fds.datagenerator.orchestrator.util.logging.Logger;
+import de.cdelmonte.fds.datagenerator.orchestrator.observer.ClickObserver;
+import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObservableEventType;
+import de.cdelmonte.fds.datagenerator.orchestrator.observer.TransactionObserver;
+import javafx.util.Pair;
 
 
-public class Actor extends Thread implements Supplier<Actor> {
+public class Actor implements Supplier<Actor>, Serializable {
+  private static final long serialVersionUID = 1L;
   private ActorType type;
   private Behavior behavior;
 
@@ -45,6 +51,7 @@ public class Actor extends Thread implements Supplier<Actor> {
   private BitcoinAccount bitcoinAccount;
   private PaypalAccount paypalAccount;
   private BankAccount bankAccount;
+  private transient Ghost ghost;
 
   private Icon icon;
 
@@ -80,6 +87,32 @@ public class Actor extends Thread implements Supplier<Actor> {
     paused = true;
   }
 
+  public void start() {
+    if (behavior == null) {
+      return;
+    }
+
+    if (ghost == null) {
+      ghost = new Ghost();
+    }
+
+    Pair<Context, Command> executor = loadProgram();
+    ghost.setProgram(executor.getKey(), executor.getValue());
+    ghost.start();
+  }
+
+  private Pair<Context, Command> loadProgram() {
+    Context co = new Context();
+    co.setActor(this);
+    co.setNumberOfClicks(10);
+    co.setNumberOfTransactions(20);
+    co.addObserver(ObservableEventType.CLICK, new ClickObserver());
+    co.addObserver(ObservableEventType.TRANSACTION, new TransactionObserver());
+    Command executor = new Executor(Parser.parse(behavior.getProgram()));
+
+    return new Pair<Context, Command>(co, executor);
+  }
+
   public String getFancyName() {
     return name;
   }
@@ -88,51 +121,13 @@ public class Actor extends Thread implements Supplier<Actor> {
     this.name = name;
   }
 
-  public void sayHello() {
-    Logger.log("\nHey, here is " + name + ", I'm a " + type);
-  }
-
   public Actor setBehavior(Behavior actorBehavior) {
     behavior = actorBehavior;
+    reloadProgram();
+
     return this;
   }
 
-  @Override
-  public void run() {
-    while (!isInterrupted()) {
-      if (!paused) {
-        sayHello();
-
-        Context co = new Context();
-        co.setActor(this);
-        co.setNumberOfClicks(10);
-        co.setNumberOfTransactions(20);
-
-        Command expr = Parser.parse(behavior.getProgram());
-        expr.interpret(co);
-
-        behavior.executeAlgorithm();
-        yield();
-      }
-
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException ex) {
-        interrupt();
-        Logger.log("bye");
-        return;
-      }
-    }
-  }
-
-  public void pause() {
-    paused = !paused;
-
-  }
-
-  public boolean isPaused() {
-    return paused;
-  }
 
   @Override
   public Actor get() {
@@ -343,18 +338,39 @@ public class Actor extends Thread implements Supplier<Actor> {
     this.icon = icon;
   }
 
+  public void pause() {
+    ghost.pause();
+  }
+
+  public boolean isPaused() {
+    return ghost.isPaused();
+  }
+
+  public void interrupt() {
+    ghost.interrupt();
+  }
+
+  public void reloadProgram() {
+    if (ghost == null) {
+      return;
+    }
+
+    Pair<Context, Command> executor = loadProgram();
+    ghost.setProgram(executor.getKey(), executor.getValue());
+  }
+
   @Override
   public String toString() {
-    return "Actor [type=" + type + "\n behavior=" + behavior + "\n id=" + id + "\n email=" + email
-        + "\n username=" + username + "\n name=" + name + "\n birthdate=" + birthdate
-        + "\n registrationDate=" + registrationDate + "\n lastLoginDate=" + lastLoginDate
-        + "\n lastCountry=" + lastCountry + "\n lastIp=" + lastIp + "\n lastCid=" + lastCid
-        + "\n languages=" + languages + "\n userAgent=" + userAgent + "\n emailVerified="
-        + emailVerified + "\n paymentsBlocked=" + paymentsBlocked + "\n blocked=" + blocked
-        + "\n doNotPay=" + doNotPay + "\n suspect=" + suspect + "\n numOfTransactions="
-        + numOfTransactions + "\n numberOfSessions=" + numberOfSessions + "\n numOfClaims="
-        + numOfClaims + "\n balance=" + balance + "\n bitcoinAccount=" + bitcoinAccount
-        + "\n paypalAccount=" + paypalAccount + "\n bankAccount=" + bankAccount + "\n paused="
-        + paused + "]";
+    return "Actor [type=" + type + ", behavior=" + behavior + ", id=" + id + ", email=" + email
+        + ", username=" + username + ", name=" + name + ", birthdate=" + birthdate
+        + ", registrationDate=" + registrationDate + ", lastLoginDate=" + lastLoginDate
+        + ", lastCountry=" + lastCountry + ", lastIp=" + lastIp + ", lastCid=" + lastCid
+        + ", languages=" + languages + ", userAgent=" + userAgent + ", emailVerified="
+        + emailVerified + ", paymentsBlocked=" + paymentsBlocked + ", blocked=" + blocked
+        + ", doNotPay=" + doNotPay + ", suspect=" + suspect + ", numOfTransactions="
+        + numOfTransactions + ", numberOfSessions=" + numberOfSessions + ", numOfClaims="
+        + numOfClaims + ", balance=" + balance + ", bitcoinAccount=" + bitcoinAccount
+        + ", paypalAccount=" + paypalAccount + ", bankAccount=" + bankAccount + ", icon=" + icon
+        + ", paused=" + paused + "]";
   }
 }

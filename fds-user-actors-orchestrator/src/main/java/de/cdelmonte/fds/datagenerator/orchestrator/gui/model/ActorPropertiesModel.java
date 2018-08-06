@@ -1,4 +1,4 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.model.view;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +64,9 @@ public class ActorPropertiesModel extends AbstractTableModel {
   }
 
   public void setValueAt(Object value, int rowIndex, int columnIndex) {
-    data.get(rowIndex).set(columnIndex, value);
-    fireTableCellUpdated(rowIndex, columnIndex);
+    if (data.size() > 0) {
+      data.get(rowIndex).set(columnIndex, value);
+      fireTableCellUpdated(rowIndex, columnIndex);
+    }
   }
 }

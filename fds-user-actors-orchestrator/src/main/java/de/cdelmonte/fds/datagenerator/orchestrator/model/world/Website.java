@@ -7,6 +7,7 @@ import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 
 
 public class Website implements World {
+  private static final long serialVersionUID = 1L;
   private List<Actor> actors = new ArrayList<>();
 
   @Override

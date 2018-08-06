@@ -8,8 +8,7 @@ import de.cdelmonte.fds.datagenerator.orchestrator.util.MockUtils;
 import net.andreinc.mockneat.MockNeat;
 
 
-public class GoodUser extends Actor implements Runnable {
-
+public class GoodUser extends Actor {
   private GoodUser(Builder builder) {
     super(builder);
   }

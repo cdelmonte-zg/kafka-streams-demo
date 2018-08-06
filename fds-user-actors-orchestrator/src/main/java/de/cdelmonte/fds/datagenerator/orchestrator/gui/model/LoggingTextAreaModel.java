@@ -1,4 +1,4 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.model.view;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.model;
 
 import java.util.ArrayList;
 import java.util.List;

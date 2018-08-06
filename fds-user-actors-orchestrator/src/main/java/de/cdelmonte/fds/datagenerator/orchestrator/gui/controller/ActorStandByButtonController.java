@@ -1,10 +1,10 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.controller;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.StartPauseActorButton;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.StartPauseActorButton;
 
 
 public class ActorStandByButtonController implements ActionListener {

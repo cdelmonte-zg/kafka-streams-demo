@@ -1,4 +1,4 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.controller;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -6,43 +6,51 @@ import java.util.List;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.model.ActorPropertiesModel;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.observer.Observer;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.ActorTableView;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
-import de.cdelmonte.fds.datagenerator.orchestrator.model.view.ActorPropertiesModel;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.world.World;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.ActorPropertiesPane;
 
 
 public class ActorPropertiesPaneTableController implements TableModelListener, Observer {
   private World world;
   private ActorPropertiesModel tableModel;
-  private ActorPropertiesPane view;
+  private ActorTableView view;
 
 
   public ActorPropertiesPaneTableController(World world, ActorPropertiesModel tableModel,
-      ActorPropertiesPane view) {
+      ActorTableView view) {
 
     this.world = world;
     this.tableModel = tableModel;
     this.view = view;
     tableModel.addActors(getActors());
+  }
+
+  public int getIndex(int index) {
+    if (index > -1) {
+      return view.getTable().convertRowIndexToModel(index);
+    } else
+      return 0;
 
   }
 
   @Override
   public void tableChanged(TableModelEvent e) {
+    TableModel model = (TableModel) e.getSource();
     int row = e.getFirstRow();
     int column = e.getColumn();
-    // TableModel model = (TableModel) e.getSource();
-    String columnName = tableModel.getColumnName(column);
-    Object data = tableModel.getValueAt(row, column);
+    String columnName = model.getColumnName(column);
+    Object data = model.getValueAt(row, column);
 
     Actor actor = getActors().get(row);
     String methodName =
         ("set" + columnName.substring(0, 1).toUpperCase() + columnName.substring(1));
     Method method = null;
 
-    System.out.println(actor.getFancyName() + " " + methodName + "::" + " = " + data);
     try {
       method = actor.getClass().getMethod(methodName, data.getClass());
     } catch (SecurityException ex) {
@@ -70,7 +78,14 @@ public class ActorPropertiesPaneTableController implements TableModelListener, O
 
   @Override
   public void update() {
+    view.requestFocusInWindow();
     tableModel.addActors(getActors());
+    view.newFilter(view.getFilterText().getText());
     view.repaint();
+  }
+
+  public void rowDeleted(int i) {
+    tableModel.fireTableRowsDeleted(i, i);
+
   }
 }

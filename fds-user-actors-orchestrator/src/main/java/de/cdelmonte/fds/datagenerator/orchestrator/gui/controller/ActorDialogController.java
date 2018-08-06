@@ -1,4 +1,4 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.controller;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,18 +8,14 @@ import java.util.function.Supplier;
 
 import javax.swing.JComboBox;
 
-import de.cdelmonte.fds.datagenerator.orchestrator.behaviors.BadBehavior;
 import de.cdelmonte.fds.datagenerator.orchestrator.behaviors.Behavior;
-import de.cdelmonte.fds.datagenerator.orchestrator.behaviors.GoodBehavior;
-import de.cdelmonte.fds.datagenerator.orchestrator.behaviors.ProgrammableBehavior;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.observer.Observable;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.observer.Observer;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.ActorDialogWindow;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.ActorFactory;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.ActorType;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.world.World;
-import de.cdelmonte.fds.datagenerator.orchestrator.observer.ClickObserver;
-import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObservableEventType;
-import de.cdelmonte.fds.datagenerator.orchestrator.observer.TransactionObserver;
-import de.cdelmonte.fds.datagenerator.orchestrator.view.ActorDialogWindow;
 
 
 public class ActorDialogController implements ActionListener, Observable {
@@ -44,14 +40,13 @@ public class ActorDialogController implements ActionListener, Observable {
     this.view = view;
 
     if (actor != null) {
+      view.setActor(actor);
       view.loadFields();
     }
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    System.out.println("hello" + e.getActionCommand() + ActorDialogCommand.CLOSE);
-
     if (e.getActionCommand() == ActorDialogCommand.CLOSE.toString()) {
       view.setActor(null);
       view.dispose();
@@ -62,9 +57,8 @@ public class ActorDialogController implements ActionListener, Observable {
       view.dispose();
     } else if (e.getActionCommand().equals(ActorDialogCommand.SELECT_TYPE.toString())) {
       JComboBox<ActorType> combo = (JComboBox<ActorType>) e.getSource();
-      System.out.println(combo.getSelectedItem());
-
       actor = createActor((ActorType) combo.getSelectedItem());
+      actor.start();
       view.setActor(actor);
       view.loadFields();
       view.validate();
@@ -72,10 +66,6 @@ public class ActorDialogController implements ActionListener, Observable {
   }
 
   private Actor createActor(ActorType type) {
-    Behavior behavior = (type == ActorType.GOOD_USER) ? new GoodBehavior() : new BadBehavior();
-    behavior.setProgram("start do_clicks do_transactions");
-    behavior.addObserver(ObservableEventType.CLICK, new ClickObserver());
-    behavior.addObserver(ObservableEventType.TRANSACTION, new TransactionObserver());
     Supplier<ActorFactory> actorFactory = ActorFactory::new;
 
     return actorFactory.get().createActor(type);
@@ -102,7 +92,7 @@ public class ActorDialogController implements ActionListener, Observable {
     actor.setEmailVerified(view.getCbEmailVerified().isSelected());
     actor.setPaymentsBlocked(view.getCbPaymentsBlocked().isSelected());
 
-    Behavior behavior = new ProgrammableBehavior();
+    Behavior behavior = new Behavior();
     behavior.setProgram(view.getEditorBehaviorArea().getText());
     actor.setBehavior(behavior);
     actor.setIcon(view.getImageLabel().getIcon());

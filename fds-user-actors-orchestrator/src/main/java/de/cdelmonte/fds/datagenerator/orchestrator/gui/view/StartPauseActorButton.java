@@ -1,4 +1,4 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.view;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.view;
 
 import java.awt.Color;
 

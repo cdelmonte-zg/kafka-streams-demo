@@ -1,4 +1,4 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.controller;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.observer;
 
 
 public interface Observable {

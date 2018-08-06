@@ -1,4 +1,4 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.view;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -17,10 +17,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableRowSorter;
 
-import de.cdelmonte.fds.datagenerator.orchestrator.model.view.ActorPropertiesModel;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.model.ActorPropertiesModel;
 
 
-public class ActorPropertiesPane extends JScrollPane {
+public class ActorTableView extends JScrollPane {
   private JTable table;
   private ActorPropertiesModel tableModel;
   private Controller controller;
@@ -28,7 +28,7 @@ public class ActorPropertiesPane extends JScrollPane {
 
   TableRowSorter<ActorPropertiesModel> sorter;
 
-  public ActorPropertiesPane(ActorPropertiesModel tableModel) {
+  public ActorTableView(ActorPropertiesModel tableModel) {
     super();
 
     this.tableModel = tableModel;
@@ -87,6 +87,7 @@ public class ActorPropertiesPane extends JScrollPane {
       return;
     }
     sorter.setRowFilter(rf);
+    table.getSelectionModel().clearSelection();
   }
 
   public ActorPropertiesModel getTableModel() {
@@ -99,5 +100,14 @@ public class ActorPropertiesPane extends JScrollPane {
 
   public JTable getTable() {
     return table;
+  }
+
+  public void setFilterText(String s) {
+    filterText.setText(s);
+    repaint();
+  }
+
+  public JTextField getFilterText() {
+    return filterText;
   }
 }

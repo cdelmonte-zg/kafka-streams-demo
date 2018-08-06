@@ -1,9 +1,9 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.view;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.view;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import de.cdelmonte.fds.datagenerator.orchestrator.controller.Observer;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.observer.Observer;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 
 

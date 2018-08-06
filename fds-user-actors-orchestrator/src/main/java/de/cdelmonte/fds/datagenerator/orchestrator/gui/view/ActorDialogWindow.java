@@ -1,7 +1,6 @@
-package de.cdelmonte.fds.datagenerator.orchestrator.view;
+package de.cdelmonte.fds.datagenerator.orchestrator.gui.view;
 
 import java.awt.Button;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
@@ -17,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -31,6 +32,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -41,26 +43,26 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingWorker;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.SwingPropertyChangeSupport;
 
-import de.cdelmonte.fds.datagenerator.orchestrator.controller.ActorDialogCommand;
-import de.cdelmonte.fds.datagenerator.orchestrator.controller.ActorDialogController;
-import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.CommandName;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.controller.ActorDialogCommand;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.controller.ActorDialogController;
+import de.cdelmonte.fds.datagenerator.orchestrator.gui.util.ViewUtils;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.ActorType;
-import de.cdelmonte.fds.datagenerator.orchestrator.util.ViewUtils;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 
-public class ActorDialogWindow extends Dialog {
-  private Actor actor;
+public class ActorDialogWindow extends JDialog {
+  private volatile Actor actor;
   private WorldFrame parent;
   private ActorDialogController controller;
   private Map<String, String> cmds = new LinkedHashMap<>();
@@ -106,48 +108,48 @@ public class ActorDialogWindow extends Dialog {
 
     this.parent = parent;
     this.controller = controller;
+
     this.actor = actor;
 
     init();
   }
 
   private void init() {
-    worker.execute();
+    ViewUtils.worker.execute();
 
-    try {
-      cmds = worker.get();
-    } catch (InterruptedException | ExecutionException e1) {
-      e1.printStackTrace();
-    }
+    java.awt.EventQueue.invokeLater(new Runnable() {
+      public void run() {
+        try {
+          cmds = ViewUtils.worker.get();
+        } catch (InterruptedException | ExecutionException e1) {
+          e1.printStackTrace();
+        }
 
-    add(buildMainPane());
-    setResizable(true);
-    setMinimumSize(new Dimension(650, 700));
+        addPropertyChangeListener(new PropertyChangeListener() {
+          @Override
+          public void propertyChange(PropertyChangeEvent evt) {
+            if ("actor".equals(evt.getPropertyName())) {
+              actor = (Actor) evt.getNewValue();
+            }
+          }
+        });
 
-    addWindowListener(new WindowAdapter() {
-      @Override
-      public void windowClosed(WindowEvent e) {
-        emptyFields();
+        add(buildMainPane());
+        setResizable(true);
+        setMinimumSize(new Dimension(650, 700));
+
+        addWindowListener(new WindowAdapter() {
+          @Override
+          public void windowClosed(WindowEvent e) {
+            emptyFields();
+          }
+        });
+
+        setLocationRelativeTo(parent);
+        validate();
       }
     });
-
-    validate();
-    setLocationRelativeTo(parent);
   }
-
-  SwingWorker<Map<String, String>, Void> worker = new SwingWorker<>() {
-    @Override
-    public Map<String, String> doInBackground() {
-      final Map<String, String> inCmds = new LinkedHashMap<>();
-
-      inCmds.put("start session", CommandName.START_SESSION.toString());
-      inCmds.put("do clicks", CommandName.DO_CLICKS.toString());
-      inCmds.put("do transactions", CommandName.DO_TRANSACTIONS.toString());
-      inCmds.put("close session", CommandName.CLOSE_SESSION.toString());
-
-      return inCmds;
-    }
-  };
 
   private JPanel buildMainPane() {
     JPanel mainPane = new JPanel();
@@ -549,59 +551,73 @@ public class ActorDialogWindow extends Dialog {
   }
 
   private void emptyFields() {
-    labActorType.setText("");
-    labid.setText("");
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        labActorType.setText("");
+        labid.setText("");
 
-    tfFancyName.setText("");
-    tfUsername.setText("");
-    tfEmail.setText("");
-    tfLastCountry.setText("");
-    tfLastIp.setText("");
-    tfLastCid.setText("");
-    tfLanguages.setText("");
-    tfUserAgent.setText("");
+        tfFancyName.setText("");
+        tfUsername.setText("");
+        tfEmail.setText("");
+        tfLastCountry.setText("");
+        tfLastIp.setText("");
+        tfLastCid.setText("");
+        tfLanguages.setText("");
+        tfUserAgent.setText("");
 
-    modelBirthdate.setValue(null);
-    modelRegistration.setValue(null);
-    modelLastLoginDate.setValue(null);
+        modelBirthdate.setValue(null);
+        modelRegistration.setValue(null);
+        modelLastLoginDate.setValue(null);
 
-    cbSuspect.setSelected(false);
-    cbBlocked.setSelected(false);
-    cbDoNotPay.setSelected(false);
-    cbEmailVerified.setSelected(false);
-    cbPaymentsBlocked.setSelected(false);
-    editorBehaviorArea.setText("");
-    imageLabel.setIcon(null);
+        cbSuspect.setSelected(false);
+        cbBlocked.setSelected(false);
+        cbDoNotPay.setSelected(false);
+        cbEmailVerified.setSelected(false);
+        cbPaymentsBlocked.setSelected(false);
+        editorBehaviorArea.setText("");
+        imageLabel.setIcon(null);
+
+        validate();
+      }
+    });
   }
 
   public void loadFields() {
-    labActorType.setText("Actor Type: " + actor.getType());
-    labid.setText("id: " + actor.getActorId());
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        labActorType.setText("Actor Type: " + actor.getType());
+        labid.setText("id: " + actor.getActorId());
 
-    tfFancyName.setText(actor.getFancyName());
-    tfUsername.setText(actor.getUsername());
-    tfEmail.setText(actor.getEmail());
-    tfLastCountry.setText(actor.getLastCountry());
-    tfLastIp.setText(actor.getLastIp());
-    tfLastCid.setText(actor.getLastCid());
-    tfLanguages.setText(actor.getLanguages());
-    tfUserAgent.setText(actor.getUserAgent());
+        tfFancyName.setText(actor.getFancyName());
+        tfUsername.setText(actor.getUsername());
+        tfEmail.setText(actor.getEmail());
+        tfLastCountry.setText(actor.getLastCountry());
+        tfLastIp.setText(actor.getLastIp());
+        tfLastCid.setText(actor.getLastCid());
+        tfLanguages.setText(actor.getLanguages());
+        tfUserAgent.setText(actor.getUserAgent());
 
-    modelBirthdate.setValue(actor.getBirthdate());
-    modelRegistration.setValue(actor.getRegistrationDate());
-    modelLastLoginDate.setValue(actor.getLastLoginDate());
+        modelBirthdate.setValue(actor.getBirthdate());
+        modelRegistration.setValue(actor.getRegistrationDate());
+        modelLastLoginDate.setValue(actor.getLastLoginDate());
 
-    cbSuspect.setSelected(actor.isSuspect());
-    cbBlocked.setSelected(actor.isBlocked());
-    cbDoNotPay.setSelected(actor.isDoNotPay());
-    cbEmailVerified.setSelected(actor.isEmailVerified());
-    cbPaymentsBlocked.setSelected(actor.isPaymentsBlocked());
+        cbSuspect.setSelected(actor.isSuspect());
+        cbBlocked.setSelected(actor.isBlocked());
+        cbDoNotPay.setSelected(actor.isDoNotPay());
+        cbEmailVerified.setSelected(actor.isEmailVerified());
+        cbPaymentsBlocked.setSelected(actor.isPaymentsBlocked());
 
-    if (actor.getBehavior() != null) {
-      editorBehaviorArea.setText(actor.getBehavior().getProgram());
-    }
+        if (actor.getBehavior() != null) {
+          editorBehaviorArea.setText(actor.getBehavior().getProgram());
+        }
 
-    getImageLabel().setIcon(actor.getIcon());
+        getImageLabel().setIcon(actor.getIcon());
+
+        validate();
+      }
+    });
+
   }
 
   private GridBagConstraints makegbc(int x, int y, int width, int height) {
@@ -640,7 +656,11 @@ public class ActorDialogWindow extends Dialog {
   }
 
   public void setActor(Actor actor) {
+    Actor oldActor = this.actor;
+
+    SwingPropertyChangeSupport pcs = new SwingPropertyChangeSupport(this);
     this.actor = actor;
+    pcs.firePropertyChange("actor", oldActor, actor);
   }
 
   public Label getLabActorType() {
