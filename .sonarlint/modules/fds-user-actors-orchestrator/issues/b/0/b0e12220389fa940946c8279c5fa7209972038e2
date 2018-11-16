@@ -1,0 +1,32 @@
+
+Åsquid:MaximumInheritanceDepth@"<This class has 6 parents which is greater than 5 authorized.(Ìî¨‹¸ˇˇˇˇH§∂RMAJORZ
+CODE_SMELL
+isquid:S1948U"3Make "modelRegistration" transient or serializable.(ˇˇò¸¯ˇˇˇˇH•∂RCRITICALZ
+CODE_SMELL
+`squid:S1602⁄",Remove useless curly braces around statement(Åæﬂ‚˙ˇˇˇˇH¶∂RMINORZ
+CODE_SMELL
+Wsquid:S1604·"(Make this anonymous inner class a lambda(∞Ôâ¢Hß∂RMAJORZ
+CODE_SMELL
+Usquid:S1148"#Use a logger to log this exception.(«í«ÍH®∂RMINORZVULNERABILITY
+zsquid:HiddenFieldCheckÆ"@Rename "labActorType" which hides the field declared at line 70.(òÇî˘H©∂RMAJORZ
+CODE_SMELL
+\squid:S1604™"(Make this anonymous inner class a lambda(‘∂µˇ˛ˇˇˇˇH™∂RMAJORZ
+CODE_SMELL
+asquid:S1948T"0Make "modelBirthdate" transient or serializable.(Æﬂ‹∆H´∂RCRITICALZ
+CODE_SMELL
+[squid:S1604x"(Make this anonymous inner class a lambda(®Ì°ß˙ˇˇˇˇH¨∂RMAJORZ
+CODE_SMELL
+rsquid:S2142|"FEither re-interrupt this method or rethrow the "InterruptedException".(Á⁄„À¯ˇˇˇˇH≠∂RMAJORZBUG
+\squid:S1604À"(Make this anonymous inner class a lambda(‘∂µˇ˛ˇˇˇˇHÆ∂RMAJORZ
+CODE_SMELL
+Ysquid:S1148}"#Use a logger to log this exception.(¬˛ˇ‚˚ˇˇˇˇHØ∂RMINORZVULNERABILITY
+]squid:S1125‰")Remove the literal "false" boolean value.(úŸßˆ¯ˇˇˇˇH∞∂RMINORZ
+CODE_SMELL
+bsquid:S1948C",Make "controller" transient or serializable.(ñÄ¡Æ˙ˇˇˇˇH±∂RCRITICALZ
+CODE_SMELL
+_squid:S2387B"/"parent" is the name of a field in "Component".(◊·≥∞H≤∂RBLOCKERZ
+CODE_SMELL
+jsquid:S1948V"4Make "modelLastLoginDate" transient or serializable.(Œı©Ñ˘ˇˇˇˇH≥∂RCRITICALZ
+CODE_SMELL
+Wsquid:S1604Ä"(Make this anonymous inner class a lambda(Í◊∂≠H¥∂RMAJORZ
+CODE_SMELL

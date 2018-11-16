@@ -78,8 +78,8 @@ public class ActorDialogController implements ActionListener, Observable {
     actor.setLastCountry(view.getTfLastCountry().getText());
     actor.setLastIp(view.getTfLastIp().getText());
     actor.setLastCid(view.getTfLastCid().getText());
-    actor.setLanguages(view.getTfLanguages().getText());
-    actor.setUserAgent(view.getTfUserAgent().getText());
+    // actor.setLanguages(view.getTfLanguages().getText());
+    actor.setLastUserAgent(view.getTfUserAgent().getText());
 
     actor.setBirthdate(view.getModelBirthdate().getValue());
     actor.setRegistrationDate(view.getModelRegistration().getValue());
@@ -88,9 +88,9 @@ public class ActorDialogController implements ActionListener, Observable {
 
     actor.setSuspect(view.getCbSuspect().isSelected());
     actor.setBlocked(view.getCbBlocked().isSelected());
-    actor.setDoNotPay(view.getCbDoNotPay().isSelected());
-    actor.setEmailVerified(view.getCbEmailVerified().isSelected());
-    actor.setPaymentsBlocked(view.getCbPaymentsBlocked().isSelected());
+    actor.setPaymentBlockedForNotAllowedOperations(view.getCbDoNotPay().isSelected());
+    actor.setEmailConfirmed(view.getCbEmailVerified().isSelected());
+    actor.setPaymentBlockedManually(view.getCbPaymentsBlocked().isSelected());
 
     Behavior behavior = new Behavior();
     behavior.setProgram(view.getEditorBehaviorArea().getText());

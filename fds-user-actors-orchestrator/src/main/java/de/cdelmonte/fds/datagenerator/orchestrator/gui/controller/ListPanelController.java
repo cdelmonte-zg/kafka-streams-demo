@@ -43,71 +43,76 @@ public class ListPanelController implements ListSelectionListener {
     ListSelectionModel lsm = (ListSelectionModel) e.getSource();
     if (!e.getValueIsAdjusting()) {
       if (!lsm.isSelectionEmpty()) {
-
         int i = lsm.getMinSelectionIndex();
-        Actor actor = world.getList().get(i);
+        if (i > -1) {
 
-        attributesView.setModel(actor);
-        attributesView.update();
+          int indModel = actorPropertiesPaneTableController.getIndexModel(i);
+          Actor actor = world.getList().get(indModel);
 
-        behaviorView.setModel(actor);
-        behaviorView.update();
-        buttonsView.removeAll();
+          attributesView.setModel(actor);
+          attributesView.update();
 
-        StartPauseActorButton startStopActorButton = new StartPauseActorButton(actor);
-        ActorStandByButtonController controller =
-            new ActorStandByButtonController(actor, startStopActorButton);
-        startStopActorButton.addActionListener(controller);
+          behaviorView.setModel(actor);
+          behaviorView.update();
+          buttonsView.removeAll();
 
-        JButton modifyButton = new JButton("Modify");
-        modifyButton.addActionListener(new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            ActorDialogController controller = new ActorDialogController(world, actor);
-            ActorDialogWindow newActorDialogW = new ActorDialogWindow(mainFrame, controller, actor);
-            controller.setView(newActorDialogW);
-            controller.addObserver(actorPropertiesPaneTableController);
-            controller.addObserver(attributesView);
-            controller.addObserver(behaviorView);
-            newActorDialogW.setVisible(true);
+          StartPauseActorButton startStopActorButton = new StartPauseActorButton(actor);
+          ActorStandByButtonController controller =
+              new ActorStandByButtonController(actor, startStopActorButton);
+          startStopActorButton.addActionListener(controller);
 
-            newActorDialogW.validate();
-            attributesView.validate();
-            buttonsView.validate();
-            mainFrame.validate();
-          }
-        });
+          JButton modifyButton = new JButton("Modify");
+          modifyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              ActorDialogController controller = new ActorDialogController(world, actor);
+              ActorDialogWindow newActorDialogW =
+                  new ActorDialogWindow(mainFrame, controller, actor);
+              controller.setView(newActorDialogW);
+              controller.addObserver(actorPropertiesPaneTableController);
+              controller.addObserver(attributesView);
+              controller.addObserver(behaviorView);
+              newActorDialogW.setVisible(true);
 
-        JButton deleteActorButton = new JButton("Delete");
-        deleteActorButton.addActionListener(new ActionListener() {
-          @Override
-          public void actionPerformed(ActionEvent e) {
-            int i = lsm.getMinSelectionIndex();
+              newActorDialogW.validate();
+              attributesView.validate();
+              buttonsView.validate();
+              mainFrame.validate();
+            }
+          });
 
-            if (i > -1) {
-              Actor actor = world.getList().get(i);
-              if (actor != null) {
-                world.remove(actor);
-                lsm.clearSelection();
-                // actorPropertiesPaneTableController.rowDeleted(i);
-                actorPropertiesPaneTableController.update();
-                attributesView.empty();
-                behaviorView.empty();
+          JButton deleteActorButton = new JButton("Delete");
+          deleteActorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              int i = lsm.getMinSelectionIndex();
 
-                startStopActorButton.setVisible(false);
-                modifyButton.setVisible(false);
-                deleteActorButton.setVisible(false);
+              if (i > -1) {
+                int indModel = actorPropertiesPaneTableController.getIndexModel(i);
+                Actor actor = world.getList().get(indModel);
+                if (actor != null) {
+                  world.remove(actor);
+                  lsm.clearSelection();
+                  actorPropertiesPaneTableController.update();
+                  attributesView.empty();
+                  behaviorView.empty();
+
+                  startStopActorButton.setVisible(false);
+                  modifyButton.setVisible(false);
+                  deleteActorButton.setVisible(false);
+
+                  attributesView.validate();
+                  buttonsView.validate();
+                  mainFrame.validate();
+                }
               }
             }
+          });
 
-            attributesView.validate();
-            buttonsView.validate();
-            mainFrame.validate();
-          }
-        });
-        buttonsView.add(startStopActorButton);
-        buttonsView.add(modifyButton);
-        buttonsView.add(deleteActorButton);
+          buttonsView.add(startStopActorButton);
+          buttonsView.add(modifyButton);
+          buttonsView.add(deleteActorButton);
+        }
       }
     }
 

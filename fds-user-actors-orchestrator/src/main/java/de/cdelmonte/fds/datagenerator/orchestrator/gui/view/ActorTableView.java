@@ -87,7 +87,7 @@ public class ActorTableView extends JScrollPane {
       return;
     }
     sorter.setRowFilter(rf);
-    table.getSelectionModel().clearSelection();
+    // table.getSelectionModel().clearSelection();
   }
 
   public ActorPropertiesModel getTableModel() {

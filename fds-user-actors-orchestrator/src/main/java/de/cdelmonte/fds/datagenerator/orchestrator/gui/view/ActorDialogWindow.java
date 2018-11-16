@@ -595,8 +595,8 @@ public class ActorDialogWindow extends JDialog {
         tfLastCountry.setText(actor.getLastCountry());
         tfLastIp.setText(actor.getLastIp());
         tfLastCid.setText(actor.getLastCid());
-        tfLanguages.setText(actor.getLanguages());
-        tfUserAgent.setText(actor.getUserAgent());
+        tfLanguages.setText("");
+        tfUserAgent.setText(actor.getLastUserAgent());
 
         modelBirthdate.setValue(actor.getBirthdate());
         modelRegistration.setValue(actor.getRegistrationDate());
@@ -604,9 +604,9 @@ public class ActorDialogWindow extends JDialog {
 
         cbSuspect.setSelected(actor.isSuspect());
         cbBlocked.setSelected(actor.isBlocked());
-        cbDoNotPay.setSelected(actor.isDoNotPay());
-        cbEmailVerified.setSelected(actor.isEmailVerified());
-        cbPaymentsBlocked.setSelected(actor.isPaymentsBlocked());
+        cbDoNotPay.setSelected(actor.isPaymentBlockedForNotAllowedOperations());
+        cbEmailVerified.setSelected(actor.isEmailConfirmed());
+        cbPaymentsBlocked.setSelected(actor.isPaymentBlockedManually());
 
         if (actor.getBehavior() != null) {
           editorBehaviorArea.setText(actor.getBehavior().getProgram());

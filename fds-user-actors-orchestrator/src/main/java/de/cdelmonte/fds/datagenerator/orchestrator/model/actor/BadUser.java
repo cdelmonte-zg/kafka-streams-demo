@@ -8,6 +8,8 @@ import net.andreinc.mockneat.MockNeat;
 
 
 public class BadUser extends Actor {
+  private static final long serialVersionUID = 1L;
+
   private BadUser(Builder builder) {
     super(builder);
   }
@@ -23,38 +25,37 @@ public class BadUser extends Actor {
 
     public Actor build() {
       setType(ActorType.BAD_USER);
-      setId(mock.longs().range(1, Long.MAX_VALUE).val());
-      setName(mock.names().full().val());
+      setId(getMock().longs().range(1, Long.MAX_VALUE).val());
+      setName(getMock().names().full().val());
 
-      setEmail(mock.emails().val());
-      setUsername(mock.users().val());
+      setEmail(getMock().emails().val());
+      setUsername(getMock().users().val());
 
-      setBirthdate(mock.localDates().between(LocalDate.of(1945, 01, 01), LocalDate.of(2001, 12, 12))
-          .toUtilDate().val());
+      setBirthdate(getMock().localDates()
+          .between(LocalDate.of(1945, 01, 01), LocalDate.of(2001, 12, 12)).toUtilDate().val());
 
-      setRegistrationDate(mock.localDates().between(LocalDate.of(2016, 01, 01), LocalDate.now())
-          .toUtilDate().val());
+      setRegistrationDate(getMock().localDates()
+          .between(LocalDate.of(2016, 01, 01), LocalDate.now()).toUtilDate().val());
 
-      setLastLoginDate(mock.localDates()
-          .between(registrationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+      setLastLoginDate(getMock().localDates()
+          .between(getRegistrationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
               LocalDate.now())
           .toUtilDate().val());
 
-      setLastCountry(mock.ipv4s().val());
-      setLastIp(mock.ipv4s().val());
-      setLastCid(mock.strings().size(12).val());
-      setLanguages(MockUtils.generateBrowserLanguage(mock).val());
-      setBankAccount(MockUtils.generateBankAccount(mock).val());
-      setBitcoinAccount(MockUtils.generateBitcoinAccount(mock).val());
-      setPaypalAccount(MockUtils.generatePaypalAccount(mock).val());
-      setUserAgent(MockUtils.generateUserAgent(mock).val());
+      setLastCountry(getMock().ipv4s().val());
+      setLastIp(getMock().ipv4s().val());
+      setLastCid(getMock().strings().size(12).val());
+      setBankAccount(MockUtils.generateBankAccount(getMock()).val());
+      setBitcoinAccount(MockUtils.generateBitcoinAccount(getMock()).val());
+      setPaypalAccount(MockUtils.generatePaypalAccount(getMock()).val());
+      setLastUserAgent(MockUtils.generateUserAgent(getMock()).val());
 
-      setEmailVerified(true);
-      setPaymentsBlocked(false);
+      setEmailConfirmed(true);
+      setPaymentBlockedManually(false);
       setBlocked(false);
-      setDoNotPay(false);
+      setPaymentBlockedForNotAllowedOperations(false);
       setSuspect(false);
-      setNumOfClaims(mock.ints().val());
+      setNumberOfClaims(getMock().ints().val());
 
       return new BadUser(this);
     }

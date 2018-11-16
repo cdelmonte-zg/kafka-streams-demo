@@ -32,6 +32,7 @@ public class Parser {
         // expressionStack.push(whatToDo);
       }
     }
+
     return syntaxTree;
   }
 }

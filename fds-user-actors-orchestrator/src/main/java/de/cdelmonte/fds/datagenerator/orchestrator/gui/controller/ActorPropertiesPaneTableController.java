@@ -81,11 +81,15 @@ public class ActorPropertiesPaneTableController implements TableModelListener, O
     view.requestFocusInWindow();
     tableModel.addActors(getActors());
     view.newFilter(view.getFilterText().getText());
-    view.repaint();
+    // view.repaint();
   }
 
   public void rowDeleted(int i) {
     tableModel.fireTableRowsDeleted(i, i);
 
+  }
+
+  public int getIndexModel(int i) {
+    return view.getTable().convertRowIndexToModel(i);
   }
 }

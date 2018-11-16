@@ -2,20 +2,22 @@ package de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment;
 
 import java.io.Serializable;
 
+
 public class PaypalAccount extends PaymentAccount implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  private String address;
+  private String email;
+  private boolean verified;
   private String accountHolder;
 
   public PaypalAccount() {}
 
-  public String getAddress() {
-    return address;
+  public String getEmail() {
+    return email;
   }
 
-  public PaypalAccount setAddress(String address) {
-    this.address = address;
+  public PaypalAccount setEmail(String email) {
+    this.email = email;
 
     return this;
   }
@@ -29,12 +31,21 @@ public class PaypalAccount extends PaymentAccount implements Serializable {
     return this;
   }
 
+  public boolean isVerified() {
+    return verified;
+  }
+
+  public void setVerified(boolean verified) {
+    this.verified = verified;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((accountHolder == null) ? 0 : accountHolder.hashCode());
-    result = prime * result + ((address == null) ? 0 : address.hashCode());
+    result = prime * result + ((email == null) ? 0 : email.hashCode());
+    result = prime * result + (verified ? 1231 : 1237);
     return result;
   }
 
@@ -52,16 +63,19 @@ public class PaypalAccount extends PaymentAccount implements Serializable {
         return false;
     } else if (!accountHolder.equals(other.accountHolder))
       return false;
-    if (address == null) {
-      if (other.address != null)
+    if (email == null) {
+      if (other.email != null)
         return false;
-    } else if (!address.equals(other.address))
+    } else if (!email.equals(other.email))
+      return false;
+    if (verified != other.verified)
       return false;
     return true;
   }
 
   @Override
   public String toString() {
-    return "PaypalAccount [address=" + address + ", accountHolder=" + accountHolder + "]";
+    return "PaypalAccount [email=" + email + ", verified=" + verified + ", accountHolder="
+        + accountHolder + "]";
   }
 }

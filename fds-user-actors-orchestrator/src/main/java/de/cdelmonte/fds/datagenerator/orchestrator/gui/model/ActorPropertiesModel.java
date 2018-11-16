@@ -47,7 +47,11 @@ public class ActorPropertiesModel extends AbstractTableModel {
 
   @Override
   public Object getValueAt(int rowIndex, int columnIndex) {
-    return data.get(rowIndex).get(columnIndex);
+    if (data.size() > 0) {
+      return data.get(rowIndex).get(columnIndex);
+    } else
+      return "";
+
   }
 
   @Override

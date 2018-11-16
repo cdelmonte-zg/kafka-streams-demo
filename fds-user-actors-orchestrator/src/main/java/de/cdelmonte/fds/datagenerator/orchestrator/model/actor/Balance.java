@@ -1,55 +1,76 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.model.actor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 public class Balance implements Serializable {
   private static final long serialVersionUID = 1L;
-  private Long pending;
-  private Long paid;
-  private Long denied;
-  private Long received;
+  private long pending;
+  private long paid;
+  private long denied;
+  private long balance;
+  private Date lastModified;
+  private String currency;
 
-  public Long getPending() {
+  public long getPending() {
     return pending;
   }
 
-  public void setPending(Long pending) {
+  public void setPending(long pending) {
     this.pending = pending;
   }
 
-  public Long getPaid() {
+  public long getPaid() {
     return paid;
   }
 
-  public void setPaid(Long paid) {
+  public void setPaid(long paid) {
     this.paid = paid;
   }
 
-  public Long getDenied() {
+  public long getDenied() {
     return denied;
   }
 
-  public void setDenied(Long denied) {
+  public void setDenied(long denied) {
     this.denied = denied;
   }
 
-  public Long getReceived() {
-    return received;
+  public long getBalance() {
+    return balance;
   }
 
-  public void setReceived(Long received) {
-    this.received = received;
+  public void setBalance(long balance) {
+    this.balance = balance;
+  }
+
+  public Date getLastModified() {
+    return lastModified;
+  }
+
+  public void setLastModified(Date lastModified) {
+    this.lastModified = lastModified;
+  }
+
+  public String getCurrency() {
+    return currency;
+  }
+
+  public void setCurrency(String currency) {
+    this.currency = currency;
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((denied == null) ? 0 : denied.hashCode());
-    result = prime * result + ((paid == null) ? 0 : paid.hashCode());
-    result = prime * result + ((pending == null) ? 0 : pending.hashCode());
-    result = prime * result + ((received == null) ? 0 : received.hashCode());
+    result = prime * result + (int) (balance ^ (balance >>> 32));
+    result = prime * result + ((currency == null) ? 0 : currency.hashCode());
+    result = prime * result + (int) (denied ^ (denied >>> 32));
+    result = prime * result + ((lastModified == null) ? 0 : lastModified.hashCode());
+    result = prime * result + (int) (paid ^ (paid >>> 32));
+    result = prime * result + (int) (pending ^ (pending >>> 32));
     return result;
   }
 
@@ -62,32 +83,30 @@ public class Balance implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     Balance other = (Balance) obj;
-    if (denied == null) {
-      if (other.denied != null)
-        return false;
-    } else if (!denied.equals(other.denied))
+    if (balance != other.balance)
       return false;
-    if (paid == null) {
-      if (other.paid != null)
+    if (currency == null) {
+      if (other.currency != null)
         return false;
-    } else if (!paid.equals(other.paid))
+    } else if (!currency.equals(other.currency))
       return false;
-    if (pending == null) {
-      if (other.pending != null)
-        return false;
-    } else if (!pending.equals(other.pending))
+    if (denied != other.denied)
       return false;
-    if (received == null) {
-      if (other.received != null)
+    if (lastModified == null) {
+      if (other.lastModified != null)
         return false;
-    } else if (!received.equals(other.received))
+    } else if (!lastModified.equals(other.lastModified))
+      return false;
+    if (paid != other.paid)
+      return false;
+    if (pending != other.pending)
       return false;
     return true;
   }
 
   @Override
   public String toString() {
-    return "Balance [pending=" + pending + ", paid=" + paid + ", denied=" + denied + ", received="
-        + received + "]";
+    return "Balance [pending=" + pending + ", paid=" + paid + ", denied=" + denied + ", balance="
+        + balance + ", lastModified=" + lastModified + ", currency=" + currency + "]";
   }
 }

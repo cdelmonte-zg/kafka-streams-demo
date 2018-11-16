@@ -51,7 +51,7 @@ public class MockUtils {
 
       PaypalAccount paypalAccount = new PaypalAccount();
       paypalAccount.setAccountHolder(name);
-      paypalAccount.setAddress(mock.emails().val());
+      paypalAccount.setEmail(mock.emails().val());
 
       return paypalAccount;
     };

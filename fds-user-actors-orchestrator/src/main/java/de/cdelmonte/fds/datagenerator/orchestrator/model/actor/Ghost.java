@@ -6,9 +6,9 @@ import de.cdelmonte.fds.datagenerator.orchestrator.util.logging.Logger;
 
 
 public class Ghost extends Thread {
-  private boolean paused;
-  private Command program;
-  private Context context;
+  private volatile boolean paused;
+  private volatile Command program;
+  private volatile Context context;
 
   public Ghost() {
     paused = true;

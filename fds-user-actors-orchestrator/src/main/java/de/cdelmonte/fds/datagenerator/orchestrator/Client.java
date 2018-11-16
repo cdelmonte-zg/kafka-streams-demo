@@ -44,9 +44,6 @@ public class Client {
       website = new Website();
     }
 
-    // actors.forEach(a -> website.add(a));
-    // actors.forEach(a -> a.start());
-
     return website;
   }
 
