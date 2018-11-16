@@ -1,7 +1,0 @@
-
-wsquid:S2095"OUse try-with-resources or close this "ObjectInputStream" in a "finally" clause.(…¿Ã.HÇ´RBLOCKERZBUG
-jsquid:S2259&"CA "NullPointerException" could be thrown; "world" is nullable here.(¯¤¥ßHÈ´RMAJORZBUG
-~squid:S2095"PUse try-with-resources or close this "ObjectOutputStream" in a "finally" clause.(›å†äýÿÿÿÿHÉ´RBLOCKERZBUG
-Ysquid:S1148#"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿHÊ´RMINORZVULNERABILITY
-msquid:S1118":Add a private constructor to hide the implicit public one.(ˆ¢ó‰øÿÿÿÿHË´RMAJORZ
-CODE_SMELL
