@@ -1,13 +1,18 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import net.andreinc.mockneat.MockNeat;
 
 
-public class Click {
+public class Click implements EventModel {
   private long id;
   private String clickedFromIp;
   private Date clickedAt;
@@ -17,6 +22,7 @@ public class Click {
   private long merchantId;
   private long userId;
   private String sessionId;
+  private List<Transaction> transactions = new ArrayList<>();
 
   public Click(Builder builder) {
     id = builder.getId();
@@ -64,6 +70,22 @@ public class Click {
 
   public String getSessionId() {
     return sessionId;
+  }
+
+  public List<Transaction> getTransactions() {
+    return transactions;
+  }
+
+  public void addTransaction(Transaction transaction) {
+    this.transactions.add(transaction);
+  }
+
+  public void removeTransaction(Transaction transaction) {
+    this.transactions.remove(transaction);
+  }
+
+  public void setTransactions(List<Transaction> transactions) {
+    this.transactions = transactions;
   }
 
   public static class Builder {
@@ -137,5 +159,20 @@ public class Click {
     public ClickSource getSource() {
       return source;
     }
+  }
+
+  @Override
+  public String getJSON() {
+    ObjectMapper mapper = new ObjectMapper();
+
+    // Convert object to JSON string
+    String jsonInString = null;
+    try {
+      jsonInString = mapper.writeValueAsString(new ClickFilter(this));
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+
+    return jsonInString;
   }
 }

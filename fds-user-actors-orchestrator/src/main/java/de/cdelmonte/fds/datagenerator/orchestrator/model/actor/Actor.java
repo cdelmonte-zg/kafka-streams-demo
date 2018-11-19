@@ -18,6 +18,7 @@ import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.BitcoinAc
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.PaypalAccount;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.ClickObserver;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObservableEventType;
+import de.cdelmonte.fds.datagenerator.orchestrator.observer.SessionObserver;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.TransactionObserver;
 import javafx.util.Pair;
 
@@ -147,6 +148,7 @@ public class Actor implements Supplier<Actor>, Serializable {
     co.setActor(this);
     co.setNumberOfClicks(10);
     co.setNumberOfTransactions(20);
+    co.addObserver(ObservableEventType.SESSION, new SessionObserver());
     co.addObserver(ObservableEventType.CLICK, new ClickObserver());
     co.addObserver(ObservableEventType.TRANSACTION, new TransactionObserver());
     Command executor = new Executor(Parser.parse(behavior.getProgram()));

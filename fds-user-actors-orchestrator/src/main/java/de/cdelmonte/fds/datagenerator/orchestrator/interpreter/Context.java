@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.cdelmonte.fds.datagenerator.orchestrator.event.Event;
+import de.cdelmonte.fds.datagenerator.orchestrator.model.Session;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.Observable;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObservableEventType;
@@ -14,7 +15,16 @@ public class Context implements Observable {
   private Actor actor;
   private int numberOfClicks;
   private int numberOfTransactions;
+  private Session session;
   protected Map<ObservableEventType, Observer> observers = new HashMap<>();
+
+  public Session getSession() {
+    return session;
+  }
+
+  public void setSession(Session session) {
+    this.session = session;
+  }
 
   public void setActor(Actor actor) {
     this.actor = actor;

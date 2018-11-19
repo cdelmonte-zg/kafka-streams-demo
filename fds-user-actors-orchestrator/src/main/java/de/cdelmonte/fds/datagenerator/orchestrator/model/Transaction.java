@@ -6,7 +6,7 @@ import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.types.enums.MarkovChainType;
 
 
-public class Transaction {
+public class Transaction implements EventModel {
   private long id;
   private int subTransactionId;
   private long clickId;
@@ -19,7 +19,6 @@ public class Transaction {
   private long enquiryId;
   private boolean review;
   private String warnings;
-
 
   private Transaction() {
 
@@ -162,5 +161,10 @@ public class Transaction {
 
   public String getWarnings() {
     return warnings;
+  }
+
+  @Override
+  public String getJSON() {
+    return null;
   }
 }

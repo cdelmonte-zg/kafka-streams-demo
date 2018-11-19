@@ -1,21 +1,19 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.event;
 
-import java.util.UUID;
+import de.cdelmonte.fds.datagenerator.orchestrator.model.EventModel;
+import de.cdelmonte.fds.datagenerator.orchestrator.model.Session;
+
 
 public class SessionEvent implements Event {
 
-  private UUID sessionId;
+  private Session session;
 
-  public SessionEvent() {
-    sessionId = UUID.randomUUID();
+  public SessionEvent(Session session) {
+    this.session = session;
   }
 
-  public UUID getSessionId() {
-    return sessionId;
+  @Override
+  public EventModel getModel() {
+    return session;
   }
-
-  public void addClick(ClickEvent click) {
-
-  }
-
 }

@@ -7,7 +7,7 @@ public class SayHello implements Command {
 
   @Override
   public void interpret(Context co) {
-    Logger.log(
-        "\nHey, here is " + co.getActor().getFancyName() + ", I'm a " + co.getActor().getType());
+    Logger
+        .log("Hey, here is " + co.getActor().getFancyName() + ", I'm a " + co.getActor().getType());
   }
 }
