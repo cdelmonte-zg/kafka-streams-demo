@@ -113,7 +113,6 @@ public class Click implements EventModel {
       this.merchant = merchant;
       this.userId = user;
       this.session = session;
-
     }
 
     public Click build() {

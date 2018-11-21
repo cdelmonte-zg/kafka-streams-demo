@@ -9,6 +9,8 @@ import javax.swing.SwingUtilities;
 import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.WorldFrame;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.world.Website;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.world.World;
+import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObservableEventType;
+import de.cdelmonte.fds.datagenerator.orchestrator.observer.ActorObserver;
 import de.cdelmonte.fds.datagenerator.orchestrator.service.WorldInOutService;
 
 
@@ -42,6 +44,7 @@ public class Client {
     }
     if (website == null) {
       website = new Website();
+      website.addObserver(ObservableEventType.ACTOR, new ActorObserver());
     }
 
     return website;

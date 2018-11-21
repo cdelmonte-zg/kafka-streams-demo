@@ -12,6 +12,7 @@ import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Command;
 import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Context;
 import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Executor;
 import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Parser;
+import de.cdelmonte.fds.datagenerator.orchestrator.model.EventModel;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.AviosAccount;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.BankAccount;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.BitcoinAccount;
@@ -23,7 +24,7 @@ import de.cdelmonte.fds.datagenerator.orchestrator.observer.TransactionObserver;
 import javafx.util.Pair;
 
 
-public class Actor implements Supplier<Actor>, Serializable {
+public class Actor implements Supplier<Actor>, Serializable, EventModel {
   private static final long serialVersionUID = 1L;
   private ActorType type;
   private Behavior behavior;
@@ -747,5 +748,11 @@ public class Actor implements Supplier<Actor>, Serializable {
         + ", numberOfTransactions=" + numberOfTransactions + ", numberOfSessions="
         + numberOfSessions + ", numberOfClaims=" + numberOfClaims + ", numberOfClicks="
         + numberOfClicks + "]";
+  }
+
+  @Override
+  public String getJSON() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

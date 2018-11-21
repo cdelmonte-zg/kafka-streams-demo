@@ -17,4 +17,9 @@ public class MessageService implements Serializable {
     String string = e.getModel().getJSON();
     Logger.log("Sending click to kafka producer with json: \n" + string);
   }
+
+  public void sendActorToKafka(Event e) {
+    String string = e.getModel().getJSON();
+    System.out.println("Sending actor update to kafka producer with json: \n" + string);
+  }
 }

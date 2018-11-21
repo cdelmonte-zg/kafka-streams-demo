@@ -1,7 +1,7 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.model.action;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.UUID;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,8 +12,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+
 import de.cdelmonte.fds.datagenerator.orchestrator.event.ClickEvent;
 import de.cdelmonte.fds.datagenerator.orchestrator.event.SessionEvent;
+
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -31,7 +33,7 @@ class SessionTest {
 
   @BeforeEach
   void setUp() throws Exception {
-    session = new SessionEvent();
+    session = new SessionEvent(null);
   }
 
   @AfterEach
@@ -46,11 +48,6 @@ class SessionTest {
 
   @Test
   void testGetSessionId() {
-    assertTrue(session.getSessionId() instanceof UUID, () -> "Something weird is happening");
-  }
-
-  @Test
-  void testAddClick() {
-    session.addClick(click);
+    assertTrue(session instanceof SessionEvent, () -> "Something weird is happening");
   }
 }
