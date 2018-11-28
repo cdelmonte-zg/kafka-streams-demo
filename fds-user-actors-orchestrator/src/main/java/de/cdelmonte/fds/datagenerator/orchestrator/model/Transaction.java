@@ -162,9 +162,4 @@ public class Transaction implements EventModel {
   public String getWarnings() {
     return warnings;
   }
-
-  @Override
-  public String getJSON() {
-    return null;
-  }
 }

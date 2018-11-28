@@ -749,10 +749,4 @@ public class Actor implements Supplier<Actor>, Serializable, EventModel {
         + numberOfSessions + ", numberOfClaims=" + numberOfClaims + ", numberOfClicks="
         + numberOfClicks + "]";
   }
-
-  @Override
-  public String getJSON() {
-    // TODO Auto-generated method stub
-    return null;
-  }
 }

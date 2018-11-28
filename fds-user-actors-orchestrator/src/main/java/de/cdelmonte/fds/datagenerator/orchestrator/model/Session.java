@@ -56,9 +56,4 @@ public class Session implements EventModel {
   public Click getRandClick() {
     return clicks.get(rand.nextInt(clicks.size()));
   }
-
-  @Override
-  public String getJSON() {
-    return null;
-  }
 }

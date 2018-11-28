@@ -1,18 +1,16 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import net.andreinc.mockneat.MockNeat;
 
 
-public class Click implements EventModel {
+public class Click implements EventModel, Serializable {
   private long id;
   private String clickedFromIp;
   private Date clickedAt;
@@ -24,7 +22,9 @@ public class Click implements EventModel {
   private String sessionId;
   private List<Transaction> transactions = new ArrayList<>();
 
-  public Click(Builder builder) {
+  public Click() {}
+
+  private Click(Builder builder) {
     id = builder.getId();
     clickedFromIp = builder.getClickedFromIp();
     clickedAt = builder.getClickedAt();
@@ -34,6 +34,18 @@ public class Click implements EventModel {
     merchantId = builder.getMerchant();
     userId = builder.getUserId();
     sessionId = builder.getSessionId();
+  }
+
+  public Click(Filter filter) {
+    id = filter.getId();
+    clickedFromIp = filter.getClickedFromIp();
+    clickedAt = filter.getClickedAt();
+    source = filter.getSource();
+    network = filter.getNetwork();
+    referrerId = filter.getReferrerId();
+    merchantId = filter.getMerchantId();
+    userId = filter.getUserId();
+    sessionId = filter.getSessionId();
   }
 
   public long getId() {
@@ -160,18 +172,181 @@ public class Click implements EventModel {
     }
   }
 
-  @Override
-  public String getJSON() {
-    ObjectMapper mapper = new ObjectMapper();
+  public static class Filter {
+    private long id;
+    private String clickedFromIp;
+    private Date clickedAt;
+    private ClickSource source;
+    private String network;
+    private long referrerId;
+    private long merchantId;
+    private long userId;
+    private String sessionId;
 
-    // Convert object to JSON string
-    String jsonInString = null;
-    try {
-      jsonInString = mapper.writeValueAsString(new ClickFilter(this));
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
+    public Filter(Click builder) {
+      id = builder.id;
+      clickedFromIp = builder.clickedFromIp;
+      clickedAt = builder.clickedAt;
+      source = builder.source;
+      network = builder.network;
+      referrerId = builder.referrerId;
+      merchantId = builder.merchantId;
+      userId = builder.userId;
+      sessionId = builder.sessionId;
     }
 
-    return jsonInString;
+    public long getId() {
+      return id;
+    }
+
+    public void setId(long id) {
+      this.id = id;
+    }
+
+    public String getClickedFromIp() {
+      return clickedFromIp;
+    }
+
+    public void setClickedFromIp(String clickedFromIp) {
+      this.clickedFromIp = clickedFromIp;
+    }
+
+    public Date getClickedAt() {
+      return clickedAt;
+    }
+
+    public void setClickedAt(Date clickedAt) {
+      this.clickedAt = clickedAt;
+    }
+
+    public ClickSource getSource() {
+      return source;
+    }
+
+    public void setSource(ClickSource source) {
+      this.source = source;
+    }
+
+    public String getNetwork() {
+      return network;
+    }
+
+    public void setNetwork(String network) {
+      this.network = network;
+    }
+
+    public long getReferrerId() {
+      return referrerId;
+    }
+
+    public void setReferrerId(long referrerId) {
+      this.referrerId = referrerId;
+    }
+
+    public long getMerchantId() {
+      return merchantId;
+    }
+
+    public void setMerchantId(long merchantId) {
+      this.merchantId = merchantId;
+    }
+
+    public long getUserId() {
+      return userId;
+    }
+
+    public void setUserId(long userId) {
+      this.userId = userId;
+    }
+
+    public String getSessionId() {
+      return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+      this.sessionId = sessionId;
+    }
+
+    public Click filter() {
+      Click click = new Click(this);
+
+      return click;
+    }
+  }
+
+  public Click filter() {
+    return new Filter(this).filter();
+  }
+
+  @Override
+  public String toString() {
+    return "Click [id=" + id + ", clickedFromIp=" + clickedFromIp + ", clickedAt=" + clickedAt
+        + ", source=" + source + ", network=" + network + ", referrerId=" + referrerId
+        + ", merchantId=" + merchantId + ", userId=" + userId + ", sessionId=" + sessionId
+        + ", transactions=" + transactions + "]";
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((clickedAt == null) ? 0 : clickedAt.hashCode());
+    result = prime * result + ((clickedFromIp == null) ? 0 : clickedFromIp.hashCode());
+    result = prime * result + (int) (id ^ (id >>> 32));
+    result = prime * result + (int) (merchantId ^ (merchantId >>> 32));
+    result = prime * result + ((network == null) ? 0 : network.hashCode());
+    result = prime * result + (int) (referrerId ^ (referrerId >>> 32));
+    result = prime * result + ((sessionId == null) ? 0 : sessionId.hashCode());
+    result = prime * result + ((source == null) ? 0 : source.hashCode());
+    result = prime * result + ((transactions == null) ? 0 : transactions.hashCode());
+    result = prime * result + (int) (userId ^ (userId >>> 32));
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Click other = (Click) obj;
+    if (clickedAt == null) {
+      if (other.clickedAt != null)
+        return false;
+    } else if (!clickedAt.equals(other.clickedAt))
+      return false;
+    if (clickedFromIp == null) {
+      if (other.clickedFromIp != null)
+        return false;
+    } else if (!clickedFromIp.equals(other.clickedFromIp))
+      return false;
+    if (id != other.id)
+      return false;
+    if (merchantId != other.merchantId)
+      return false;
+    if (network == null) {
+      if (other.network != null)
+        return false;
+    } else if (!network.equals(other.network))
+      return false;
+    if (referrerId != other.referrerId)
+      return false;
+    if (sessionId == null) {
+      if (other.sessionId != null)
+        return false;
+    } else if (!sessionId.equals(other.sessionId))
+      return false;
+    if (source != other.source)
+      return false;
+    if (transactions == null) {
+      if (other.transactions != null)
+        return false;
+    } else if (!transactions.equals(other.transactions))
+      return false;
+    if (userId != other.userId)
+      return false;
+    return true;
   }
 }
