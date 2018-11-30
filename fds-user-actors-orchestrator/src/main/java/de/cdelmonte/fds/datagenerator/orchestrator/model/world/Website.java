@@ -1,7 +1,7 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.model.world;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +14,7 @@ import de.cdelmonte.fds.datagenerator.orchestrator.observer.Observer;
 public class Website implements World {
   private static final long serialVersionUID = 1L;
   private List<Actor> actors = new ArrayList<>();
-  protected Map<ObservableEventType, Observer> observers = new HashMap<>();
+  protected Map<ObservableEventType, Observer> observers = new EnumMap<>(ObservableEventType.class);
 
   @Override
   public void add(Actor a) {
@@ -38,12 +38,12 @@ public class Website implements World {
   }
 
   @Override
-  public void addObserver(ObservableEventType e, Observer o) {
+  public void addObserver(ObservableEventType e, Observer<?> o) {
     observers.put(e, o);
   }
 
   @Override
-  public void removeObserver(ObservableEventType e, Observer o) {
+  public void removeObserver(ObservableEventType e, Observer<?> o) {
     observers.remove(e);
   }
 

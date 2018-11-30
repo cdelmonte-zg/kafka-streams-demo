@@ -1,6 +1,6 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.interpreter;
 
-import de.cdelmonte.fds.datagenerator.orchestrator.event.ClickEvent;
+import de.cdelmonte.fds.datagenerator.orchestrator.event.Event;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.Click;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.ClickSource;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObservableEventType;
@@ -15,7 +15,7 @@ public class DoClick implements Command {
     Click click = new Click.Builder(MockNeat.threadLocal(), co.getActor(), co.getSession(),
         ClickSource.SIMULATOR, 0).build();
     co.getSession().addClick(click);
-    co.notifyObservers(ObservableEventType.CLICK, new ClickEvent(click));
+    co.notifyObservers(ObservableEventType.CLICK, new Event<Click>(click));
 
     Logger.log("Doing clicks");
   }

@@ -5,11 +5,12 @@ import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 
 public class EventNotifier implements AutoCloseable {
-  private final KafkaProducer<String, String> producer;
+  private final KafkaProducer<String, byte[]> producer;
   private final String topic;
 
   public EventNotifier(String bootstrapServers, String clientId, String topic) {
@@ -19,10 +20,10 @@ public class EventNotifier implements AutoCloseable {
     props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     props.setProperty(ProducerConfig.CLIENT_ID_CONFIG, clientId);
 
-    this.producer = new KafkaProducer<>(props, new StringSerializer(), new StringSerializer());
+    this.producer = new KafkaProducer<>(props, new StringSerializer(), new ByteArraySerializer());
   }
 
-  public void sendNotification(String key, String notification) {
+  public void sendNotification(String key, byte[] notification) {
     producer.send(new ProducerRecord<>(topic, key, notification));
   }
 

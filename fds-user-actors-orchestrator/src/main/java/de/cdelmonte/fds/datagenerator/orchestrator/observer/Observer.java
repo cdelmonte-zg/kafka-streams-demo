@@ -1,10 +1,11 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.observer;
 
-import java.io.Serializable;
-
 import de.cdelmonte.fds.datagenerator.orchestrator.event.Event;
+import de.cdelmonte.fds.datagenerator.orchestrator.model.EventModel;
 
 
-public interface Observer extends Serializable {
-  public void update(Event event);
+public interface Observer<T extends EventModel> {
+
+  void update(Event<T> event);
+
 }

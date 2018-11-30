@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import net.andreinc.mockneat.MockNeat;
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Session implements EventModel {
   private String sessionId;
   private Random rand = new Random();
@@ -55,5 +58,19 @@ public class Session implements EventModel {
 
   public Click getRandClick() {
     return clicks.get(rand.nextInt(clicks.size()));
+  }
+
+
+  @Override
+  public EventModel filter() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+
+  @Override
+  public EventModel getModel() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

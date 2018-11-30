@@ -2,10 +2,13 @@ package de.cdelmonte.fds.datagenerator.orchestrator.model;
 
 import java.util.Date;
 
+import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.types.enums.MarkovChainType;
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Transaction implements EventModel {
   private long id;
   private int subTransactionId;
@@ -161,5 +164,17 @@ public class Transaction implements EventModel {
 
   public String getWarnings() {
     return warnings;
+  }
+
+  @Override
+  public EventModel filter() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public EventModel getModel() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

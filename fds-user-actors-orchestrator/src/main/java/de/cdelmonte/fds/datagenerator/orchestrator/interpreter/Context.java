@@ -1,9 +1,10 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.interpreter;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import de.cdelmonte.fds.datagenerator.orchestrator.event.Event;
+import de.cdelmonte.fds.datagenerator.orchestrator.model.EventModel;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.Session;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.Observable;
@@ -12,11 +13,12 @@ import de.cdelmonte.fds.datagenerator.orchestrator.observer.Observer;
 
 
 public class Context implements Observable {
+  private static final long serialVersionUID = 1L;
   private Actor actor;
   private int numberOfClicks;
   private int numberOfTransactions;
   private Session session;
-  protected Map<ObservableEventType, Observer> observers = new HashMap<>();
+  private Map<ObservableEventType, Observer> observers = new EnumMap<>(ObservableEventType.class);
 
   public Session getSession() {
     return session;
@@ -51,17 +53,17 @@ public class Context implements Observable {
   }
 
   @Override
-  public void addObserver(ObservableEventType e, Observer o) {
+  public void addObserver(ObservableEventType e, Observer<?> o) {
     observers.put(e, o);
   }
 
   @Override
-  public void removeObserver(ObservableEventType e, Observer o) {
+  public void removeObserver(ObservableEventType e, Observer<?> o) {
     observers.remove(e);
   }
 
   @Override
-  public void notifyObservers(ObservableEventType e, Event a) {
+  public void notifyObservers(ObservableEventType e, Event<? extends EventModel> a) {
     observers.get(e).update(a);
   }
 }

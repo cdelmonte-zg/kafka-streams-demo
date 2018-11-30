@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import net.andreinc.mockneat.MockNeat;
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Click implements EventModel, Serializable {
   private long id;
   private String clickedFromIp;
@@ -348,5 +351,11 @@ public class Click implements EventModel, Serializable {
     if (userId != other.userId)
       return false;
     return true;
+  }
+
+  @Override
+  public EventModel getModel() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

@@ -11,6 +11,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,20 +39,20 @@ public class EventNotifierIT {
   public void sendNotification() throws Exception {
     try (
         EventNotifier notifier = new EventNotifier(kafka.getBootstrapServers(), key, topic);
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(
+        KafkaConsumer<String, byte[]> consumer = new KafkaConsumer<>(
             ImmutableMap.of(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers(),
                 ConsumerConfig.GROUP_ID_CONFIG, "tc-" + UUID.randomUUID(),
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"),
 
-            new StringDeserializer(), new StringDeserializer());
+            new StringDeserializer(), new ByteArrayDeserializer());
     ) {
       consumer.subscribe(Arrays.asList(topic));
 
-      String notificationMessage = "Hello stream world!";
+      byte[] notificationMessage = "Hello stream world!".getBytes("UTF-8");
       notifier.sendNotification(key, notificationMessage);
 
       Unreliables.retryUntilTrue(10, TimeUnit.SECONDS, () -> {
-        ConsumerRecords<String, String> records = consumer.poll(100);
+        ConsumerRecords<String, byte[]> records = consumer.poll(100);
 
         if (records.isEmpty()) {
           return false;
@@ -79,7 +80,7 @@ public class EventNotifierIT {
 
             new StringDeserializer(), new StringDeserializer());
     ) {
-      String notificationMessageSent = "Hello stream world!";
+      byte[] notificationMessageSent = "Hello stream world!".getBytes("UTF-8");
       String notificationMessageAttended = "Hello stream world!XXX";
 
       consumer.subscribe(Arrays.asList(topic));
@@ -102,5 +103,4 @@ public class EventNotifierIT {
       consumer.unsubscribe();
     }
   }
-
 }

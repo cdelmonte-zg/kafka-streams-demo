@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import javax.swing.JComboBox;
 
 import de.cdelmonte.fds.datagenerator.orchestrator.behaviors.Behavior;
-import de.cdelmonte.fds.datagenerator.orchestrator.event.ActorEvent;
+import de.cdelmonte.fds.datagenerator.orchestrator.event.Event;
 import de.cdelmonte.fds.datagenerator.orchestrator.gui.observer.Observable;
 import de.cdelmonte.fds.datagenerator.orchestrator.gui.observer.Observer;
 import de.cdelmonte.fds.datagenerator.orchestrator.gui.view.ActorDialogWindow;
@@ -70,7 +70,7 @@ public class ActorDialogController implements ActionListener, Observable {
   private Actor createActor(ActorType type) {
     Supplier<ActorFactory> actorFactory = ActorFactory::new;
     Actor actor = actorFactory.get().createActor(type);
-    world.notifyObservers(ObservableEventType.ACTOR, new ActorEvent(actor));
+    world.notifyObservers(ObservableEventType.ACTOR, new Event<Actor>(actor));
 
     return actor;
   }
@@ -103,7 +103,7 @@ public class ActorDialogController implements ActionListener, Observable {
   }
 
   public void saveActor() {
-    world.notifyObservers(ObservableEventType.ACTOR, new ActorEvent(actor));
+    world.notifyObservers(ObservableEventType.ACTOR, new Event<Actor>(actor));
 
     if (actor != null) {
       updateActor();

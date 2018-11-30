@@ -7,6 +7,8 @@ import java.util.function.Supplier;
 
 import javax.swing.Icon;
 
+import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import de.cdelmonte.fds.datagenerator.orchestrator.behaviors.Behavior;
 import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Command;
 import de.cdelmonte.fds.datagenerator.orchestrator.interpreter.Context;
@@ -17,13 +19,12 @@ import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.AviosAcco
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.BankAccount;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.BitcoinAccount;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.payment.PaypalAccount;
-import de.cdelmonte.fds.datagenerator.orchestrator.observer.ClickObserver;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObservableEventType;
-import de.cdelmonte.fds.datagenerator.orchestrator.observer.SessionObserver;
-import de.cdelmonte.fds.datagenerator.orchestrator.observer.TransactionObserver;
+import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObserverFactory;
 import javafx.util.Pair;
 
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Actor implements Supplier<Actor>, Serializable, EventModel {
   private static final long serialVersionUID = 1L;
   private ActorType type;
@@ -146,12 +147,13 @@ public class Actor implements Supplier<Actor>, Serializable, EventModel {
 
   private Pair<Context, Command> loadProgram() {
     Context co = new Context();
+    ObserverFactory obs = new ObserverFactory();
     co.setActor(this);
     co.setNumberOfClicks(10);
     co.setNumberOfTransactions(20);
-    co.addObserver(ObservableEventType.SESSION, new SessionObserver());
-    co.addObserver(ObservableEventType.CLICK, new ClickObserver());
-    co.addObserver(ObservableEventType.TRANSACTION, new TransactionObserver());
+    co.addObserver(ObservableEventType.SESSION, obs.getSessionObserver());
+    co.addObserver(ObservableEventType.CLICK, obs.getClickObserver());
+    co.addObserver(ObservableEventType.TRANSACTION, obs.getTransactionObserver());
     Command executor = new Executor(Parser.parse(behavior.getProgram()));
 
     return new Pair<Context, Command>(co, executor);
@@ -748,5 +750,17 @@ public class Actor implements Supplier<Actor>, Serializable, EventModel {
         + ", numberOfTransactions=" + numberOfTransactions + ", numberOfSessions="
         + numberOfSessions + ", numberOfClaims=" + numberOfClaims + ", numberOfClicks="
         + numberOfClicks + "]";
+  }
+
+  @Override
+  public EventModel filter() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public EventModel getModel() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }
