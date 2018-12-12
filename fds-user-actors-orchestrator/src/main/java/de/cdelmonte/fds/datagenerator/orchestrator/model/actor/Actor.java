@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import javax.swing.Icon;
 
+import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonIgnore;
 import org.testcontainers.shaded.com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import de.cdelmonte.fds.datagenerator.orchestrator.behaviors.Behavior;
@@ -27,10 +28,20 @@ import javafx.util.Pair;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Actor implements Supplier<Actor>, Serializable, EventModel {
   private static final long serialVersionUID = 1L;
+
+  @JsonIgnore
   private ActorType type;
+
+  @JsonIgnore
   private Behavior behavior;
+
+  @JsonIgnore
   private volatile boolean paused = false;
+
+  @JsonIgnore
   private transient Ghost ghost;
+
+  @JsonIgnore
   private Icon icon;
 
   private long id;
@@ -77,6 +88,7 @@ public class Actor implements Supplier<Actor>, Serializable, EventModel {
   private int numberOfClaims;
   private int numberOfClicks;
 
+  public Actor() {}
 
   public Actor(ActorBuilder builder) {
     type = builder.getType();
@@ -131,6 +143,47 @@ public class Actor implements Supplier<Actor>, Serializable, EventModel {
     paused = true;
   }
 
+  public Actor(Filter filter) {
+    id = filter.id;
+    email = filter.email;
+    username = filter.username;
+    name = filter.name;
+    birthdate = filter.birthdate;
+    gender = filter.gender;
+    role = filter.role;
+
+    avatarSet = filter.avatarSet;
+    active = filter.active;
+    facebookAccountSet = filter.facebookAccountSet;
+    blocked = filter.blocked;
+    subscribedToNewsletter = filter.subscribedToNewsletter;
+    paymentInfoVerified = filter.paymentInfoVerified;
+    paymentBlockedForNotAllowedOperations = filter.paymentBlockedForNotAllowedOperations;
+    paymentBlockedManually = filter.paymentBlockedManually;
+    emailAdvertisingAllowed = filter.emailAdvertisingAllowed;
+    emailConfirmed = filter.emailConfirmed;
+    favouriteCategories = filter.favouriteCategories;
+    favouriteMerchants = filter.favouriteMerchants;
+    ignoredMerchantIds = filter.ignoredMerchantIds;
+    twoFactorAuthenticationActivated = filter.twoFactorAuthenticationActivated;
+
+    registrationDate = filter.registrationDate;
+    lastLoginDate = filter.lastLoginDate;
+    lastCountry = filter.lastCountry;
+    lastIp = filter.lastIp;
+    lastCid = filter.lastCid;
+    lastUserAgent = filter.lastUserAgent;
+    suspect = filter.suspect;
+    registrationPlatform = filter.registrationPlatform;
+    activationPlatform = filter.activationPlatform;
+
+    balance = filter.balance;
+    bitcoinAccount = filter.bitcoinAccount;
+    paypalAccount = filter.paypalAccount;
+    bankAccount = filter.bankAccount;
+    aviosAccount = filter.aviosAccount;
+  }
+
   public void start() {
     if (behavior == null) {
       return;
@@ -154,6 +207,7 @@ public class Actor implements Supplier<Actor>, Serializable, EventModel {
     co.addObserver(ObservableEventType.SESSION, obs.getSessionObserver());
     co.addObserver(ObservableEventType.CLICK, obs.getClickObserver());
     co.addObserver(ObservableEventType.TRANSACTION, obs.getTransactionObserver());
+    co.addObserver(ObservableEventType.ACTOR, obs.getActorObserver());
     Command executor = new Executor(Parser.parse(behavior.getProgram()));
 
     return new Pair<Context, Command>(co, executor);
@@ -172,6 +226,99 @@ public class Actor implements Supplier<Actor>, Serializable, EventModel {
     reloadProgram();
 
     return this;
+  }
+
+
+  @Override
+  public Actor filter() {
+    return new Filter(this).filter();
+  }
+
+  public static class Filter {
+    private long id;
+    private String email;
+    private String username;
+    private String name;
+    private Date birthdate;
+    private Gender gender;
+    private Role role;
+
+    private boolean avatarSet;
+    private boolean active;
+    private boolean facebookAccountSet;
+    private boolean blocked;
+    private boolean subscribedToNewsletter;
+    private boolean paymentInfoVerified;
+    private boolean paymentBlockedForNotAllowedOperations;
+    private boolean paymentBlockedManually;
+    private boolean emailAdvertisingAllowed;
+    private boolean emailConfirmed;
+    private boolean favouriteCategories;
+    private long[] favouriteMerchants;
+    private long[] ignoredMerchantIds;
+    private boolean twoFactorAuthenticationActivated;
+
+    private Date registrationDate;
+    private Date lastLoginDate;
+    private String lastCountry;
+    private String lastIp;
+    private String lastCid;
+    private String lastUserAgent;
+    private boolean suspect;
+    private ClientPlatform registrationPlatform;
+    private ClientPlatform activationPlatform;
+
+    private Balance balance;
+    private BitcoinAccount bitcoinAccount;
+    private PaypalAccount paypalAccount;
+    private BankAccount bankAccount;
+    private AviosAccount aviosAccount;
+
+
+    public Filter(Actor builder) {
+      id = builder.id;
+      email = builder.email;
+      username = builder.username;
+      name = builder.name;
+      birthdate = builder.birthdate;
+      gender = builder.gender;
+      role = builder.role;
+
+      avatarSet = builder.avatarSet;
+      active = builder.active;
+      facebookAccountSet = builder.facebookAccountSet;
+      blocked = builder.blocked;
+      subscribedToNewsletter = builder.subscribedToNewsletter;
+      paymentInfoVerified = builder.paymentInfoVerified;
+      paymentBlockedForNotAllowedOperations = builder.paymentBlockedForNotAllowedOperations;
+      paymentBlockedManually = builder.paymentBlockedManually;
+      emailAdvertisingAllowed = builder.emailAdvertisingAllowed;
+      emailConfirmed = builder.emailConfirmed;
+      favouriteCategories = builder.favouriteCategories;
+      favouriteMerchants = builder.favouriteMerchants;
+      ignoredMerchantIds = builder.ignoredMerchantIds;
+      twoFactorAuthenticationActivated = builder.twoFactorAuthenticationActivated;
+
+      registrationDate = builder.registrationDate;
+      lastLoginDate = builder.lastLoginDate;
+      lastCountry = builder.lastCountry;
+      lastIp = builder.lastIp;
+      lastCid = builder.lastCid;
+      lastUserAgent = builder.lastUserAgent;
+      suspect = builder.suspect;
+      registrationPlatform = builder.registrationPlatform;
+      activationPlatform = builder.activationPlatform;
+
+      balance = builder.balance;
+      bitcoinAccount = builder.bitcoinAccount;
+      paypalAccount = builder.paypalAccount;
+      bankAccount = builder.bankAccount;
+      aviosAccount = builder.aviosAccount;
+    }
+
+    public Actor filter() {
+      return new Actor(this);
+    }
   }
 
 
@@ -309,30 +456,37 @@ public class Actor implements Supplier<Actor>, Serializable, EventModel {
     this.bankAccount = bankAccount;
   }
 
+  @JsonIgnore
   public void setPaused(boolean paused) {
     this.paused = paused;
   }
 
+  @JsonIgnore
   public Icon getIcon() {
     return icon;
   }
 
+  @JsonIgnore
   public void setIcon(Icon icon) {
     this.icon = icon;
   }
 
+  @JsonIgnore
   public void pause() {
     ghost.pause();
   }
 
+  @JsonIgnore
   public boolean isPaused() {
     return ghost.isPaused();
   }
 
+  @JsonIgnore
   public void interrupt() {
     ghost.interrupt();
   }
 
+  @JsonIgnore
   public void reloadProgram() {
     if (ghost == null) {
       return;
@@ -750,17 +904,5 @@ public class Actor implements Supplier<Actor>, Serializable, EventModel {
         + ", numberOfTransactions=" + numberOfTransactions + ", numberOfSessions="
         + numberOfSessions + ", numberOfClaims=" + numberOfClaims + ", numberOfClicks="
         + numberOfClicks + "]";
-  }
-
-  @Override
-  public EventModel filter() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public EventModel getModel() {
-    // TODO Auto-generated method stub
-    return null;
   }
 }

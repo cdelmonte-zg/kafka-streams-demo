@@ -7,6 +7,8 @@ import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serializer;
 
 import de.cdelmonte.fds.datagenerator.orchestrator.model.Click;
+import de.cdelmonte.fds.datagenerator.orchestrator.model.EventModel;
+import de.cdelmonte.fds.datagenerator.orchestrator.model.Transaction;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import de.cdelmonte.fds.datagenerator.orchestrator.util.serializer.JsonDeserializer;
 import de.cdelmonte.fds.datagenerator.orchestrator.util.serializer.JsonSerializer;
@@ -21,6 +23,10 @@ public class StreamSerdes {
     return new ClickSerde();
   }
 
+  public static Serde<Transaction> transactionSerde() {
+    return new TransactionSerde();
+  }
+
   static final class ActorSerde extends WrapperSerde<Actor> {
     public ActorSerde() {
       super(new JsonSerializer<>(), new JsonDeserializer<>(Actor.class));
@@ -30,6 +36,12 @@ public class StreamSerdes {
   static final class ClickSerde extends WrapperSerde<Click> {
     public ClickSerde() {
       super(new JsonSerializer<>(), new JsonDeserializer<>(Click.class));
+    }
+  }
+
+  static final class TransactionSerde extends WrapperSerde<Transaction> {
+    public TransactionSerde() {
+      super(new JsonSerializer<>(), new JsonDeserializer<>(Transaction.class));
     }
   }
 
@@ -57,5 +69,20 @@ public class StreamSerdes {
     public Deserializer<T> deserializer() {
       return deserializer;
     }
+  }
+
+  public static byte[] serializeModel(String key, EventModel model) {
+    byte[] data = null;
+
+    if (model instanceof Actor) {
+      data = StreamSerdes.actorSerde().serializer().serialize(key, (Actor) model.filter());
+    } else if (model instanceof Transaction) {
+      data =
+          StreamSerdes.transactionSerde().serializer().serialize(key, (Transaction) model.filter());
+    } else if (model instanceof Click) {
+      data = StreamSerdes.clickSerde().serializer().serialize(key, (Click) model.filter());
+    }
+
+    return data;
   }
 }

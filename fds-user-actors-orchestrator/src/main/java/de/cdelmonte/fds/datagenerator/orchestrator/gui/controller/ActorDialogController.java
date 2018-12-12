@@ -70,7 +70,6 @@ public class ActorDialogController implements ActionListener, Observable {
   private Actor createActor(ActorType type) {
     Supplier<ActorFactory> actorFactory = ActorFactory::new;
     Actor actor = actorFactory.get().createActor(type);
-    world.notifyObservers(ObservableEventType.ACTOR, new Event<Actor>(actor));
 
     return actor;
   }
@@ -103,8 +102,6 @@ public class ActorDialogController implements ActionListener, Observable {
   }
 
   public void saveActor() {
-    world.notifyObservers(ObservableEventType.ACTOR, new Event<Actor>(actor));
-
     if (actor != null) {
       updateActor();
 
@@ -114,6 +111,8 @@ public class ActorDialogController implements ActionListener, Observable {
       }
       notifyObservers();
     }
+
+    world.notifyObservers(ObservableEventType.ACTOR, new Event<Actor>(actor));
   }
 
   public void reset() {

@@ -352,10 +352,4 @@ public class Click implements EventModel, Serializable {
       return false;
     return true;
   }
-
-  @Override
-  public EventModel getModel() {
-    // TODO Auto-generated method stub
-    return null;
-  }
 }

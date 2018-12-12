@@ -1,38 +1,39 @@
 package de.cdelmonte.fds.datagenerator.orchestrator.service;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-import de.cdelmonte.fds.datagenerator.orchestrator.event.Event;
-import de.cdelmonte.fds.datagenerator.orchestrator.model.Click;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.EventModel;
-import de.cdelmonte.fds.datagenerator.orchestrator.model.Transaction;
-import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
-import de.cdelmonte.fds.datagenerator.orchestrator.service.kafka.ClickNotifier;
-import de.cdelmonte.fds.datagenerator.orchestrator.util.logging.Logger;
+import de.cdelmonte.fds.datagenerator.orchestrator.service.kafka.KafkaMessenger;
 
 
-public class MessageService<T extends EventModel> implements Serializable {
-  private static final long serialVersionUID = 1L;
+public class MessageService {
+  private List<BlockingQueue<EventModel>> messengerQueues = new ArrayList<>(10);
 
-  public void sendToKafka(Event<T> event) {
-    EventModel model = event.getModel();
+  public MessageService() {
+    BlockingQueue<EventModel> kafkaQueue = new LinkedBlockingQueue<>(1000);
+    Runnable kS = new KafkaMessenger<EventModel>(kafkaQueue);
+    new Thread((Runnable) kS).start();
+    messengerQueues.add(kafkaQueue);
+  }
 
-    if (model instanceof Actor) {
-    } else if (model instanceof Click) {
-      new ClickNotifier().notify((Click) model);
-    } else if (model instanceof Transaction) {
+  public void registerMessenger(BlockingQueue<EventModel> m) {
+    messengerQueues.add(m);
+  }
 
+  public void removeMessenger(BlockingQueue<EventModel> m) {
+    messengerQueues.remove(m);
+  }
+
+  public void sendTo(EventModel model) {
+    for (BlockingQueue<EventModel> q : messengerQueues) {
+      try {
+        q.put(model);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
-  }
-
-  private void sendTransactionToKafka(Transaction event) {
-    Logger.log("Sending transaction to kafka producer");
-  }
-
-
-
-  private static void sendActorToKafka(Actor model) {
-    String string = model.toString();
-    System.out.println("Sending actor update to kafka producer with json: \n" + string);
   }
 }

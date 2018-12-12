@@ -10,6 +10,8 @@ import de.cdelmonte.fds.datagenerator.orchestrator.service.MessageService;
 
 
 public class ObserverFactory {
+  private MessageService notifier = new MessageService();
+
   public Observer<Click> getClickObserver() {
     return new ClickObserver();
   }
@@ -28,37 +30,31 @@ public class ObserverFactory {
 
   final class ActorObserver extends ObserverWrapper<Actor> {
     public ActorObserver() {
-      super(new MessageService<Actor>());
+      super();
     }
   }
 
   final class TransactionObserver extends ObserverWrapper<Transaction> {
     public TransactionObserver() {
-      super(new MessageService<Transaction>());
+      super();
     }
   }
 
   final class SessionObserver extends ObserverWrapper<Session> {
     public SessionObserver() {
-      super(new MessageService<Session>());
+      super();
     }
   }
 
   final class ClickObserver extends ObserverWrapper<Click> {
     public ClickObserver() {
-      super(new MessageService<Click>());
+      super();
     }
   }
 
   class ObserverWrapper<T extends EventModel> implements Observer<T> {
-    private MessageService<T> notifier;
-
-    ObserverWrapper(MessageService<T> notifier) {
-      this.notifier = notifier;
-    }
-
     public void update(Event<T> event) {
-      notifier.sendToKafka(event);
+      notifier.sendTo(event.getModel());
     }
   }
 }

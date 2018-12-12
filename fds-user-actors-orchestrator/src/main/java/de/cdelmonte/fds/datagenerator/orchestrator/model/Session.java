@@ -66,11 +66,4 @@ public class Session implements EventModel {
     // TODO Auto-generated method stub
     return null;
   }
-
-
-  @Override
-  public EventModel getModel() {
-    // TODO Auto-generated method stub
-    return null;
-  }
 }
