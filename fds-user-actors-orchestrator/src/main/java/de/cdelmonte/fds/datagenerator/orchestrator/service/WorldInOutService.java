@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.world.World;
@@ -35,7 +36,7 @@ public class WorldInOutService {
       e.printStackTrace();
     }
 
-    for (Actor actor : world.getList()) {
+    for (Actor actor : (ArrayList<Actor>) world.getList()) {
       actor.start();
     }
 

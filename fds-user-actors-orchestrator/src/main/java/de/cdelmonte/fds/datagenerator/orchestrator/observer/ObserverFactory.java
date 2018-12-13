@@ -10,7 +10,7 @@ import de.cdelmonte.fds.datagenerator.orchestrator.service.MessageService;
 
 
 public class ObserverFactory {
-  private MessageService notifier = new MessageService();
+  private static final MessageService notifier = new MessageService();
 
   public Observer<Click> getClickObserver() {
     return new ClickObserver();
@@ -54,7 +54,7 @@ public class ObserverFactory {
 
   class ObserverWrapper<T extends EventModel> implements Observer<T> {
     public void update(Event<T> event) {
-      notifier.sendTo(event.getModel());
+      ObserverFactory.notifier.sendTo(event.getModel());
     }
   }
 }

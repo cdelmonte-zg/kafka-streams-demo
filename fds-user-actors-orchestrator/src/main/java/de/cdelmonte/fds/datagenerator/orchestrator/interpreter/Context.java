@@ -12,13 +12,15 @@ import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObservableEventType;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.Observer;
 
 
-public class Context implements Observable {
+public class Context<T extends EventModel> implements Observable<T> {
   private static final long serialVersionUID = 1L;
   private Actor actor;
   private int numberOfClicks;
   private int numberOfTransactions;
   private Session session;
-  private Map<ObservableEventType, Observer> observers = new EnumMap<>(ObservableEventType.class);
+
+  private Map<ObservableEventType, Observer<T>> observers =
+      new EnumMap<>(ObservableEventType.class);
 
   public Session getSession() {
     return session;
@@ -53,17 +55,17 @@ public class Context implements Observable {
   }
 
   @Override
-  public void addObserver(ObservableEventType e, Observer<?> o) {
+  public void addObserver(ObservableEventType e, Observer<T> o) {
     observers.put(e, o);
   }
 
   @Override
-  public void removeObserver(ObservableEventType e, Observer<?> o) {
+  public void removeObserver(ObservableEventType e, Observer<T> o) {
     observers.remove(e);
   }
 
   @Override
-  public void notifyObservers(ObservableEventType e, Event<? extends EventModel> a) {
+  public void notifyObservers(ObservableEventType e, Event<T> a) {
     observers.get(e).update(a);
   }
 }

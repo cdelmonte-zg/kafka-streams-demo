@@ -6,15 +6,17 @@ import java.util.List;
 import java.util.Map;
 
 import de.cdelmonte.fds.datagenerator.orchestrator.event.Event;
+import de.cdelmonte.fds.datagenerator.orchestrator.model.EventModel;
 import de.cdelmonte.fds.datagenerator.orchestrator.model.actor.Actor;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.ObservableEventType;
 import de.cdelmonte.fds.datagenerator.orchestrator.observer.Observer;
 
 
-public class Website implements World {
+public class Website<T extends EventModel> implements World<T> {
   private static final long serialVersionUID = 1L;
   private List<Actor> actors = new ArrayList<>();
-  protected Map<ObservableEventType, Observer> observers = new EnumMap<>(ObservableEventType.class);
+  protected Map<ObservableEventType, Observer<T>> observers =
+      new EnumMap<>(ObservableEventType.class);
 
   @Override
   public void add(Actor a) {
@@ -37,18 +39,18 @@ public class Website implements World {
     return actors.contains(actor);
   }
 
-  @Override
-  public void addObserver(ObservableEventType e, Observer<?> o) {
-    observers.put(e, o);
-  }
-
-  @Override
-  public void removeObserver(ObservableEventType e, Observer<?> o) {
-    observers.remove(e);
-  }
-
-  @Override
-  public void notifyObservers(ObservableEventType e, Event a) {
+  public void notifyObservers(ObservableEventType e, Event<T> a) {
     observers.get(e).update(a);
+  }
+
+  @Override
+  public void addObserver(ObservableEventType e, Observer<T> o) {
+    observers.put(e, o);
+
+  }
+
+  @Override
+  public void removeObserver(ObservableEventType e, Observer<T> o) {
+    observers.remove(e);
   }
 }

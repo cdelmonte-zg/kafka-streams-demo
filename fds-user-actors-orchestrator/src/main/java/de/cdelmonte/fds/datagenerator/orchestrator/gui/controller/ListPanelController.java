@@ -47,7 +47,7 @@ public class ListPanelController implements ListSelectionListener {
         if (i > -1) {
 
           int indModel = actorPropertiesPaneTableController.getIndexModel(i);
-          Actor actor = world.getList().get(indModel);
+          Actor actor = (Actor) world.getList().get(indModel);
 
           attributesView.setModel(actor);
           attributesView.update();
@@ -89,7 +89,7 @@ public class ListPanelController implements ListSelectionListener {
 
               if (i > -1) {
                 int indModel = actorPropertiesPaneTableController.getIndexModel(i);
-                Actor actor = world.getList().get(indModel);
+                Actor actor = (Actor) world.getList().get(indModel);
                 if (actor != null) {
                   world.remove(actor);
                   lsm.clearSelection();
